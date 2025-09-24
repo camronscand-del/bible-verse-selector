@@ -23,12 +23,22 @@ const randomBtn = document.getElementById('random-verse-btn');
 // Get all the verse containers
 const verseContainers = document.querySelectorAll('.verse-container');
 
-// Get the dark mode toggle button and body element
-const modeToggle = document.getElementById('mode-toggle');
+// Get the body element to toggle themes
 const body = document.body;
 
-// Get all emotion links to add scroll behavior
-const emotionLinks = document.querySelectorAll('.emotion-link');
+// Get all theme buttons
+const themeButtons = document.querySelectorAll('[data-theme]');
+
+// Get font size buttons and all verse paragraph elements
+const fontSizeIncreaseBtn = document.getElementById('font-size-increase-btn');
+const fontSizeDecreaseBtn = document.getElementById('font-size-decrease-btn');
+const allVerseParagraphs = document.querySelectorAll('.verse-container p');
+
+// Get profile elements
+const userNameDisplay = document.getElementById('user-name-display');
+const nameInput = document.getElementById('name-input');
+const bioInput = document.getElementById('bio-input');
+const saveProfileBtn = document.getElementById('save-profile-btn');
 
 // Get the verse of the day container
 const dailyVerseContainer = document.getElementById('verse-of-the-day');
@@ -117,12 +127,10 @@ const allVerses = {
  * @param {string} targetId - The ID of the verse container to show.
  */
 function showVerseContainer(targetId) {
-    // Hide all verses
     verseContainers.forEach(container => {
         container.style.display = 'none';
     });
 
-    // Show the target verse
     const targetElement = document.getElementById(targetId);
     if (targetElement) {
         targetElement.style.display = 'block';
@@ -132,28 +140,19 @@ function showVerseContainer(targetId) {
 
 // Event listener for the Random Verse button
 randomBtn.addEventListener('click', (event) => {
-    event.preventDefault(); 
+    event.preventDefault();
     const randomIndex = Math.floor(Math.random() * verseIds.length);
     const randomVerseId = verseIds[randomIndex];
     showVerseContainer(randomVerseId);
 });
 
-// Dark Mode Toggle Functionality
-modeToggle.addEventListener('click', () => {
-    body.classList.toggle('dark-mode');
-    if (body.classList.contains('dark-mode')) {
-        modeToggle.textContent = 'Light Mode';
-    } else {
-        modeToggle.textContent = 'Dark Mode';
-    }
-});
-
-// Smooth Scroll and show verse for Emotion Links
+// Event listeners for emotion links
+const emotionLinks = document.querySelectorAll('.emotion-link');
 emotionLinks.forEach(link => {
     link.addEventListener('click', (event) => {
         event.preventDefault();
-        const targetId = link.getAttribute('data-verse-id');
-        showVerseContainer(targetId);
+        const verseId = link.getAttribute('data-verse-id');
+        showVerseContainer(verseId);
     });
 });
 
@@ -163,7 +162,6 @@ function getDailyVerse() {
     const storedDate = localStorage.getItem('dailyVerseDate');
     let dailyVerseId = localStorage.getItem('dailyVerseId');
 
-    // If no verse is stored or the date is different, get a new one
     if (!dailyVerseId || storedDate !== today) {
         const randomIndex = Math.floor(Math.random() * verseIds.length);
         dailyVerseId = verseIds[randomIndex];
@@ -171,7 +169,6 @@ function getDailyVerse() {
         localStorage.setItem('dailyVerseId', dailyVerseId);
     }
     
-    // Get the verse data from the object
     const verseData = allVerses[dailyVerseId];
     if (verseData) {
         dailyVerseContainer.innerHTML = `
@@ -186,5 +183,69 @@ function getDailyVerse() {
     }
 }
 
-// Call the function on page load to display the daily verse
+// User Profile (Idea #22)
+function saveProfile() {
+    const name = nameInput.value;
+    const bio = bioInput.value;
+    localStorage.setItem('userName', name);
+    localStorage.setItem('userBio', bio);
+    userNameDisplay.textContent = name || 'Guest';
+    // No alert()
+}
+
+function loadProfile() {
+    const name = localStorage.getItem('userName');
+    const bio = localStorage.getItem('userBio');
+    if (name) {
+        nameInput.value = name;
+        userNameDisplay.textContent = name;
+    }
+    if (bio) {
+        bioInput.value = bio;
+    }
+}
+
+saveProfileBtn.addEventListener('click', saveProfile);
+loadProfile();
+
+// Customizable Themes (Idea #37)
+function applyTheme(themeName) {
+    body.setAttribute('data-theme', themeName);
+    localStorage.setItem('theme', themeName);
+}
+
+themeButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const theme = button.getAttribute('data-theme');
+        applyTheme(theme);
+    });
+});
+
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme) {
+    applyTheme(savedTheme);
+}
+
+// Font Sizer (Idea #40)
+let currentFontSize = parseFloat(localStorage.getItem('fontSize')) || 1.1;
+
+function updateFontSize() {
+    allVerseParagraphs.forEach(p => {
+        p.style.fontSize = `${currentFontSize}rem`;
+    });
+    localStorage.setItem('fontSize', currentFontSize);
+}
+
+fontSizeIncreaseBtn.addEventListener('click', () => {
+    currentFontSize += 0.1;
+    updateFontSize();
+});
+
+fontSizeDecreaseBtn.addEventListener('click', () => {
+    currentFontSize = Math.max(0.8, currentFontSize - 0.1);
+    updateFontSize();
+});
+
+// Initial load
 getDailyVerse();
+updateFontSize();
