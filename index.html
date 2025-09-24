@@ -5,10 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find a Verse (CSS-Only)</title>
     <style>
+        /* --- COLOUR CHANGES START HERE --- */
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             padding: 20px;
+            background-color: #f0f4f8; /* Light blue-grey page background */
+            color: #333; /* Darker text for readability */
+        }
+        .header-image {
+            width: 100%;
+            max-width: 600px;
+            height: auto; /* Keeps the image proportions correct */
+            display: block;
+            margin: 0 auto 20px; /* Centers the image */
+            border-radius: 8px;
         }
         .emotion-links {
             display: flex;
@@ -18,14 +29,15 @@
         }
         .emotion-links a {
             padding: 8px 12px;
-            border: 1px solid #ccc;
+            border: 1px solid #a9c2d6;
             border-radius: 5px;
             text-decoration: none;
-            color: #333;
+            background-color: #ffffff; /* White background for links */
+            color: #005a9c; /* Dark blue text for links */
             transition: background-color 0.2s;
         }
         .emotion-links a:hover {
-            background-color: #eee;
+            background-color: #eaf5ff; /* Lighter blue on hover */
         }
         .verse-container {
             display: none;
@@ -33,16 +45,19 @@
             padding: 15px;
             border: 1px solid #005a9c;
             border-radius: 5px;
-            background-color: #e6f3ff;
-            color: #003058;
+            background-color: #e6f3ff; /* Light blue background for verse box */
+            color: #003058; /* Darker blue text for verse */
             border-left: 5px solid #005a9c;
         }
         .verse-container:target {
-            display: block; /* The CSS trick to show only the selected one */
+            display: block;
         }
+        /* --- COLOUR CHANGES END HERE --- */
     </style>
 </head>
 <body>
+
+    <img src="https://picsum.photos/600/200" alt="A calming natural landscape" class="header-image">
 
     <h1>Find a Bible Verse</h1>
     <p>How are you feeling today? Click an emotion to find a comforting verse.</p>
@@ -60,6 +75,9 @@
         <a href="#fearful-verse">Fearful</a>
         <a href="#joyful-verse">Joyful</a>
         <a href="#tired-verse">Tired</a>
+        <a href="#confused-verse">Confused</a>
+        <a href="#content-verse">Content</a>
+        <a href="#hurt-verse">Hurt</a>
     </div>
 
     <!-- Verse containers for each link -->
@@ -98,6 +116,15 @@
     </div>
     <div id="tired-verse" class="verse-container">
         <p>But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint. - Isaiah 40:31</p>
+    </div>
+    <div id="confused-verse" class="verse-container">
+        <p>For God is not a God of confusion but of peace. - 1 Corinthians 14:33</p>
+    </div>
+    <div id="content-verse" class="verse-container">
+        <p>I know what it is to be in need, and I know what it is to have plenty. I have learned the secret of being content in any and every situation. - Philippians 4:12</p>
+    </div>
+    <div id="hurt-verse" class="verse-container">
+        <p>The Lord is near to the brokenhearted and saves the crushed in spirit. - Psalm 34:18</p>
     </div>
 
 </body>
