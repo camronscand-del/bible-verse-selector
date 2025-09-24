@@ -16,6 +16,10 @@
             --verse-bg: #fff0f5; /* Very light, soft pink */
             --verse-border: #d44949; /* A darker pink for the border */
             --verse-text-color: #555;
+            /* New: Hero background colors for light mode */
+            --hero-bg-start: #ffb7b7; /* Light salmon */
+            --hero-bg-end: #ffa07a;   /* Light coral */
+            --hero-text-color: #8b0000; /* Darker red for contrast */
         }
 
         /* 2. Define variables for the dark theme */
@@ -28,6 +32,10 @@
                 --verse-bg: #4a4a4a; /* Darker grey box */
                 --verse-border: #8b0000; /* Darker red border */
                 --verse-text-color: #f0f0f0;
+                /* New: Hero background colors for dark mode */
+                --hero-bg-start: #3a3a3a; /* Darker grey */
+                --hero-bg-end: #1a1a1a;   /* Very dark grey */
+                --hero-text-color: #ffb7b7; /* Light red for contrast */
             }
         }
 
@@ -35,26 +43,46 @@
         body {
             font-family: 'Merriweather', serif;
             line-height: 1.6;
-            padding: 20px;
+            padding: 0; /* Remove body padding, hero section will handle it */
             margin: 0;
             background-color: var(--bg-color);
             color: var(--text-color);
             transition: background-color 0.3s, color 0.3s;
         }
 
-        h1, h2 {
+        .hero-section {
+            background: linear-gradient(to right, var(--hero-bg-start), var(--hero-bg-end));
+            color: var(--hero-text-color);
+            padding: 60px 20px; /* More padding for a bigger section */
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+        }
+
+        .hero-section h1 {
+            font-family: 'Open Sans', sans-serif;
+            color: var(--hero-text-color);
+            margin-top: 0; /* Remove default h1 margin */
+            font-size: 2.8em; /* Larger title */
+            margin-bottom: 10px;
+        }
+
+        .hero-section p {
+            max-width: 800px;
+            margin: 0 auto 20px auto; /* Center paragraph and add bottom margin */
+            font-size: 1.1em;
+            color: var(--hero-text-color); /* Ensure text color is readable */
+        }
+
+        h2 {
             font-family: 'Open Sans', sans-serif;
             color: var(--header-color);
             text-align: center;
-            margin-top: 30px;
+            margin-top: 40px; /* Adjusted spacing */
+            margin-bottom: 20px;
         }
 
-        p {
-            text-align: center;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            margin-bottom: 20px;
+        .main-content {
+            padding: 20px; /* Add padding to the main content area */
         }
 
         .emotion-links {
@@ -276,7 +304,6 @@
             background-color: var(--verse-bg);
             color: var(--verse-text-color);
             border-left: 5px solid var(--verse-border);
-            /* New: Adds a soft shadow */
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
             max-width: 700px;
@@ -295,7 +322,7 @@
             display: block;
         }
 
-        /* New styles for the Home link */
+        /* Styles for the Home link */
         .home-link {
             display: block;
             text-align: center;
@@ -305,7 +332,7 @@
             text-decoration: none;
         }
 
-        /* New styles for the footer and back to top link */
+        /* Styles for the footer and back to top link */
         .back-to-top {
             display: block;
             text-align: center;
@@ -332,81 +359,83 @@
 
     <a id="top"></a>
 
-    <h1>Find a Bible Verse</h1>
-
-    <a href="#" class="home-link">Home</a>
+    <div class="hero-section">
+        <h1>Find a Bible Verse</h1>
+        <p>How are you feeling today? Click an emotion to find a comforting verse.</p>
+        <a href="#" class="home-link" style="color: var(--hero-text-color);">Home</a>
+    </div>
     
-    <p>How are you feeling today? Click an emotion to find a comforting verse.</p>
+    <div class="main-content">
+        <h2>What is This?</h2>
+        <p>This website is a simple tool to help you find a Bible verse for how you are feeling. The Bible is a source of comfort and guidance, and this page can help you find a verse that speaks to your heart.</p>
+        <hr>
+        
+        <div class="emotion-links">
+            <a href="#anxious-verse" class="anxious-link">Anxious</a>
+            <a href="#sad-verse" class="sad-link">Sad</a>
+            <a href="#grateful-verse" class="grateful-link">Grateful</a>
+            <a href="#stressed-verse" class="stressed-link">Stressed</a>
+            <a href="#peaceful-verse" class="peaceful-link">Peaceful</a>
+            <a href="#lonely-verse" class="lonely-link">Lonely</a>
+            <a href="#angry-verse" class="angry-link">Angry</a>
+            <a href="#hopeful-verse" class="hopeful-link">Hopeful</a>
+            <a href="#guilty-verse" class="guilty-link">Guilty</a>
+            <a href="#fearful-verse" class="fearful-link">Fearful</a>
+            <a href="#joyful-verse" class="joyful-link">Joyful</a>
+            <a href="#tired-verse" class="tired-link">Tired</a>
+            <a href="#confused-verse" class="confused-link">Confused</a>
+            <a href="#content-verse" class="content-link">Content</a>
+            <a href="#hurt-verse" class="hurt-link">Hurt</a>
+        </div>
 
-    <h2>What is This?</h2>
-    <p>This website is a simple tool to help you find a Bible verse for how you are feeling. The Bible is a source of comfort and guidance, and this page can help you find a verse that speaks to your heart.</p>
-    <hr>
-    
-    <div class="emotion-links">
-        <a href="#anxious-verse" class="anxious-link">Anxious</a>
-        <a href="#sad-verse" class="sad-link">Sad</a>
-        <a href="#grateful-verse" class="grateful-link">Grateful</a>
-        <a href="#stressed-verse" class="stressed-link">Stressed</a>
-        <a href="#peaceful-verse" class="peaceful-link">Peaceful</a>
-        <a href="#lonely-verse" class="lonely-link">Lonely</a>
-        <a href="#angry-verse" class="angry-link">Angry</a>
-        <a href="#hopeful-verse" class="hopeful-link">Hopeful</a>
-        <a href="#guilty-verse" class="guilty-link">Guilty</a>
-        <a href="#fearful-verse" class="fearful-link">Fearful</a>
-        <a href="#joyful-verse" class="joyful-link">Joyful</a>
-        <a href="#tired-verse" class="tired-link">Tired</a>
-        <a href="#confused-verse" class="confused-link">Confused</a>
-        <a href="#content-verse" class="content-link">Content</a>
-        <a href="#hurt-verse" class="hurt-link">Hurt</a>
-    </div>
+        <div id="anxious-verse" class="verse-container">
+            <p>Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. - <a href="https://www.biblegateway.com/passage/?search=Philippians+4%3A6&version=NIV" class="citation-link">Philippians 4:6</a> &#10013;</p>
+        </div>
+        <div id="sad-verse" class="verse-container">
+            <p>The Lord is close to the brokenhearted and saves those who are crushed in spirit. - <a href="https://www.biblegateway.com/passage/?search=Psalm+34%3A18&version=NIV" class="citation-link">Psalm 34:18</a> &#10013;</p>
+        </div>
+        <div id="grateful-verse" class="verse-container">
+            <p>Give thanks to the Lord, for he is good; his love endures forever. - <a href="https://www.biblegateway.com/passage/?search=Psalm+107%3A1&version=NIV" class="citation-link">Psalm 107:1</a> &#10013;</p>
+        </div>
+        <div id="stressed-verse" class="verse-container">
+            <p>Come to me, all you who are weary and burdened, and I will give you rest. - <a href="https://www.biblegateway.com/passage/?search=Matthew+11%3A28&version=NIV" class="citation-link">Matthew 11:28</a> &#10013;</p>
+        </div>
+        <div id="peaceful-verse" class="verse-container">
+            <p>I have told you these things, so that in me you may have peace. In this world you will have trouble. But take heart! I have overcome the world. - <a href="https://www.biblegateway.com/passage/?search=John+16%3A33&version=NIV" class="citation-link">John 16:33</a> &#10013;</p>
+        </div>
+        <div id="lonely-verse" class="verse-container">
+            <p>The Lord is on my side; I will not fear. What can man do to me? - <a href="https://www.biblegateway.com/passage/?search=Psalm+118%3A6&version=NIV" class="citation-link">Psalm 118:6</a> &#10013;</p>
+        </div>
+        <div id="angry-verse" class="verse-container">
+            <p>A gentle answer turns away wrath, but a harsh word stirs up anger. - <a href="https://www.biblegateway.com/passage/?search=Proverbs+15%3A1&version=NIV" class="citation-link">Proverbs 15:1</a> &#10013;</p>
+        </div>
+        <div id="hopeful-verse" class="verse-container">
+            <p>For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future. - <a href="https://www.biblegateway.com/passage/?search=Jeremiah+29%3A11&version=NIV" class="citation-link">Jeremiah 29:11</a> &#10013;</p>
+        </div>
+        <div id="guilty-verse" class="verse-container">
+            <p>If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness. - <a href="https://www.biblegateway.com/passage/?search=1+John+1%3A9&version=NIV" class="citation-link">1 John 1:9</a> &#10013;</p>
+        </div>
+        <div id="fearful-verse" class="verse-container">
+            <p>Do not be afraid or discouraged, for the Lord your God will be with you wherever you go. - <a href="https://www.biblegateway.com/passage/?search=Joshua+1%3A9&version=NIV" class="citation-link">Joshua 1:9</a> &#10013;</p>
+        </div>
+        <div id="joyful-verse" class="verse-container">
+            <p>Rejoice in the Lord always. I will say it again: Rejoice! - <a href="https://www.biblegateway.com/passage/?search=Philippians+4%3A4&version=NIV" class="citation-link">Philippians 4:4</a> &#10013;</p>
+        </div>
+        <div id="tired-verse" class="verse-container">
+            <p>But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint. - <a href="https://www.biblegateway.com/passage/?search=Isaiah+40%3A31&version=NIV" class="citation-link">Isaiah 40:31</a> &#10013;</p>
+        </div>
+        <div id="confused-verse" class="verse-container">
+            <p>For God is not a God of confusion but of peace. - <a href="https://www.biblegateway.com/passage/?search=1+Corinthians+14%3A33&version=NIV" class="citation-link">1 Corinthians 14:33</a> &#10013;</p>
+        </div>
+        <div id="content-verse" class="verse-container">
+            <p>I know what it is to be in need, and I know what it is to have plenty. I have learned the secret of being content in any and every situation. - <a href="https://www.biblegateway.com/passage/?search=Philippians+4%3A12&version=NIV" class="citation-link">Philippians 4:12</a> &#10013;</p>
+        </div>
+        <div id="hurt-verse" class="verse-container">
+            <p>He heals the brokenhearted and binds up their wounds. - <a href="https://www.biblegateway.com/passage/?search=Psalm+147%3A3&version=NIV" class="citation-link">Psalm 147:3</a> &#10013;</p>
+        </div>
 
-    <div id="anxious-verse" class="verse-container">
-        <p>Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. - <a href="https://www.biblegateway.com/passage/?search=Philippians+4%3A6&version=NIV" class="citation-link">Philippians 4:6</a> &#10013;</p>
+        <a href="#top" class="back-to-top">Back to Top</a>
     </div>
-    <div id="sad-verse" class="verse-container">
-        <p>The Lord is close to the brokenhearted and saves those who are crushed in spirit. - <a href="https://www.biblegateway.com/passage/?search=Psalm+34%3A18&version=NIV" class="citation-link">Psalm 34:18</a> &#10013;</p>
-    </div>
-    <div id="grateful-verse" class="verse-container">
-        <p>Give thanks to the Lord, for he is good; his love endures forever. - <a href="https://www.biblegateway.com/passage/?search=Psalm+107%3A1&version=NIV" class="citation-link">Psalm 107:1</a> &#10013;</p>
-    </div>
-    <div id="stressed-verse" class="verse-container">
-        <p>Come to me, all you who are weary and burdened, and I will give you rest. - <a href="https://www.biblegateway.com/passage/?search=Matthew+11%3A28&version=NIV" class="citation-link">Matthew 11:28</a> &#10013;</p>
-    </div>
-    <div id="peaceful-verse" class="verse-container">
-        <p>I have told you these things, so that in me you may have peace. In this world you will have trouble. But take heart! I have overcome the world. - <a href="https://www.biblegateway.com/passage/?search=John+16%3A33&version=NIV" class="citation-link">John 16:33</a> &#10013;</p>
-    </div>
-    <div id="lonely-verse" class="verse-container">
-        <p>The Lord is on my side; I will not fear. What can man do to me? - <a href="https://www.biblegateway.com/passage/?search=Psalm+118%3A6&version=NIV" class="citation-link">Psalm 118:6</a> &#10013;</p>
-    </div>
-    <div id="angry-verse" class="verse-container">
-        <p>A gentle answer turns away wrath, but a harsh word stirs up anger. - <a href="https://www.biblegateway.com/passage/?search=Proverbs+15%3A1&version=NIV" class="citation-link">Proverbs 15:1</a> &#10013;</p>
-    </div>
-    <div id="hopeful-verse" class="verse-container">
-        <p>For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future. - <a href="https://www.biblegateway.com/passage/?search=Jeremiah+29%3A11&version=NIV" class="citation-link">Jeremiah 29:11</a> &#10013;</p>
-    </div>
-    <div id="guilty-verse" class="verse-container">
-        <p>If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness. - <a href="https://www.biblegateway.com/passage/?search=1+John+1%3A9&version=NIV" class="citation-link">1 John 1:9</a> &#10013;</p>
-    </div>
-    <div id="fearful-verse" class="verse-container">
-        <p>Do not be afraid or discouraged, for the Lord your God will be with you wherever you go. - <a href="https://www.biblegateway.com/passage/?search=Joshua+1%3A9&version=NIV" class="citation-link">Joshua 1:9</a> &#10013;</p>
-    </div>
-    <div id="joyful-verse" class="verse-container">
-        <p>Rejoice in the Lord always. I will say it again: Rejoice! - <a href="https://www.biblegateway.com/passage/?search=Philippians+4%3A4&version=NIV" class="citation-link">Philippians 4:4</a> &#10013;</p>
-    </div>
-    <div id="tired-verse" class="verse-container">
-        <p>But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint. - <a href="https://www.biblegateway.com/passage/?search=Isaiah+40%3A31&version=NIV" class="citation-link">Isaiah 40:31</a> &#10013;</p>
-    </div>
-    <div id="confused-verse" class="verse-container">
-        <p>For God is not a God of confusion but of peace. - <a href="https://www.biblegateway.com/passage/?search=1+Corinthians+14%3A33&version=NIV" class="citation-link">1 Corinthians 14:33</a> &#10013;</p>
-    </div>
-    <div id="content-verse" class="verse-container">
-        <p>I know what it is to be in need, and I know what it is to have plenty. I have learned the secret of being content in any and every situation. - <a href="https://www.biblegateway.com/passage/?search=Philippians+4%3A12&version=NIV" class="citation-link">Philippians 4:12</a> &#10013;</p>
-    </div>
-    <div id="hurt-verse" class="verse-container">
-        <p>He heals the brokenhearted and binds up their wounds. - <a href="https://www.biblegateway.com/passage/?search=Psalm+147%3A3&version=NIV" class="citation-link">Psalm 147:3</a> &#10013;</p>
-    </div>
-
-    <a href="#top" class="back-to-top">Back to Top</a>
 
 </body>
 </html>
