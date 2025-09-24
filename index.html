@@ -121,4 +121,233 @@
             background-color: #c0392b;
         }
         .hopeful-link {
-            background-color: #3498
+            background-color: #3498db;
+        }
+        .hopeful-link:hover {
+            background-color: #2980b9;
+        }
+        .guilty-link {
+            background-color: #6c5ce7;
+        }
+        .guilty-link:hover {
+            background-color: #5f4cb6;
+        }
+        .fearful-link {
+            background-color: #95a5a6;
+        }
+        .fearful-link:hover {
+            background-color: #7f8c8d;
+        }
+        .joyful-link {
+            background-color: #f1c40f;
+        }
+        .joyful-link:hover {
+            background-color: #d4ac0d;
+        }
+        .tired-link {
+            background-color: #7f8c8d;
+        }
+        .tired-link:hover {
+            background-color: #6a7677;
+        }
+        .confused-link {
+            background-color: #9b59b6;
+        }
+        .confused-link:hover {
+            background-color: #8e44ad;
+        }
+        .content-link {
+            background-color: #1abc9c;
+        }
+        .content-link:hover {
+            background-color: #16a085;
+        }
+        .hurt-link {
+            background-color: #d35400;
+        }
+        .hurt-link:hover {
+            background-color: #ba4a00;
+        }
+        
+        /* Link colors for dark theme */
+        @media (prefers-color-scheme: dark) {
+            .anxious-link {
+                background-color: #5c5c5c;
+            }
+            .anxious-link:hover {
+                background-color: #444444;
+            }
+            .sad-link {
+                background-color: #6a85b5;
+            }
+            .sad-link:hover {
+                background-color: #5a75a5;
+            }
+            .grateful-link {
+                background-color: #c5862d;
+            }
+            .grateful-link:hover {
+                background-color: #9c6c24;
+            }
+            .stressed-link {
+                background-color: #e74c3c;
+            }
+            .stressed-link:hover {
+                background-color: #c0392b;
+            }
+            .peaceful-link {
+                background-color: #48b17b;
+            }
+            .peaceful-link:hover {
+                background-color: #3a986a;
+            }
+            .lonely-link {
+                background-color: #5d708f;
+            }
+            .lonely-link:hover {
+                background-color: #4b5a74;
+            }
+            .angry-link {
+                background-color: #ff6666;
+            }
+            .angry-link:hover {
+                background-color: #ff4d4d;
+            }
+            .hopeful-link {
+                background-color: #5d9ddf;
+            }
+            .hopeful-link:hover {
+                background-color: #4a8ac2;
+            }
+            .guilty-link {
+                background-color: #8f79ff;
+            }
+            .guilty-link:hover {
+                background-color: #7a63d9;
+            }
+            .fearful-link {
+                background-color: #b0b8b9;
+            }
+            .fearful-link:hover {
+                background-color: #949c9d;
+            }
+            .joyful-link {
+                background-color: #f7da55;
+            }
+            .joyful-link:hover {
+                background-color: #d9bd4a;
+            }
+            .tired-link {
+                background-color: #9ba4a5;
+            }
+            .tired-link:hover {
+                background-color: #848c8d;
+            }
+            .confused-link {
+                background-color: #c38ff2;
+            }
+            .confused-link:hover {
+                background-color: #a779d4;
+            }
+            .content-link {
+                background-color: #37c2a4;
+            }
+            .content-link:hover {
+                background-color: #2da187;
+            }
+            .hurt-link {
+                background-color: #e07b39;
+            }
+            .hurt-link:hover {
+                background-color: #c96c2e;
+            }
+        }
+
+        .verse-container {
+            display: none; /* This hides all verse boxes by default */
+            margin-top: 20px;
+            padding: 25px;
+            border-radius: 12px;
+            background-color: var(--verse-bg);
+            color: var(--verse-text-color);
+            border-left: 5px solid var(--verse-border);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .verse-container p {
+            font-style: italic;
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        /* This is the key rule: It only displays the ONE box that is targeted */
+        .verse-container:target {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Find a Bible Verse</h1>
+    <p>How are you feeling today? Click an emotion to find a comforting verse.</p>
+
+    <div class="emotion-links">
+        <a href="#anxious-verse" class="anxious-link">Anxious</a>
+        <a href="#sad-verse" class="sad-link">Sad</a>
+        <a href="#grateful-verse" class="grateful-link">Grateful</a>
+        <a href="#stressed-verse" class="stressed-link">Stressed</a>
+        <a href="#peaceful-verse" class="peaceful-link">Peaceful</a>
+        <a href="#lonely-verse" class="lonely-link">Lonely</a>
+        <a href="#angry-verse" class="angry-link">Angry</a>
+        <a href="#hopeful-verse" class="hopeful-link">Hopeful</a>
+        <a href="#guilty-verse" class="guilty-link">Guilty</a>
+        <a href="#fearful-verse" class="fearful-link">Fearful</a>
+        <a href="#joyful-verse" class="joyful-link">Joyful</a>
+        <a href="#tired-verse" class="tired-link">Tired</a>
+        <a href="#confused-verse" class="confused-link">Confused</a>
+        <a href="#content-verse" class="content-link">Content</a>
+        <a href="#hurt-verse" class="hurt-link">Hurt</a>
+    </div>
+
+    <div id="anxious-verse" class="verse-container">
+        <p>Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. - Philippians 4:6 &#10013;</p>
+    </div>
+    <div id="sad-verse" class="verse-container">
+        <p>The Lord is close to the brokenhearted and saves those who are crushed in spirit. - Psalm 34:18 &#10013;</p>
+    </div>
+    <div id="grateful-verse" class="verse-container">
+        <p>Give thanks to the Lord, for he is good; his love endures forever. - Psalm 107:1 &#10013;</p>
+    </div>
+    <div id="stressed-verse" class="verse-container">
+        <p>Come to me, all you who are weary and burdened, and I will give you rest. - Matthew 11:28 &#10013;</p>
+    </div>
+    <div id="peaceful-verse" class="verse-container">
+        <p>I have told you these things, so that in me you may have peace. In this world you will have trouble. But take heart! I have overcome the world. - John 16:33 &#10013;</p>
+    </div>
+    <div id="lonely-verse" class="verse-container">
+        <p>The Lord is on my side; I will not fear. What can man do to me? - Psalm 118:6 &#10013;</p>
+    </div>
+    <div id="angry-verse" class="verse-container">
+        <p>A gentle answer turns away wrath, but a harsh word stirs up anger. - Proverbs 15:1 &#10013;</p>
+    </div>
+    <div id="hopeful-verse" class="verse-container">
+        <p>For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future. - Jeremiah 29:11 &#10013;</p>
+    </div>
+    <div id="guilty-verse" class="verse-container">
+        <p>If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness. - 1 John 1:9 &#10013;</p>
+    </div>
+    <div id="fearful-verse" class="verse-container">
+        <p>Do not be afraid or discouraged, for the Lord your God will be with you wherever you go. - Joshua 1:9 &#10013;</p>
+    </div>
+    <div id="joyful-verse" class="verse-container">
+        <p>Rejoice in the Lord always. I will say it again: Rejoice! - Philippians 4:4 &#10013;</p>
+    </div>
+    <div id="tired-verse" class="verse-container">
+        <p>But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint. - Isaiah 40:31 &#10013;</p>
+    </div>
+    <div id="confused-verse" class="verse-container">
+        <p>For God is not a God of confusion but of peace. - 1 Corinthians 14:33 &#100
