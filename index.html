@@ -21,7 +21,6 @@
             --hero-bg-start: #ffb7b7; /* Light salmon */
             --hero-bg-end: #ffa07a;   /* Light coral */
             --hero-text-color: #8b0000; /* Darker red for contrast */
-            --card-front-bg: #c0392b; /* A default color for the card front */
         }
 
         /* 2. Define variables for the dark theme */
@@ -36,7 +35,6 @@
             --hero-bg-start: #3a3a3a; /* Darker grey */
             --hero-bg-end: #1a1a1a;   /* Very dark grey */
             --hero-text-color: #ffb7b7; /* Light red for contrast */
-            --card-front-bg: #4a4a4a;
         }
         
         /* New: Dark mode for the system preference.
@@ -57,7 +55,7 @@
             color: var(--text-color);
             transition: background-color 0.3s, color 0.3s;
             /* Custom Cursor */
-            cursor: url('https://raw.githubusercontent.com/google/material-design-icons/master/png/navigation/public/baseline_arrow_black_48dp.png'), auto;
+            cursor: url('https://cur.cursors-4u.com/cursors/cur-2/cur118.cur'), auto;
         }
         .hero-section {
             background: linear-gradient(to right, var(--hero-bg-start), var(--hero-bg-end));
@@ -145,61 +143,6 @@
         .random-link { background: linear-gradient(#5d98db, #4878b2); }
         .random-link:hover { background: linear-gradient(#7aaddf, #5d98db); }
         
-        /* New: Card Flip Styles */
-        .verse-container {
-            display: none;
-            perspective: 1000px;
-            max-width: 700px;
-            margin: 20px auto;
-            height: 250px; /* Fixed height for the card to prevent content shift */
-        }
-        .flipper-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
-        .verse-container.flipped .flipper-inner {
-            transform: rotateY(180deg);
-        }
-        .card-front, .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden; /* For Safari */
-            backface-visibility: hidden;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            padding: 25px;
-        }
-        .card-front {
-            background-color: var(--card-front-bg);
-            color: var(--link-text-color);
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-        .card-back {
-            background-color: var(--verse-bg);
-            color: var(--verse-text-color);
-            border-left: 5px solid var(--verse-border);
-            transform: rotateY(180deg);
-            padding: 25px;
-        }
-        .card-back p {
-            font-style: italic;
-            margin: 0;
-            font-size: 1.1rem;
-        }
-        .verse-container:target {
-            display: block;
-        }
-        
         /* Verse of the Day styles */
         #verse-of-the-day {
             text-align: center;
@@ -217,6 +160,25 @@
             margin-top: 0;
         }
 
+        .verse-container {
+            display: none;
+            margin-top: 20px;
+            padding: 25px;
+            border-radius: 12px;
+            background-color: var(--verse-bg);
+            color: var(--verse-text-color);
+            border-left: 5px solid var(--verse-border);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .verse-container p {
+            font-style: italic;
+            margin: 0;
+            font-size: 1.1rem;
+        }
         .home-link {
             display: block;
             text-align: center;
@@ -242,7 +204,7 @@
             text-decoration: underline;
         }
 
-        /* New: Styles for the Dark Mode Toggle Button */
+        /* Styles for the Dark Mode Toggle Button */
         #mode-toggle {
             position: absolute;
             top: 20px;
@@ -277,7 +239,7 @@
         <div id="verse-of-the-day">
             <h3>Loading...</h3>
         </div>
-        
+
         <h2>What is This?</h2>
         <p>This website is a simple tool to help you find a Bible verse for how you are feeling. The Bible is a source of comfort and guidance, and this page can help you find a verse that speaks to your heart.</p>
         <hr>
@@ -301,154 +263,50 @@
             <a href="#" id="random-verse-btn" class="random-link">Random Verse</a>
         </div>
 
-        <!-- Anxious Verse Card -->
         <div id="anxious-verse" class="verse-container">
-            <div class="flipper-inner">
-                <div class="card-front">Click to reveal verse</div>
-                <div class="card-back">
-                    <p>Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. - <a href="https://www.biblegateway.com/passage/?search=Philippians+4%3A6&version=NIV" class="citation-link">Philippians 4:6</a> &#10013;</p>
-                </div>
-            </div>
+            <p>Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. - <a href="https://www.biblegateway.com/passage/?search=Philippians+4%3A6&version=NIV" class="citation-link">Philippians 4:6</a> &#10013;</p>
         </div>
-
-        <!-- Sad Verse Card -->
         <div id="sad-verse" class="verse-container">
-            <div class="flipper-inner">
-                <div class="card-front">Click to reveal verse</div>
-                <div class="card-back">
-                    <p>The Lord is close to the brokenhearted and saves those who are crushed in spirit. - <a href="https://www.biblegateway.com/passage/?search=Psalm+34%3A18&version=NIV" class="citation-link">Psalm 34:18</a> &#10013;</p>
-                </div>
-            </div>
+            <p>The Lord is close to the brokenhearted and saves those who are crushed in spirit. - <a href="https://www.biblegateway.com/passage/?search=Psalm+34%3A18&version=NIV" class="citation-link">Psalm 34:18</a> &#10013;</p>
         </div>
-
-        <!-- Grateful Verse Card -->
         <div id="grateful-verse" class="verse-container">
-            <div class="flipper-inner">
-                <div class="card-front">Click to reveal verse</div>
-                <div class="card-back">
-                    <p>Give thanks to the Lord, for he is good; his love endures forever. - <a href="https://www.biblegateway.com/passage/?search=Psalm+107%3A1&version=NIV" class="citation-link">Psalm 107:1</a> &#10013;</p>
-                </div>
-            </div>
+            <p>Give thanks to the Lord, for he is good; his love endures forever. - <a href="https://www.biblegateway.com/passage/?search=Psalm+107%3A1&version=NIV" class="citation-link">Psalm 107:1</a> &#10013;</p>
         </div>
-
-        <!-- Stressed Verse Card -->
         <div id="stressed-verse" class="verse-container">
-            <div class="flipper-inner">
-                <div class="card-front">Click to reveal verse</div>
-                <div class="card-back">
-                    <p>Come to me, all you who are weary and burdened, and I will give you rest. - <a href="https://www.biblegateway.com/passage/?search=Matthew+11%3A28&version=NIV" class="citation-link">Matthew 11:28</a> &#10013;</p>
-                </div>
-            </div>
+            <p>Come to me, all you who are weary and burdened, and I will give you rest. - <a href="https://www.biblegateway.com/passage/?search=Matthew+11%3A28&version=NIV" class="citation-link">Matthew 11:28</a> &#10013;</p>
         </div>
-
-        <!-- Peaceful Verse Card -->
         <div id="peaceful-verse" class="verse-container">
-            <div class="flipper-inner">
-                <div class="card-front">Click to reveal verse</div>
-                <div class="card-back">
-                    <p>I have told you these things, so that in me you may have peace. In this world you will have trouble. But take heart! I have overcome the world. - <a href="https://www.biblegateway.com/passage/?search=John+16%3A33&version=NIV" class="citation-link">John 16:33</a> &#10013;</p>
-                </div>
-            </div>
+            <p>I have told you these things, so that in me you may have peace. In this world you will have trouble. But take heart! I have overcome the world. - <a href="https://www.biblegateway.com/passage/?search=John+16%3A33&version=NIV" class="citation-link">John 16:33</a> &#10013;</p>
         </div>
-        
-        <!-- Lonely Verse Card -->
         <div id="lonely-verse" class="verse-container">
-            <div class="flipper-inner">
-                <div class="card-front">Click to reveal verse</div>
-                <div class="card-back">
-                    <p>The Lord is on my side; I will not fear. What can man do to me? - <a href="https://www.biblegateway.com/passage/?search=Psalm+118%3A6&version=NIV" class="citation-link">Psalm 118:6</a> &#10013;</p>
-                </div>
-            </div>
+            <p>The Lord is on my side; I will not fear. What can man do to me? - <a href="https://www.biblegateway.com/passage/?search=Psalm+118%3A6&version=NIV" class="citation-link">Psalm 118:6</a> &#10013;</p>
         </div>
-
-        <!-- Angry Verse Card -->
         <div id="angry-verse" class="verse-container">
-            <div class="flipper-inner">
-                <div class="card-front">Click to reveal verse</div>
-                <div class="card-back">
-                    <p>A gentle answer turns away wrath, but a harsh word stirs up anger. - <a href="https://www.biblegateway.com/passage/?search=Proverbs+15%3A1&version=NIV" class="citation-link">Proverbs 15:1</a> &#10013;</p>
-                </div>
-            </div>
+            <p>A gentle answer turns away wrath, but a harsh word stirs up anger. - <a href="https://www.biblegateway.com/passage/?search=Proverbs+15%3A1&version=NIV" class="citation-link">Proverbs 15:1</a> &#10013;</p>
         </div>
-        
-        <!-- Hopeful Verse Card -->
         <div id="hopeful-verse" class="verse-container">
-            <div class="flipper-inner">
-                <div class="card-front">Click to reveal verse</div>
-                <div class="card-back">
-                    <p>For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future. - <a href="https://www.biblegateway.com/passage/?search=Jeremiah+29%3A11&version=NIV" class="citation-link">Jeremiah 29:11</a> &#10013;</p>
-                </div>
-            </div>
+            <p>For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future. - <a href="https://www.biblegateway.com/passage/?search=Jeremiah+29%3A11&version=NIV" class="citation-link">Jeremiah 29:11</a> &#10013;</p>
         </div>
-
-        <!-- Guilty Verse Card -->
         <div id="guilty-verse" class="verse-container">
-            <div class="flipper-inner">
-                <div class="card-front">Click to reveal verse</div>
-                <div class="card-back">
-                    <p>If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness. - <a href="https://www.biblegateway.com/passage/?search=1+John+1%3A9&version=NIV" class="citation-link">1 John 1:9</a> &#10013;</p>
-                </div>
-            </div>
+            <p>If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness. - <a href="https://www.biblegateway.com/passage/?search=1+John+1%3A9&version=NIV" class="citation-link">1 John 1:9</a> &#10013;</p>
         </div>
-        
-        <!-- Fearful Verse Card -->
         <div id="fearful-verse" class="verse-container">
-            <div class="flipper-inner">
-                <div class="card-front">Click to reveal verse</div>
-                <div class="card-back">
-                    <p>Do not be afraid or discouraged, for the Lord your God will be with you wherever you go. - <a href="https://www.biblegateway.com/passage/?search=Joshua+1%3A9&version=NIV" class="citation-link">Joshua 1:9</a> &#10013;</p>
-                </div>
-            </div>
+            <p>Do not be afraid or discouraged, for the Lord your God will be with you wherever you go. - <a href="https://www.biblegateway.com/passage/?search=Joshua+1%3A9&version=NIV" class="citation-link">Joshua 1:9</a> &#10013;</p>
         </div>
-        
-        <!-- Joyful Verse Card -->
         <div id="joyful-verse" class="verse-container">
-            <div class="flipper-inner">
-                <div class="card-front">Click to reveal verse</div>
-                <div class="card-back">
-                    <p>Rejoice in the Lord always. I will say it again: Rejoice! - <a href="https://www.biblegateway.com/passage/?search=Philippians+4%3A4&version=NIV" class="citation-link">Philippians 4:4</a> &#10013;</p>
-                </div>
-            </div>
+            <p>Rejoice in the Lord always. I will say it again: Rejoice! - <a href="https://www.biblegateway.com/passage/?search=Philippians+4%3A4&version=NIV" class="citation-link">Philippians 4:4</a> &#10013;</p>
         </div>
-
-        <!-- Tired Verse Card -->
         <div id="tired-verse" class="verse-container">
-            <div class="flipper-inner">
-                <div class="card-front">Click to reveal verse</div>
-                <div class="card-back">
-                    <p>But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint. - <a href="https://www.biblegateway.com/passage/?search=Isaiah+40%3A31&version=NIV" class="citation-link">Isaiah 40:31</a> &#10013;</p>
-                </div>
-            </div>
+            <p>But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint. - <a href="https://www.biblegateway.com/passage/?search=Isaiah+40%3A31&version=NIV" class="citation-link">Isaiah 40:31</a> &#10013;</p>
         </div>
-
-        <!-- Confused Verse Card -->
         <div id="confused-verse" class="verse-container">
-            <div class="flipper-inner">
-                <div class="card-front">Click to reveal verse</div>
-                <div class="card-back">
-                    <p>For God is not a God of confusion but of peace. - <a href="https://www.biblegateway.com/passage/?search=1+Corinthians+14%3A33&version=NIV" class="citation-link">1 Corinthians 14:33</a> &#10013;</p>
-                </div>
-            </div>
+            <p>For God is not a God of confusion but of peace. - <a href="https://www.biblegateway.com/passage/?search=1+Corinthians+14%3A33&version=NIV" class="citation-link">1 Corinthians 14:33</a> &#10013;</p>
         </div>
-        
-        <!-- Content Verse Card -->
         <div id="content-verse" class="verse-container">
-            <div class="flipper-inner">
-                <div class="card-front">Click to reveal verse</div>
-                <div class="card-back">
-                    <p>I know what it is to be in need, and I know what it is to have plenty. I have learned the secret of being content in any and every situation. - <a href="https://www.biblegateway.com/passage/?search=Philippians+4%3A12&version=NIV" class="citation-link">Philippians 4:12</a> &#10013;</p>
-                </div>
-            </div>
+            <p>I know what it is to be in need, and I know what it is to have plenty. I have learned the secret of being content in any and every situation. - <a href="https://www.biblegateway.com/passage/?search=Philippians+4%3A12&version=NIV" class="citation-link">Philippians 4:12</a> &#10013;</p>
         </div>
-
-        <!-- Hurt Verse Card -->
         <div id="hurt-verse" class="verse-container">
-            <div class="flipper-inner">
-                <div class="card-front">Click to reveal verse</div>
-                <div class="card-back">
-                    <p>He heals the brokenhearted and binds up their wounds. - <a href="https://www.biblegateway.com/passage/?search=Psalm+147%3A3&version=NIV" class="citation-link">Psalm 147:3</a> &#10013;</p>
-                </div>
-            </div>
+            <p>He heals the brokenhearted and binds up their wounds. - <a href="https://www.biblegateway.com/passage/?search=Psalm+147%3A3&version=NIV" class="citation-link">Psalm 147:3</a> &#10013;</p>
         </div>
 
         <a href="#top" class="back-to-top">Back to Top</a>
