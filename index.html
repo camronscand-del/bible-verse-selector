@@ -4,573 +4,279 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find a Verse</title>
-    <!-- New Fonts from Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Favicon: Adds an icon to the browser tab -->
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/google/material-design-icons/master/png/social/public/baseline_book_black_48dp.png">
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Base Variables and Cursor */
-        :root {
-            --bg-color: #fcebeb;
-            --text-color: #444;
-            --header-color: #8b0000;
-            --link-text-color: #ffffff;
-            --verse-bg: #fff0f5;
-            --verse-border: #d44949;
-            --verse-text-color: #555;
-            --hero-bg-start: #ffb7b7;
-            --hero-bg-end: #ffa07a;
-            --hero-text-color: #8b0000;
-            --message-bg: #fff;
-            --message-text: #444;
-            --button-bg: #8b0000;
-            --button-hover: #a04040;
-        }
-
-        body[data-theme="light"] {
-            --bg-color: #fcebeb;
-            --text-color: #444;
-            --header-color: #8b0000;
-            --link-text-color: #ffffff;
-            --verse-bg: #fff0f5;
-            --verse-border: #d44949;
-            --verse-text-color: #555;
-            --hero-bg-start: #ffb7b7;
-            --hero-bg-end: #ffa07a;
-            --hero-text-color: #8b0000;
-            --message-bg: #fff;
-            --message-text: #444;
-        }
-
-        body[data-theme="dark"] {
-            --bg-color: #2c2c2c;
-            --text-color: #f0f0f0;
-            --header-color: #ffb7b7;
-            --link-text-color: #ffffff;
-            --verse-bg: #4a4a4a;
-            --verse-border: #8b0000;
-            --verse-text-color: #f0f0f0;
-            --hero-bg-start: #3a3a3a;
-            --hero-bg-end: #1a1a1a;
-            --hero-text-color: #ffb7b7;
-            --message-bg: #555;
-            --message-text: #f0f0f0;
-        }
-
-        body[data-theme="ocean"] {
-            --bg-color: #e0f7fa;
-            --text-color: #2c3e50;
-            --header-color: #3498db;
-            --link-text-color: #ffffff;
-            --verse-bg: #bbdefb;
-            --verse-border: #2196f3;
-            --verse-text-color: #2c3e50;
-            --hero-bg-start: #81d4fa;
-            --hero-bg-end: #03a9f4;
-            --hero-text-color: #2c3e50;
-            --message-bg: #fff;
-            --message-text: #2c3e50;
-        }
-
-        body[data-theme="forest"] {
-            --bg-color: #f0fff0;
-            --text-color: #2d543e;
-            --header-color: #4caf50;
-            --link-text-color: #ffffff;
-            --verse-bg: #c8e6c9;
-            --verse-border: #388e3c;
-            --verse-text-color: #2d543e;
-            --hero-bg-start: #a5d6a7;
-            --hero-bg-end: #4caf50;
-            --hero-text-color: #2d543e;
-            --message-bg: #fff;
-            --message-text: #2d543e;
-        }
-        
+        /* Custom styles for themes and layout */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body {
-            font-family: 'Merriweather', serif;
-            line-height: 1.6;
-            padding: 0;
-            margin: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
             transition: background-color 0.3s, color 0.3s;
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23f58a43" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>'), auto;
         }
-        .hero-section {
-            background: linear-gradient(to right, var(--hero-bg-start), var(--hero-bg-end));
-            color: var(--hero-text-color);
-            padding: 60px 20px;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            position: relative;
+        [data-theme="light"] {
+            background-color: #f8fafc;
+            color: #1f2937;
         }
-        .hero-section h1 {
-            font-family: 'Open Sans', sans-serif;
-            color: var(--hero-text-color);
-            margin-top: 0;
-            font-size: 2.8em;
-            margin-bottom: 10px;
+        [data-theme="dark"] {
+            background-color: #111827;
+            color: #f9fafb;
         }
-        .hero-section p {
-            max-width: 800px;
-            margin: 0 auto 20px auto;
-            font-size: 1.1em;
-            color: var(--hero-text-color);
+        [data-theme="blue"] {
+            background-color: #e0f2fe;
+            color: #0c4a6e;
         }
-        h2 {
-            font-family: 'Open Sans', sans-serif;
-            color: var(--header-color);
-            text-align: center;
-            margin-top: 40px;
-            margin-bottom: 20px;
+        [data-theme="green"] {
+            background-color: #d1fae5;
+            color: #065f46;
         }
-        .main-content {
-            padding: 20px;
-        }
-        .emotion-links {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 30px;
-            padding: 0 10px;
-        }
-        .emotion-links a {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 25px;
-            text-decoration: none;
-            color: var(--link-text-color);
-            font-weight: 600;
-            transition: transform 0.2s;
+        .emotion-card {
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .emotion-links a:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        .emotion-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
         }
-        .anxious-link { background: linear-gradient(#9c9c9c, #7b7b7b); }
-        .anxious-link:hover { background: linear-gradient(#b0b0b0, #9c9c9c); }
-        .sad-link { background: linear-gradient(#4a6792, #384e70); }
-        .sad-link:hover { background: linear-gradient(#5d78a8, #4a6792); }
-        .grateful-link { background: linear-gradient(#f39c12, #d68910); }
-        .grateful-link:hover { background: linear-gradient(#f6af3b, #f39c12); }
-        .stressed-link { background: linear-gradient(#c0392b, #a93226); }
-        .stressed-link:hover { background: linear-gradient(#d54c3c, #c0392b); }
-        .peaceful-link { background: linear-gradient(#2ecc71, #27ae60); }
-        .peaceful-link:hover { background: linear-gradient(#39e285, #2ecc71); }
-        .lonely-link { background: linear-gradient(#34495e, #2c3e50); }
-        .lonely-link:hover { background: linear-gradient(#4b6076, #34495e); }
-        .angry-link { background: linear-gradient(#e74c3c, #c0392b); }
-        .angry-link:hover { background: linear-gradient(#ff6666, #e74c3c); }
-        .hopeful-link { background: linear-gradient(#3498db, #2980b9); }
-        .hopeful-link:hover { background: linear-gradient(#4aa8e8, #3498db); }
-        .guilty-link { background: linear-gradient(#6c5ce7, #5f4cb6); }
-        .guilty-link:hover { background: linear-gradient(#7c6ef7, #6c5ce7); }
-        .fearful-link { background: linear-gradient(#95a5a6, #7f8c8d); }
-        .fearful-link:hover { background: linear-gradient(#a8b8b9, #95a5a6); }
-        .joyful-link { background: linear-gradient(#f1c40f, #d4ac0d); }
-        .joyful-link:hover { background: linear-gradient(#f5d415, #f1c40f); }
-        .tired-link { background: linear-gradient(#7f8c8d, #6a7677); }
-        .tired-link:hover { background: linear-gradient(#959ca2, #7f8c8d); }
-        .confused-link { background: linear-gradient(#9b59b6, #8e44ad); }
-        .confused-link:hover { background: linear-gradient(#a969c5, #9b59b6); }
-        .content-link { background: linear-gradient(#1abc9c, #16a085); }
-        .content-link:hover { background: linear-gradient(#26c1a1, #1abc9c); }
-        .hurt-link { background: linear-gradient(#d35400, #ba4a00); }
-        .hurt-link:hover { background: linear-gradient(#e76b19, #d35400); }
-        .random-link { background: linear-gradient(#5d98db, #4878b2); }
-        .random-link:hover { background: linear-gradient(#7aaddf, #5d98db); }
-        
-        /* General input and button styles */
-        .input-group {
-            margin-bottom: 15px;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .input-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--verse-border);
-            border-radius: 8px;
-            background-color: var(--verse-bg);
-            color: var(--text-color);
-        }
-        .section-header {
-            font-size: 1.2em;
-            margin-top: 25px;
-            margin-bottom: 10px;
-            color: var(--header-color);
-        }
-
-        /* Verse of the Day styles */
-        #verse-of-the-day {
-            text-align: center;
-            margin: 40px auto;
-            padding: 30px;
-            max-width: 700px;
-            border: 2px solid var(--header-color);
-            border-radius: 12px;
-            background: rgba(139, 0, 0, 0.05);
-            box-shadow: inset 0 0 10px rgba(139, 0, 0, 0.2);
-        }
-        #verse-of-the-day h3 {
-            color: var(--header-color);
-            font-size: 1.8em;
-            margin-top: 0;
-        }
-
-        .verse-container {
-            display: none;
-            margin-top: 20px;
-            padding: 25px;
-            border-radius: 12px;
-            background-color: var(--verse-bg);
-            color: var(--verse-text-color);
-            border-left: 5px solid var(--verse-border);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            transition: font-size 0.3s ease;
-        }
-        .verse-container p {
-            font-style: italic;
-            margin: 0;
-            font-size: 1.1rem;
-        }
-        .home-link {
-            display: block;
-            text-align: center;
-            margin: 20px auto;
-            color: var(--header-color);
-            font-weight: bold;
-            text-decoration: none;
-        }
-        .back-to-top {
-            display: block;
-            text-align: center;
-            margin-top: 40px;
-            font-size: 0.9em;
-            color: var(--text-color);
-            text-decoration: none;
-        }
-        .citation-link {
-            color: var(--header-color);
-            font-weight: bold;
-            text-decoration: none;
-        }
-        .citation-link:hover {
-            text-decoration: underline;
-        }
-        .controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin: 20px auto;
-            padding: 15px;
-            border-radius: 12px;
-            background-color: var(--verse-bg);
-            max-width: 500px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .controls h3 {
-            margin: 0;
-            color: var(--header-color);
-        }
-        .controls button {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 8px;
-            background-color: var(--button-bg);
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .controls button:hover {
-            background-color: var(--button-hover);
-        }
-
-        #profile-section {
-            display: none; /* Initially hidden */
-            flex-direction: column;
-            gap: 15px;
-            margin: 20px auto;
-            padding: 25px;
-            max-width: 500px;
-            border-radius: 12px;
-            background-color: var(--verse-bg);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        #profile-section input, #profile-section textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--verse-border);
-            border-radius: 8px;
-            background-color: var(--verse-bg);
-            color: var(--text-color);
-        }
-
-        #profile-section button {
-            align-self: flex-start;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            background-color: var(--button-bg);
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        #profile-section button:hover {
-            background-color: var(--button-hover);
-        }
-
-        #auth-section {
-            display: block; /* Initially shown */
-            margin: 20px auto;
-            padding: 25px;
-            max-width: 500px;
-            border-radius: 12px;
-            background-color: var(--verse-bg);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        #auth-section input {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            border: 1px solid var(--verse-border);
-            background-color: var(--verse-bg);
-            color: var(--text-color);
-        }
-        #auth-section button {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            background-color: var(--button-bg);
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        #auth-section button:hover {
-            background-color: var(--button-hover);
-        }
-        #auth-section p, #auth-section a {
-            text-align: center;
-            margin-top: 15px;
-        }
-        #message-box {
+        .message-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
             display: none;
             text-align: center;
-            margin: 20px auto;
-            padding: 15px;
-            border-radius: 8px;
-            background-color: var(--message-bg);
-            color: var(--message-text);
-            max-width: 500px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .separator {
-            border: 0;
-            height: 1px;
-            background-image: linear-gradient(to right, rgba(0, 0, 0, 0), var(--header-color), rgba(0, 0, 0, 0));
-            margin: 20px 0;
         }
     </style>
 </head>
-<body data-theme="light">
-    <a id="top"></a>
-    <div class="hero-section">
-        <h1>Find a Bible Verse</h1>
-        <p>How are you feeling today? Click an emotion to find a comforting verse.</p>
-    </div>
+<body class="bg-gray-50 text-gray-800 transition-colors duration-300" data-theme="light">
+
+    <!-- Header Section -->
+    <header class="bg-white shadow-md py-4 px-6 flex justify-between items-center sticky top-0 z-50 rounded-b-lg">
+        <h1 class="text-3xl font-bold text-indigo-600">Find a Verse</h1>
+        <div id="user-display" class="flex items-center space-x-4">
+            <span id="user-name-display" class="text-xl font-medium">Guest</span>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-6 lg:p-12">
+        <div id="message-box" class="message-box"></div>
+
+        <!-- Authentication Section (initially visible) -->
+        <section id="auth-section" class="bg-white p-8 rounded-2xl shadow-lg max-w-lg mx-auto mb-8">
+            <h2 class="text-2xl font-semibold text-center mb-6">Log In or Sign Up</h2>
+            <div id="login-form" class="space-y-4">
+                <input type="email" id="login-email-input" placeholder="Email" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <input type="password" id="login-password-input" placeholder="Password" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <button id="login-btn" class="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-indigo-700 transition-colors">Log In</button>
+                <p class="text-center text-sm mt-4">Don't have an account? <a href="#" id="show-signup" class="text-indigo-600 hover:underline">Sign up here</a>.</p>
+            </div>
+            <div id="signup-form" class="space-y-4 hidden">
+                <input type="email" id="signup-email-input" placeholder="Email" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <input type="password" id="signup-password-input" placeholder="Password" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <button id="signup-btn" class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-green-700 transition-colors">Sign Up</button>
+                <p class="text-center text-sm mt-4">Already have an account? <a href="#" id="show-login" class="text-green-600 hover:underline">Log in here</a>.</p>
+            </div>
+        </section>
+
+        <!-- Profile Section (initially hidden) -->
+        <section id="profile-section" class="hidden flex-col items-center">
+            <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-lg mx-auto">
+                <h2 class="text-2xl font-semibold text-center mb-6">Your Profile</h2>
+                <div class="space-y-4">
+                    <input type="text" id="name-input" placeholder="Your Name" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <textarea id="bio-input" placeholder="A short bio..." rows="3" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                    <button id="save-profile-btn" class="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-indigo-700 transition-colors">Save Profile</button>
+                    <button id="signout-btn" class="w-full bg-red-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-red-700 transition-colors mt-4">Sign Out</button>
+                    
+                    <h3 class="text-xl font-semibold mt-8">Account Management</h3>
+                    <div class="space-y-4">
+                        <input type="email" id="email-input" placeholder="Change Email" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <button id="change-email-btn" class="w-full bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl hover:bg-gray-300 transition-colors">Change Email</button>
+                        <input type="password" id="password-input" placeholder="Change Password (min 6 chars)" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <button id="change-password-btn" class="w-full bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl hover:bg-gray-300 transition-colors">Change Password</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Daily Verse & Controls -->
+        <section class="mt-8 text-center">
+            <div id="verse-of-the-day" class="bg-white p-6 rounded-2xl shadow-lg mb-6">
+                <!-- Verse of the day will be loaded here by JavaScript -->
+            </div>
+            <button id="random-verse-btn" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition-colors transform hover:scale-105">
+                Find a Random Verse
+            </button>
+            <div class="mt-8 flex justify-center space-x-4">
+                <button id="font-size-decrease-btn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-full hover:bg-gray-300 transition-colors">-A</button>
+                <button id="font-size-increase-btn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-full hover:bg-gray-300 transition-colors">+A</button>
+            </div>
+        </section>
+
+        <!-- Emotion Grid -->
+        <section class="mt-12">
+            <h2 class="text-3xl font-bold text-center mb-8">What are you feeling today?</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                <!-- Each emotion card links to a specific verse -->
+                <a href="#anxious" data-verse-id="anxious-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
+                    <img src="https://placehold.co/100x100/A3A3A3/000000?text=Anxious" alt="Anxious" class="mx-auto rounded-full mb-4">
+                    <span class="font-semibold text-lg">Anxious</span>
+                </a>
+                <a href="#sad" data-verse-id="sad-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
+                    <img src="https://placehold.co/100x100/A3A3A3/000000?text=Sad" alt="Sad" class="mx-auto rounded-full mb-4">
+                    <span class="font-semibold text-lg">Sad</span>
+                </a>
+                <a href="#grateful" data-verse-id="grateful-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
+                    <img src="https://placehold.co/100x100/A3A3A3/000000?text=Grateful" alt="Grateful" class="mx-auto rounded-full mb-4">
+                    <span class="font-semibold text-lg">Grateful</span>
+                </a>
+                <a href="#stressed" data-verse-id="stressed-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
+                    <img src="https://placehold.co/100x100/A3A3A3/000000?text=Stressed" alt="Stressed" class="mx-auto rounded-full mb-4">
+                    <span class="font-semibold text-lg">Stressed</span>
+                </a>
+                <a href="#peaceful" data-verse-id="peaceful-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
+                    <img src="https://placehold.co/100x100/A3A3A3/000000?text=Peaceful" alt="Peaceful" class="mx-auto rounded-full mb-4">
+                    <span class="font-semibold text-lg">Peaceful</span>
+                </a>
+                <a href="#lonely" data-verse-id="lonely-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
+                    <img src="https://placehold.co/100x100/A3A3A3/000000?text=Lonely" alt="Lonely" class="mx-auto rounded-full mb-4">
+                    <span class="font-semibold text-lg">Lonely</span>
+                </a>
+                <a href="#angry" data-verse-id="angry-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
+                    <img src="https://placehold.co/100x100/A3A3A3/000000?text=Angry" alt="Angry" class="mx-auto rounded-full mb-4">
+                    <span class="font-semibold text-lg">Angry</span>
+                </a>
+                <a href="#hopeful" data-verse-id="hopeful-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
+                    <img src="https://placehold.co/100x100/A3A3A3/000000?text=Hopeful" alt="Hopeful" class="mx-auto rounded-full mb-4">
+                    <span class="font-semibold text-lg">Hopeful</span>
+                </a>
+                <a href="#guilty" data-verse-id="guilty-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
+                    <img src="https://placehold.co/100x100/A3A3A3/000000?text=Guilty" alt="Guilty" class="mx-auto rounded-full mb-4">
+                    <span class="font-semibold text-lg">Guilty</span>
+                </a>
+                <a href="#fearful" data-verse-id="fearful-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
+                    <img src="https://placehold.co/100x100/A3A3A3/000000?text=Fearful" alt="Fearful" class="mx-auto rounded-full mb-4">
+                    <span class="font-semibold text-lg">Fearful</span>
+                </a>
+                <a href="#joyful" data-verse-id="joyful-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
+                    <img src="https://placehold.co/100x100/A3A3A3/000000?text=Joyful" alt="Joyful" class="mx-auto rounded-full mb-4">
+                    <span class="font-semibold text-lg">Joyful</span>
+                </a>
+                <a href="#tired" data-verse-id="tired-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
+                    <img src="https://placehold.co/100x100/A3A3A3/000000?text=Tired" alt="Tired" class="mx-auto rounded-full mb-4">
+                    <span class="font-semibold text-lg">Tired</span>
+                </a>
+                <a href="#confused" data-verse-id="confused-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
+                    <img src="https://placehold.co/100x100/A3A3A3/000000?text=Confused" alt="Confused" class="mx-auto rounded-full mb-4">
+                    <span class="font-semibold text-lg">Confused</span>
+                </a>
+                <a href="#content" data-verse-id="content-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
+                    <img src="https://placehold.co/100x100/A3A3A3/000000?text=Content" alt="Content" class="mx-auto rounded-full mb-4">
+                    <span class="font-semibold text-lg">Content</span>
+                </a>
+                <a href="#hurt" data-verse-id="hurt-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
+                    <img src="https://placehold.co/100x100/A3A3A3/000000?text=Hurt" alt="Hurt" class="mx-auto rounded-full mb-4">
+                    <span class="font-semibold text-lg">Hurt</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Verses Section (Initially hidden) -->
+        <section class="mt-12 space-y-8">
+            <div id="anxious-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4">Anxious</h2>
+                <p class="text-xl leading-relaxed">"Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God."</p>
+                <p class="mt-4 text-sm font-light text-gray-500">- Philippians 4:6</p>
+            </div>
+            <div id="sad-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4">Sad</h2>
+                <p class="text-xl leading-relaxed">"The Lord is close to the brokenhearted and saves those who are crushed in spirit."</p>
+                <p class="mt-4 text-sm font-light text-gray-500">- Psalm 34:18</p>
+            </div>
+            <div id="grateful-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4">Grateful</h2>
+                <p class="text-xl leading-relaxed">"Give thanks to the Lord, for he is good; his love endures forever."</p>
+                <p class="mt-4 text-sm font-light text-gray-500">- Psalm 107:1</p>
+            </div>
+            <div id="stressed-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4">Stressed</h2>
+                <p class="text-xl leading-relaxed">"Come to me, all you who are weary and burdened, and I will give you rest."</p>
+                <p class="mt-4 text-sm font-light text-gray-500">- Matthew 11:28</p>
+            </div>
+            <div id="peaceful-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4">Peaceful</h2>
+                <p class="text-xl leading-relaxed">"I have told you these things, so that in me you may have peace. In this world you will have trouble. But take heart! I have overcome the world."</p>
+                <p class="mt-4 text-sm font-light text-gray-500">- John 16:33</p>
+            </div>
+            <div id="lonely-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4">Lonely</h2>
+                <p class="text-xl leading-relaxed">"The Lord is on my side; I will not fear. What can man do to me?"</p>
+                <p class="mt-4 text-sm font-light text-gray-500">- Psalm 118:6</p>
+            </div>
+            <div id="angry-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4">Angry</h2>
+                <p class="text-xl leading-relaxed">"A gentle answer turns away wrath, but a harsh word stirs up anger."</p>
+                <p class="mt-4 text-sm font-light text-gray-500">- Proverbs 15:1</p>
+            </div>
+            <div id="hopeful-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4">Hopeful</h2>
+                <p class="text-xl leading-relaxed">"For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future."</p>
+                <p class="mt-4 text-sm font-light text-gray-500">- Jeremiah 29:11</p>
+            </div>
+            <div id="guilty-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4">Guilty</h2>
+                <p class="text-xl leading-relaxed">"If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness."</p>
+                <p class="mt-4 text-sm font-light text-gray-500">- 1 John 1:9</p>
+            </div>
+            <div id="fearful-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4">Fearful</h2>
+                <p class="text-xl leading-relaxed">"Do not be afraid or discouraged, for the Lord your God will be with you wherever you go."</p>
+                <p class="mt-4 text-sm font-light text-gray-500">- Joshua 1:9</p>
+            </div>
+            <div id="joyful-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4">Joyful</h2>
+                <p class="text-xl leading-relaxed">"Rejoice in the Lord always. I will say it again: Rejoice!"</p>
+                <p class="mt-4 text-sm font-light text-gray-500">- Philippians 4:4</p>
+            </div>
+            <div id="tired-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4">Tired</h2>
+                <p class="text-xl leading-relaxed">"But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint."</p>
+                <p class="mt-4 text-sm font-light text-gray-500">- Isaiah 40:31</p>
+            </div>
+            <div id="confused-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4">Confused</h2>
+                <p class="text-xl leading-relaxed">"For God is not a God of confusion but of peace."</p>
+                <p class="mt-4 text-sm font-light text-gray-500">- 1 Corinthians 14:33</p>
+            </div>
+            <div id="content-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4">Content</h2>
+                <p class="text-xl leading-relaxed">"I know what it is to be in need, and I know what it is to have plenty. I have learned the secret of being content in any and every situation."</p>
+                <p class="mt-4 text-sm font-light text-gray-500">- Philippians 4:12</p>
+            </div>
+            <div id="hurt-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4">Hurt</h2>
+                <p class="text-xl leading-relaxed">"He heals the brokenhearted and binds up their wounds."</p>
+                <p class="mt-4 text-sm font-light text-gray-500">- Psalm 147:3</p>
+            </div>
+        </section>
+
+        <!-- Theme Switcher -->
+        <section class="mt-12 text-center">
+            <h2 class="text-2xl font-bold mb-4">Choose a Theme</h2>
+            <div class="flex justify-center space-x-4">
+                <button data-theme="light" class="w-12 h-12 rounded-full border-4 border-white shadow-md bg-gray-50 hover:scale-110 transition-transform transform"></button>
+                <button data-theme="dark" class="w-12 h-12 rounded-full border-4 border-white shadow-md bg-gray-800 hover:scale-110 transition-transform transform"></button>
+                <button data-theme="blue" class="w-12 h-12 rounded-full border-4 border-white shadow-md bg-sky-200 hover:scale-110 transition-transform transform"></button>
+                <button data-theme="green" class="w-12 h-12 rounded-full border-4 border-white shadow-md bg-teal-200 hover:scale-110 transition-transform transform"></button>
+            </div>
+        </section>
+    </main>
     
-    <div class="main-content">
-        <section id="auth-section">
-            <h2>Log In or Sign Up</h2>
-            <div id="login-form">
-                <input type="email" id="login-email-input" placeholder="Email">
-                <input type="password" id="login-password-input" placeholder="Password">
-                <button id="login-btn">Log In</button>
-                <p>Don't have an account? <a href="#" id="show-signup">Sign Up here</a></p>
-            </div>
-            <div id="signup-form" style="display: none;">
-                <input type="email" id="signup-email-input" placeholder="Email">
-                <input type="password" id="signup-password-input" placeholder="Password">
-                <button id="signup-btn">Sign Up</button>
-                <p>Already have an account? <a href="#" id="show-login">Log In here</a></p>
-            </div>
-            <div id="message-box"></div>
-        </section>
-
-        <section id="user-profile">
-            <h2>My Profile</h2>
-            <div id="profile-section">
-                <p>Welcome back, <span id="user-name-display">Guest</span>!</p>
-
-                <div class="section-header">Edit Your Profile</div>
-                <div class="input-group">
-                    <label for="name-input">Name</label>
-                    <input type="text" id="name-input" placeholder="Your Name">
-                </div>
-                <div class="input-group">
-                    <label for="bio-input">Bio</label>
-                    <textarea id="bio-input" placeholder="Tell us about yourself..." rows="3"></textarea>
-                </div>
-                <button id="save-profile-btn">Save Profile</button>
-                
-                <hr class="separator">
-
-                <div class="section-header">Change Email and Password</div>
-                <div class="input-group">
-                    <label for="email-input">New Email</label>
-                    <input type="email" id="email-input" placeholder="New Email">
-                </div>
-                <button id="change-email-btn">Change Email</button>
-
-                <div class="input-group" style="margin-top: 15px;">
-                    <label for="password-input">New Password</label>
-                    <input type="password" id="password-input" placeholder="New Password">
-                </div>
-                <button id="change-password-btn">Change Password</button>
-
-                <hr class="separator">
-
-                <button id="signout-btn">Sign Out</button>
-            </div>
-        </section>
-
-        <section id="theme-font-controls">
-            <h2>Customize Your Experience</h2>
-            <div class="controls">
-                <h3>Change Theme:</h3>
-                <button data-theme="light">Light</button>
-                <button data-theme="dark">Dark</button>
-                <button data-theme="ocean">Ocean</button>
-                <button data-theme="forest">Forest</button>
-            </div>
-            <div class="controls">
-                <h3>Font Size:</h3>
-                <button id="font-size-decrease-btn">A-</button>
-                <button id="font-size-increase-btn">A+</button>
-            </div>
-        </section>
-
-        <h2>Verse of the Day</h2>
-        <div id="verse-of-the-day">
-            <h3>Loading...</h3>
-        </div>
-
-        <h2>What is This?</h2>
-        <p>This website is a simple tool to help you find a Bible verse for how you are feeling. The Bible is a source of comfort and guidance, and this page can help you find a verse that speaks to your heart.</p>
-        <hr>
-        
-        <div class="emotion-links">
-            <a href="#anxious-verse" class="emotion-link anxious-link" data-verse-id="anxious-verse">Anxious</a>
-            <a href="#sad-verse" class="emotion-link sad-link" data-verse-id="sad-verse">Sad</a>
-            <a href="#grateful-verse" class="emotion-link grateful-link" data-verse-id="grateful-verse">Grateful</a>
-            <a href="#stressed-verse" class="emotion-link stressed-link" data-verse-id="stressed-verse">Stressed</a>
-            <a href="#peaceful-verse" class="emotion-link peaceful-link" data-verse-id="peaceful-verse">Peaceful</a>
-            <a href="#lonely-verse" class="emotion-link lonely-link" data-verse-id="lonely-verse">Lonely</a>
-            <a href="#angry-verse" class="emotion-link angry-link" data-verse-id="angry-verse">Angry</a>
-            <a href="#hopeful-verse" class="emotion-link hopeful-link" data-verse-id="hopeful-verse">Hopeful</a>
-            <a href="#guilty-verse" class="emotion-link guilty-link" data-verse-id="guilty-verse">Guilty</a>
-            <a href="#fearful-verse" class="emotion-link fearful-link" data-verse-id="fearful-verse">Fearful</a>
-            <a href="#joyful-verse" class="emotion-link joyful-link" data-verse-id="joyful-verse">Joyful</a>
-            <a href="#tired-verse" class="emotion-link tired-link" data-verse-id="tired-verse">Tired</a>
-            <a href="#confused-verse" class="emotion-link confused-link" data-verse-id="confused-verse">Confused</a>
-            <a href="#content-verse" class="emotion-link content-link" data-verse-id="content-verse">Content</a>
-            <a href="#hurt-verse" class="emotion-link hurt-link" data-verse-id="hurt-verse">Hurt</a>
-            <a href="#" id="random-verse-btn" class="random-link">Random Verse</a>
-        </div>
-
-        <div id="anxious-verse" class="verse-container">
-            <p>Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. - <a href="https://www.biblegateway.com/passage/?search=Philippians+4%3A6&version=NIV" class="citation-link">Philippians 4:6</a> &#10013;</p>
-        </div>
-        <div id="sad-verse" class="verse-container">
-            <p>The Lord is close to the brokenhearted and saves those who are crushed in spirit. - <a href="https://www.biblegateway.com/passage/?search=Psalm+34%3A18&version=NIV" class="citation-link">Psalm 34:18</a> &#10013;</p>
-        </div>
-        <div id="grateful-verse" class="verse-container">
-            <p>Give thanks to the Lord, for he is good; his love endures forever. - <a href="https://www.biblegateway.com/passage/?search=Psalm+107%3A1&version=NIV" class="citation-link">Psalm 107:1</a> &#10013;</p>
-        </div>
-        <div id="stressed-verse" class="verse-container">
-            <p>Come to me, all you who are weary and burdened, and I will give you rest. - <a href="https://www.biblegateway.com/passage/?search=Matthew+11%3A28&version=NIV" class="citation-link">Matthew 11:28</a> &#10013;</p>
-        </div>
-        <div id="peaceful-verse" class="verse-container">
-            <p>I have told you these things, so that in me you may have peace. In this world you will have trouble. But take heart! I have overcome the world. - <a href="https://www.biblegateway.com/passage/?search=John+16%3A33&version=NIV" class="citation-link">John 16:33</a> &#10013;</p>
-        </div>
-        <div id="lonely-verse" class="verse-container">
-            <p>The Lord is on my side; I will not fear. What can man do to me? - <a href="https://www.biblegateway.com/passage/?search=Psalm+118%3A6&version=NIV" class="citation-link">Psalm 118:6</a> &#10013;</p>
-        </div>
-        <div id="angry-verse" class="verse-container">
-            <p>A gentle answer turns away wrath, but a harsh word stirs up anger. - <a href="https://www.biblegateway.com/passage/?search=Proverbs+15%3A1&version=NIV" class="citation-link">Proverbs 15:1</a> &#10013;</p>
-        </div>
-        <div id="hopeful-verse" class="verse-container">
-            <p>For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future. - <a href="https://www.biblegateway.com/passage/?search=Jeremiah+29%3A11&version=NIV" class="citation-link">Jeremiah 29:11</a> &#10013;</p>
-        </div>
-        <div id="guilty-verse" class="verse-container">
-            <p>If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness. - <a href="https://www.biblegateway.com/passage/?search=1+John+1%3A9&version=NIV" class="citation-link">1 John 1:9</a> &#10013;</p>
-        </div>
-        <div id="fearful-verse" class="verse-container">
-            <p>Do not be afraid or discouraged, for the Lord your God will be with you wherever you go. - <a href="https://www.biblegateway.com/passage/?search=Joshua+1%3A9&version=NIV" class="citation-link">Joshua 1:9</a> &#10013;</p>
-        </div>
-        <div id="joyful-verse" class="verse-container">
-            <p>Rejoice in the Lord always. I will say it again: Rejoice! - <a href="https://www.biblegateway.com/passage/?search=Philippians+4%3A4&version=NIV" class="citation-link">Philippians 4:4</a> &#10013;</p>
-        </div>
-        <div id="tired-verse" class="verse-container">
-            <p>But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint. - <a href="https://www.biblegateway.com/passage/?search=Isaiah+40%3A31&version=NIV" class="citation-link">Isaiah 40:31</a> &#10013;</p>
-        </div>
-        <div id="confused-verse" class="verse-container">
-            <p>For God is not a God of confusion but of peace. - <a href="https://www.biblegateway.com/passage/?search=1+Corinthians+14%3A33&version=NIV" class="citation-link">1 Corinthians 14:33</a> &#10013;</p>
-        </div>
-        <div id="content-verse" class="verse-container">
-            <p>I know what it is to be in need, and I know what it is to have plenty. I have learned the secret of being content in any and every situation. - <a href="https://www.biblegateway.com/passage/?search=Philippians+4%3A12&version=NIV" class="citation-link">Philippians 4:12</a> &#10013;</p>
-        </div>
-        <div id="hurt-verse" class="verse-container">
-            <p>He heals the brokenhearted and binds up their wounds. - <a href="https://www.biblegateway.com/passage/?search=Psalm+147%3A3&version=NIV" class="citation-link">Psalm 147:3</a> &#10013;</p>
-        </div>
-
-        <a href="#top" class="back-to-top">Back to Top</a>
-    </div>
-    
-    <!-- Firebase SDK Imports -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateEmail, updatePassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        
-        // These global variables are provided by the environment
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-        
-        // Initialize Firebase services
-        const app = initializeApp(firebaseConfig);
-        window.db = getFirestore(app);
-        window.auth = getAuth(app);
-        window.getProfileDoc = (userId) => doc(window.db, `artifacts/${appId}/users/${userId}/profile/user_data`);
-        
-        // Expose Firebase auth methods to the global scope
-        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
-        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
-        window.signOut = signOut;
-        window.onAuthStateChanged = onAuthStateChanged;
-        window.updateEmail = updateEmail;
-        window.updatePassword = updatePassword;
-
-    </script>
-    <script src="script.js"></script>
+    <!-- This is the crucial line that links to your JavaScript file! -->
+    <script type="module" src="script.js"></script>
 </body>
 </html>
