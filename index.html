@@ -305,9 +305,33 @@
             font-weight: bold;
             text-decoration: none;
         }
+
+        /* New styles for the footer and back to top link */
+        .back-to-top {
+            display: block;
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        /* Style for the new citation links */
+        .citation-link {
+            color: var(--header-color); /* Matches the main heading color */
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .citation-link:hover {
+            text-decoration: underline;
+        }
+
     </style>
 </head>
 <body>
+
+    <a id="top"></a>
 
     <h1>Find a Bible Verse</h1>
 
@@ -324,7 +348,7 @@
         <a href="#sad-verse" class="sad-link">Sad</a>
         <a href="#grateful-verse" class="grateful-link">Grateful</a>
         <a href="#stressed-verse" class="stressed-link">Stressed</a>
-        <a href="#peaceful-verse" class="peaceful-link">Peaceful</a>
+        <a href="#peaceful-link" class="peaceful-link">Peaceful</a>
         <a href="#lonely-verse" class="lonely-link">Lonely</a>
         <a href="#angry-verse" class="angry-link">Angry</a>
         <a href="#hopeful-verse" class="hopeful-link">Hopeful</a>
@@ -338,7 +362,7 @@
     </div>
 
     <div id="anxious-verse" class="verse-container">
-        <p>Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. - Philippians 4:6 &#10013;</p>
+        <p>Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. - <a href="https://www.biblegateway.com/passage/?search=Philippians+4%3A6&version=NIV" class="citation-link">Philippians 4:6</a> &#10013;</p>
     </div>
     <div id="sad-verse" class="verse-container">
         <p>The Lord is close to the brokenhearted and saves those who are crushed in spirit. - Psalm 34:18 &#10013;</p>
@@ -380,8 +404,10 @@
         <p>I know what it is to be in need, and I know what it is to have plenty. I have learned the secret of being content in any and every situation. - Philippians 4:12 &#10013;</p>
     </div>
     <div id="hurt-verse" class="verse-container">
-        <p>He heals the brokenhearted and binds up their wounds. - Psalm 147:3 &#10013;</p>
+        <p>He heals the brokenhearted and binds up their wounds. - <a href="https://www.biblegateway.com/passage/?search=Psalm+147%3A3&version=NIV" class="citation-link">Psalm 147:3</a> &#10013;</p>
     </div>
+
+    <a href="#top" class="back-to-top">Back to Top</a>
 
 </body>
 </html>
