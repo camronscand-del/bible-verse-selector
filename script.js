@@ -20,12 +20,13 @@ const verseIds = [
 // Get the random verse button
 const randomBtn = document.getElementById('random-verse-btn');
 
-// Get all the verse containers
-const verseContainers = document.querySelectorAll('.verse-container');
-
 // Add a click event listener to the button
-randomBtn.addEventListener('click', () => {
-    // Hide all verses first
+randomBtn.addEventListener('click', (event) => {
+    // This stops the page from jumping to a different section
+    event.preventDefault(); 
+    
+    // Hide all verses
+    const verseContainers = document.querySelectorAll('.verse-container');
     verseContainers.forEach(container => {
         container.style.display = 'none';
     });
