@@ -1,60 +1,125 @@
-.html
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Find a Verse (CSS-Only)</title>
+    <title>Find a Verse</title>
     <style>
-        /* --- COLOUR CHANGES START HERE --- */
-        body body {
-    font-family: 'Poppins', sans-serif;
-    /* ... other styles ... */
-}
+        /* 1. Define variables for the light theme */
+        :root {
+            --bg-color: #fcebeb; /* A soft, warm pink background */
+            --text-color: #444; /* Slightly softer text color */
+            --header-color: #8b0000; /* Rich, deep red */
+            --link-bg: #ff6347; /* Vibrant red-orange */
+            --link-hover-bg: #e5533d; /* Darker red-orange */
+            --link-text-color: #ffffff; /* White text on links */
+            --verse-bg: #fff0f5; /* Very light, soft pink */
+            --verse-border: #d4a9a9;
+            --verse-text-color: #555;
+        }
+
+        /* 2. Define variables for the dark theme */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #2c2c2c; /* Dark grey background */
+                --text-color: #f0f0f0; /* Light text */
+                --header-color: #ffb7b7; /* Light red */
+                --link-bg: #8b0000; /* Darker red for links */
+                --link-hover-bg: #5f0000;
+                --link-text-color: #ffffff;
+                --verse-bg: #4a4a4a; /* Darker grey box */
+                --verse-border: #777;
+                --verse-text-color: #f0f0f0;
+            }
+        }
+
+        /* 3. Use the variables to style your page */
+        body {
+            font-family: 'Bookman Old Style', Georgia, serif;
+            line-height: 1.6;
+            padding: 20px;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
         .header-image {
             width: 100%;
-            max-width: 600px;
-            height: auto; /* Keeps the image proportions correct */
+            max-width: 200px; /* Smaller max-width suitable for a logo */
+            height: auto;
             display: block;
-            margin: 0 auto 20px; /* Centers the image */
-            border-radius: 8px;
+            margin: 20px auto;
+            border-radius: 50%; /* Makes the logo circular, remove if not desired */
         }
+
+        h1 {
+            color: var(--header-color);
+            text-align: center;
+        }
+
+        p {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 20px;
+        }
+
         .emotion-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
         }
+
         .emotion-links a {
-            padding: 8px 12px;
-            border: 1px solid #a9c2d6;
-            border-radius: 5px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px; /* Pill-shaped buttons */
             text-decoration: none;
-            background-color: #ffffff; /* White background for links */
-            color: #005a9c; /* Dark blue text for links */
-            transition: background-color 0.2s;
+            background-color: var(--link-bg);
+            color: var(--link-text-color);
+            font-weight: 600;
+            transition: background-color 0.2s, transform 0.2s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
         .emotion-links a:hover {
-            background-color: #eaf5ff; /* Lighter blue on hover */
+            background-color: var(--link-hover-bg);
+            transform: translateY(-2px);
         }
+
         .verse-container {
             display: none;
             margin-top: 20px;
-            padding: 15px;
-            border: 1px solid #005a9c;
-            border-radius: 5px;
-            background-color: #e6f3ff; /* Light blue background for verse box */
-            color: #003058; /* Darker blue text for verse */
-            border-left: 5px solid #005a9c;
+            padding: 25px;
+            border-radius: 12px;
+            background-color: var(--verse-bg);
+            color: var(--verse-text-color);
+            border-left: 5px solid var(--verse-border);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
         }
+
+        .verse-container p {
+            font-style: italic;
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
         .verse-container:target {
             display: block;
         }
-        /* --- COLOUR CHANGES END HERE --- */
     </style>
 </head>
 <body>
 
-    <img src="https://picsum.photos/600/200" alt="A calming natural landscape" class="header-image">
+    <!-- ▼▼▼ YOUR LOGO GOES HERE ▼▼▼ -->
+    <!-- Make sure you have uploaded a file named "logo.png" to your GitHub repository! -->
+    <img src="logo.png" alt="My Website Logo" class="header-image">
 
     <h1>Find a Bible Verse</h1>
     <p>How are you feeling today? Click an emotion to find a comforting verse.</p>
@@ -121,9 +186,8 @@
         <p>I know what it is to be in need, and I know what it is to have plenty. I have learned the secret of being content in any and every situation. - Philippians 4:12</p>
     </div>
     <div id="hurt-verse" class="verse-container">
-        <p>The Lord is near to the brokenhearted and saves the crushed in spirit. - Psalm 34:18</p>
+        <p>He heals the brokenhearted and binds up their wounds. - Psalm 147:3</p>
     </div>
 
 </body>
 </html>
-
