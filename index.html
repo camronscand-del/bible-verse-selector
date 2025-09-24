@@ -12,6 +12,18 @@
             transition: background-color 0.3s, color 0.3s;
         }
         /* --- Themes --- */
+        .theme-light {
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+        .theme-light .bg-white { background-color: #ffffff; }
+        .theme-light .text-gray-800 { color: #1f2937; }
+        .theme-light .text-gray-500 { color: #6b7280; }
+        .theme-light input, .theme-light textarea { background-color: #ffffff; border-color: #d1d5db; color: #1f2937; }
+        .theme-light input::placeholder, .theme-light textarea::placeholder { color: #9ca3af; }
+        .theme-light .border-gray-300 { border-color: #d1d5db; }
+        .theme-light .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        
         .theme-dark {
             background-color: #1a202c;
             color: #e2e8f0;
@@ -36,6 +48,20 @@
         .theme-ocean .border-gray-300 { border-color: #93c5fd; }
         .theme-ocean .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
         .theme-ocean .bg-blue-600 { background-color: #1d4ed8; }
+
+        .theme-forest-green {
+            background-color: #f0fdf4;
+            color: #166534;
+        }
+        .theme-forest-green .bg-white { background-color: #dcfce7; }
+        .theme-forest-green .text-gray-800 { color: #166534; }
+        .theme-forest-green .text-gray-500 { color: #4ade80; }
+        .theme-forest-green input, .theme-forest-green textarea { background-color: #f0fdf4; border-color: #bbf7d0; color: #166534; }
+        .theme-forest-green input::placeholder, .theme-forest-green textarea::placeholder { color: #bbf7d0; }
+        .theme-forest-green .border-gray-300 { border-color: #bbf7d0; }
+        .theme-forest-green .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .theme-forest-green .bg-blue-600 { background-color: #15803d; }
+        .theme-forest-green .text-blue-600 { color: #15803d; }
         
         .verse-card {
             background-size: cover;
@@ -99,15 +125,15 @@
         <section class="border-t border-gray-300 pt-6 space-y-4">
             <h2 class="text-xl font-bold text-gray-800">Find a Verse by Emotion</h2>
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                <button data-emotion="joy" class="verse-card bg-green-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/22c55e/ffffff?text=Joy');">Joy</button>
-                <button data-emotion="peace" class="verse-card bg-purple-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/a855f7/ffffff?text=Peace');">Peace</button>
-                <button data-emotion="sadness" class="verse-card bg-blue-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/3b82f6/ffffff?text=Sadness');">Sadness</button>
-                <button data-emotion="fear" class="verse-card bg-orange-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/f97316/ffffff?text=Fear');">Fear</button>
-                <button data-emotion="anger" class="verse-card bg-red-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/ef4444/ffffff?text=Anger');">Anger</button>
-                <button data-emotion="strength" class="verse-card bg-indigo-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/6366f1/ffffff?text=Strength');">Strength</button>
-                <button data-emotion="hope" class="verse-card bg-yellow-400 text-gray-800 p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/fcd34d/ffffff?text=Hope');">Hope</button>
-                <button data-emotion="gratitude" class="verse-card bg-pink-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/f472b6/ffffff?text=Gratitude');">Gratitude</button>
-                <button data-emotion="healing" class="verse-card bg-teal-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/2dd4bf/ffffff?text=Healing');">Healing</button>
+                <button data-emotion="joy" class="verse-card bg-green-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/22c55e/ffffff');">Joy</button>
+                <button data-emotion="peace" class="verse-card bg-purple-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/a855f7/ffffff');">Peace</button>
+                <button data-emotion="sadness" class="verse-card bg-blue-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/3b82f6/ffffff');">Sadness</button>
+                <button data-emotion="fear" class="verse-card bg-orange-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/f97316/ffffff');">Fear</button>
+                <button data-emotion="anger" class="verse-card bg-red-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/ef4444/ffffff');">Anger</button>
+                <button data-emotion="strength" class="verse-card bg-indigo-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/6366f1/ffffff');">Strength</button>
+                <button data-emotion="hope" class="verse-card bg-yellow-400 text-gray-800 p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/fcd34d/ffffff');">Hope</button>
+                <button data-emotion="gratitude" class="verse-card bg-pink-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/f472b6/ffffff');">Gratitude</button>
+                <button data-emotion="healing" class="verse-card bg-teal-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/2dd4bf/ffffff');">Healing</button>
             </div>
             <div id="random-verse-container" class="mt-4">
                  <button id="random-verse-button" class="w-full bg-gray-300 text-gray-800 p-3 rounded-lg hover:bg-gray-400 transition-colors duration-300 font-bold shadow-md">Get a Random Verse</button>
@@ -136,6 +162,7 @@
                     <button data-theme="light" class="w-8 h-8 rounded-full bg-white border border-gray-300 hover:ring-2 hover:ring-blue-500 transition-all"></button>
                     <button data-theme="dark" class="w-8 h-8 rounded-full bg-gray-800 border border-gray-300 hover:ring-2 hover:ring-blue-500 transition-all"></button>
                     <button data-theme="ocean" class="w-8 h-8 rounded-full bg-blue-300 border border-gray-300 hover:ring-2 hover:ring-blue-500 transition-all"></button>
+                    <button data-theme="forest-green" class="w-8 h-8 rounded-full bg-green-500 border border-gray-300 hover:ring-2 hover:ring-green-700 transition-all"></button>
                 </div>
             </div>
         </section>
@@ -178,7 +205,7 @@
         let db, auth;
         let userId;
         let profileRef;
-        const THEMES = ['light', 'dark', 'ocean'];
+        const THEMES = ['light', 'dark', 'ocean', 'forest-green'];
 
         // Verses data
         const verses = {
@@ -272,16 +299,20 @@
 
         // Theme management
         const applyTheme = (themeName) => {
-            body.className = '';
-            body.classList.add('min-h-screen', 'flex', 'flex-col', 'items-center', 'p-4', 'transition-colors', 'duration-300');
+            // Remove all existing theme classes
+            body.classList.remove('theme-light', 'theme-dark', 'theme-ocean', 'theme-forest-green');
+            
+            // Add the new theme class
             body.classList.add(`theme-${themeName}`);
             body.dataset.theme = themeName;
-            
-            // This is now handled by separate buttons and doesn't need to be toggled
         };
 
         // Display a verse
         const displayVerse = (verse) => {
+            // Explicitly clear existing text content to prevent overlap
+            resultText.textContent = '';
+            resultReference.textContent = '';
+            
             resultText.textContent = `“${verse.text}”`;
             resultReference.textContent = `— ${verse.reference}`;
             bibleLink.href = `https://www.biblegateway.com/passage/?search=${encodeURIComponent(verse.reference)}&version=NIV`;
