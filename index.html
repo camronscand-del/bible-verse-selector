@@ -16,75 +16,82 @@
             --verse-bg: #fff0f5; /* Very light, soft pink */
             --verse-border: #d44949; /* A darker pink for the border */
             --verse-text-color: #555;
-            /* New: Hero background colors for light mode */
             --hero-bg-start: #ffb7b7; /* Light salmon */
             --hero-bg-end: #ffa07a;   /* Light coral */
             --hero-text-color: #8b0000; /* Darker red for contrast */
         }
 
         /* 2. Define variables for the dark theme */
+        body.dark-mode {
+            --bg-color: #2c2c2c; /* Dark grey background */
+            --text-color: #f0f0f0; /* Light text */
+            --header-color: #ffb7b7; /* Light red */
+            --link-text-color: #ffffff;
+            --verse-bg: #4a4a4a; /* Darker grey box */
+            --verse-border: #8b0000; /* Darker red border */
+            --verse-text-color: #f0f0f0;
+            --hero-bg-start: #3a3a3a; /* Darker grey */
+            --hero-bg-end: #1a1a1a;   /* Very dark grey */
+            --hero-text-color: #ffb7b7; /* Light red for contrast */
+        }
+        
+        /* New: Dark mode for the system preference */
         @media (prefers-color-scheme: dark) {
             :root {
-                --bg-color: #2c2c2c; /* Dark grey background */
-                --text-color: #f0f0f0; /* Light text */
-                --header-color: #ffb7b7; /* Light red */
+                --bg-color: #2c2c2c;
+                --text-color: #f0f0f0;
+                --header-color: #ffb7b7;
                 --link-text-color: #ffffff;
-                --verse-bg: #4a4a4a; /* Darker grey box */
-                --verse-border: #8b0000; /* Darker red border */
+                --verse-bg: #4a4a4a;
+                --verse-border: #8b0000;
                 --verse-text-color: #f0f0f0;
-                /* New: Hero background colors for dark mode */
-                --hero-bg-start: #3a3a3a; /* Darker grey */
-                --hero-bg-end: #1a1a1a;   /* Very dark grey */
-                --hero-text-color: #ffb7b7; /* Light red for contrast */
+                --hero-bg-start: #3a3a3a;
+                --hero-bg-end: #1a1a1a;
+                --hero-text-color: #ffb7b7;
             }
         }
-
+        
         /* 3. Use the variables to style your page */
         body {
             font-family: 'Merriweather', serif;
             line-height: 1.6;
-            padding: 0; /* Remove body padding, hero section will handle it */
+            padding: 0;
             margin: 0;
             background-color: var(--bg-color);
             color: var(--text-color);
             transition: background-color 0.3s, color 0.3s;
         }
-
         .hero-section {
             background: linear-gradient(to right, var(--hero-bg-start), var(--hero-bg-end));
             color: var(--hero-text-color);
-            padding: 60px 20px; /* More padding for a bigger section */
+            padding: 60px 20px;
             text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative; /* Needed for the toggle button */
         }
-
         .hero-section h1 {
             font-family: 'Open Sans', sans-serif;
             color: var(--hero-text-color);
-            margin-top: 0; /* Remove default h1 margin */
-            font-size: 2.8em; /* Larger title */
+            margin-top: 0;
+            font-size: 2.8em;
             margin-bottom: 10px;
         }
-
         .hero-section p {
             max-width: 800px;
-            margin: 0 auto 20px auto; /* Center paragraph and add bottom margin */
+            margin: 0 auto 20px auto;
             font-size: 1.1em;
-            color: var(--hero-text-color); /* Ensure text color is readable */
+            color: var(--hero-text-color);
         }
-
         h2 {
             font-family: 'Open Sans', sans-serif;
             color: var(--header-color);
             text-align: center;
-            margin-top: 40px; /* Adjusted spacing */
+            margin-top: 40px;
             margin-bottom: 20px;
         }
-
         .main-content {
-            padding: 20px; /* Add padding to the main content area */
+            padding: 20px;
         }
-
         .emotion-links {
             display: flex;
             flex-wrap: wrap;
@@ -93,223 +100,54 @@
             margin-bottom: 30px;
             padding: 0 10px;
         }
-
         .emotion-links a {
             padding: 12px 20px;
             border: none;
-            border-radius: 25px; /* Pill-shaped buttons */
+            border-radius: 25px;
             text-decoration: none;
             color: var(--link-text-color);
             font-weight: 600;
             transition: transform 0.2s;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
         .emotion-links a:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
-
-        /* Light theme gradients */
-        .anxious-link {
-            background: linear-gradient(#9c9c9c, #7b7b7b);
-        }
-        .anxious-link:hover {
-            background: linear-gradient(#b0b0b0, #9c9c9c);
-        }
-        .sad-link {
-            background: linear-gradient(#4a6792, #384e70);
-        }
-        .sad-link:hover {
-            background: linear-gradient(#5d78a8, #4a6792);
-        }
-        .grateful-link {
-            background: linear-gradient(#f39c12, #d68910);
-        }
-        .grateful-link:hover {
-            background: linear-gradient(#f6af3b, #f39c12);
-        }
-        .stressed-link {
-            background: linear-gradient(#c0392b, #a93226);
-        }
-        .stressed-link:hover {
-            background: linear-gradient(#d54c3c, #c0392b);
-        }
-        .peaceful-link {
-            background: linear-gradient(#2ecc71, #27ae60);
-        }
-        .peaceful-link:hover {
-            background: linear-gradient(#39e285, #2ecc71);
-        }
-        .lonely-link {
-            background: linear-gradient(#34495e, #2c3e50);
-        }
-        .lonely-link:hover {
-            background: linear-gradient(#4b6076, #34495e);
-        }
-        .angry-link {
-            background: linear-gradient(#e74c3c, #c0392b);
-        }
-        .angry-link:hover {
-            background: linear-gradient(#ff6666, #e74c3c);
-        }
-        .hopeful-link {
-            background: linear-gradient(#3498db, #2980b9);
-        }
-        .hopeful-link:hover {
-            background: linear-gradient(#4aa8e8, #3498db);
-        }
-        .guilty-link {
-            background: linear-gradient(#6c5ce7, #5f4cb6);
-        }
-        .guilty-link:hover {
-            background: linear-gradient(#7c6ef7, #6c5ce7);
-        }
-        .fearful-link {
-            background: linear-gradient(#95a5a6, #7f8c8d);
-        }
-        .fearful-link:hover {
-            background: linear-gradient(#a8b8b9, #95a5a6);
-        }
-        .joyful-link {
-            background: linear-gradient(#f1c40f, #d4ac0d);
-        }
-        .joyful-link:hover {
-            background: linear-gradient(#f5d415, #f1c40f);
-        }
-        .tired-link {
-            background: linear-gradient(#7f8c8d, #6a7677);
-        }
-        .tired-link:hover {
-            background: linear-gradient(#959ca2, #7f8c8d);
-        }
-        .confused-link {
-            background: linear-gradient(#9b59b6, #8e44ad);
-        }
-        .confused-link:hover {
-            background: linear-gradient(#a969c5, #9b59b6);
-        }
-        .content-link {
-            background: linear-gradient(#1abc9c, #16a085);
-        }
-        .content-link:hover {
-            background: linear-gradient(#26c1a1, #1abc9c);
-        }
-        .hurt-link {
-            background: linear-gradient(#d35400, #ba4a00);
-        }
-        .hurt-link:hover {
-            background: linear-gradient(#e76b19, #d35400);
-        }
-        .random-link {
-            background: linear-gradient(#5d98db, #4878b2);
-        }
-        .random-link:hover {
-            background: linear-gradient(#7aaddf, #5d98db);
-        }
-
-        /* Dark theme gradients */
-        @media (prefers-color-scheme: dark) {
-            .anxious-link {
-                background: linear-gradient(#5c5c5c, #444444);
-            }
-            .anxious-link:hover {
-                background: linear-gradient(#6c6c6c, #5c5c5c);
-            }
-            .sad-link {
-                background: linear-gradient(#6a85b5, #5a75a5);
-            }
-            .sad-link:hover {
-                background: linear-gradient(#7a95c5, #6a85b5);
-            }
-            .grateful-link {
-                background: linear-gradient(#c5862d, #9c6c24);
-            }
-            .grateful-link:hover {
-                background: linear-gradient(#d99d45, #c5862d);
-            }
-            .stressed-link {
-                background: linear-gradient(#e74c3c, #c0392b);
-            }
-            .stressed-link:hover {
-                background: linear-gradient(#ff6666, #e74c3c);
-            }
-            .peaceful-link {
-                background: linear-gradient(#48b17b, #3a986a);
-            }
-            .peaceful-link:hover {
-                background: linear-gradient(#5ac18a, #48b17b);
-            }
-            .lonely-link {
-                background: linear-gradient(#5d708f, #4b5a74);
-            }
-            .lonely-link:hover {
-                background: linear-gradient(#6e81a0, #5d708f);
-            }
-            .angry-link {
-                background: linear-gradient(#ff6666, #ff4d4d);
-            }
-            .angry-link:hover {
-                background: linear-gradient(#ff7a7a, #ff6666);
-            }
-            .hopeful-link {
-                background: linear-gradient(#5d9ddf, #4a8ac2);
-            }
-            .hopeful-link:hover {
-                background: linear-gradient(#71b0f1, #5d9ddf);
-            }
-            .guilty-link {
-                background: linear-gradient(#8f79ff, #7a63d9);
-            }
-            .guilty-link:hover {
-                background: linear-gradient(#a08ffb, #8f79ff);
-            }
-            .fearful-link {
-                background: linear-gradient(#b0b8b9, #949c9d);
-            }
-            .fearful-link:hover {
-                background: linear-gradient(#c4c9ca, #b0b8b9);
-            }
-            .joyful-link {
-                background: linear-gradient(#f7da55, #d9bd4a);
-            }
-            .joyful-link:hover {
-                background: linear-gradient(#fbe171, #f7da55);
-            }
-            .tired-link {
-                background: linear-gradient(#9ba4a5, #848c8d);
-            }
-            .tired-link:hover {
-                background: linear-gradient(#adbacb, #9ba4a5);
-            }
-            .confused-link {
-                background: linear-gradient(#c38ff2, #a779d4);
-            }
-            .confused-link:hover {
-                background: linear-gradient(#d5a0f9, #c38ff2);
-            }
-            .content-link {
-                background: linear-gradient(#37c2a4, #2da187);
-            }
-            .content-link:hover {
-                background: linear-gradient(#4ecdae, #37c2a4);
-            }
-            .hurt-link {
-                background: linear-gradient(#e07b39, #c96c2e);
-            }
-            .hurt-link:hover {
-                background: linear-gradient(#f48b4e, #e07b39);
-            }
-            .random-link {
-                background: linear-gradient(#89b0f4, #6e9fdd);
-            }
-            .random-link:hover {
-                background: linear-gradient(#9ac0f6, #89b0f4);
-            }
-        }
-
+        .anxious-link { background: linear-gradient(#9c9c9c, #7b7b7b); }
+        .anxious-link:hover { background: linear-gradient(#b0b0b0, #9c9c9c); }
+        .sad-link { background: linear-gradient(#4a6792, #384e70); }
+        .sad-link:hover { background: linear-gradient(#5d78a8, #4a6792); }
+        .grateful-link { background: linear-gradient(#f39c12, #d68910); }
+        .grateful-link:hover { background: linear-gradient(#f6af3b, #f39c12); }
+        .stressed-link { background: linear-gradient(#c0392b, #a93226); }
+        .stressed-link:hover { background: linear-gradient(#d54c3c, #c0392b); }
+        .peaceful-link { background: linear-gradient(#2ecc71, #27ae60); }
+        .peaceful-link:hover { background: linear-gradient(#39e285, #2ecc71); }
+        .lonely-link { background: linear-gradient(#34495e, #2c3e50); }
+        .lonely-link:hover { background: linear-gradient(#4b6076, #34495e); }
+        .angry-link { background: linear-gradient(#e74c3c, #c0392b); }
+        .angry-link:hover { background: linear-gradient(#ff6666, #e74c3c); }
+        .hopeful-link { background: linear-gradient(#3498db, #2980b9); }
+        .hopeful-link:hover { background: linear-gradient(#4aa8e8, #3498db); }
+        .guilty-link { background: linear-gradient(#6c5ce7, #5f4cb6); }
+        .guilty-link:hover { background: linear-gradient(#7c6ef7, #6c5ce7); }
+        .fearful-link { background: linear-gradient(#95a5a6, #7f8c8d); }
+        .fearful-link:hover { background: linear-gradient(#a8b8b9, #95a5a6); }
+        .joyful-link { background: linear-gradient(#f1c40f, #d4ac0d); }
+        .joyful-link:hover { background: linear-gradient(#f5d415, #f1c40f); }
+        .tired-link { background: linear-gradient(#7f8c8d, #6a7677); }
+        .tired-link:hover { background: linear-gradient(#959ca2, #7f8c8d); }
+        .confused-link { background: linear-gradient(#9b59b6, #8e44ad); }
+        .confused-link:hover { background: linear-gradient(#a969c5, #9b59b6); }
+        .content-link { background: linear-gradient(#1abc9c, #16a085); }
+        .content-link:hover { background: linear-gradient(#26c1a1, #1abc9c); }
+        .hurt-link { background: linear-gradient(#d35400, #ba4a00); }
+        .hurt-link:hover { background: linear-gradient(#e76b19, #d35400); }
+        .random-link { background: linear-gradient(#5d98db, #4878b2); }
+        .random-link:hover { background: linear-gradient(#7aaddf, #5d98db); }
         .verse-container {
-            display: none; /* This hides all verse boxes by default */
+            display: none;
             margin-top: 20px;
             padding: 25px;
             border-radius: 12px;
@@ -322,19 +160,14 @@
             margin-left: auto;
             margin-right: auto;
         }
-
         .verse-container p {
             font-style: italic;
             margin: 0;
             font-size: 1.1rem;
         }
-
-        /* This is the key rule: It only displays the ONE box that is targeted */
         .verse-container:target {
             display: block;
         }
-
-        /* Styles for the Home link */
         .home-link {
             display: block;
             text-align: center;
@@ -343,8 +176,6 @@
             font-weight: bold;
             text-decoration: none;
         }
-
-        /* Styles for the footer and back to top link */
         .back-to-top {
             display: block;
             text-align: center;
@@ -353,28 +184,43 @@
             color: var(--text-color);
             text-decoration: none;
         }
-
-        /* Style for the new citation links */
         .citation-link {
-            color: var(--header-color); /* Matches the main heading color */
+            color: var(--header-color);
             font-weight: bold;
             text-decoration: none;
         }
-
         .citation-link:hover {
             text-decoration: underline;
         }
 
+        /* New: Styles for the Dark Mode Toggle Button */
+        #mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 12px;
+            background-color: var(--hero-bg-end);
+            border: 1px solid var(--hero-text-color);
+            border-radius: 5px;
+            color: var(--hero-text-color);
+            cursor: pointer;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        #mode-toggle:hover {
+            background-color: var(--hero-text-color);
+            color: var(--hero-bg-end);
+        }
     </style>
 </head>
 <body>
-
     <a id="top"></a>
-
     <div class="hero-section">
         <h1>Find a Bible Verse</h1>
         <p>How are you feeling today? Click an emotion to find a comforting verse.</p>
         <a href="#" class="home-link" style="color: var(--hero-text-color);">Home</a>
+        <button id="mode-toggle">Dark Mode</button>
     </div>
     
     <div class="main-content">
@@ -383,21 +229,21 @@
         <hr>
         
         <div class="emotion-links">
-            <a href="#anxious-verse" class="anxious-link">Anxious</a>
-            <a href="#sad-verse" class="sad-link">Sad</a>
-            <a href="#grateful-verse" class="grateful-link">Grateful</a>
-            <a href="#stressed-verse" class="stressed-link">Stressed</a>
-            <a href="#peaceful-verse" class="peaceful-link">Peaceful</a>
-            <a href="#lonely-verse" class="lonely-link">Lonely</a>
-            <a href="#angry-verse" class="angry-link">Angry</a>
-            <a href="#hopeful-verse" class="hopeful-link">Hopeful</a>
-            <a href="#guilty-verse" class="guilty-link">Guilty</a>
-            <a href="#fearful-verse" class="fearful-link">Fearful</a>
-            <a href="#joyful-verse" class="joyful-link">Joyful</a>
-            <a href="#tired-verse" class="tired-link">Tired</a>
-            <a href="#confused-verse" class="confused-link">Confused</a>
-            <a href="#content-verse" class="content-link">Content</a>
-            <a href="#hurt-verse" class="hurt-link">Hurt</a>
+            <a href="#anxious-verse" class="emotion-link anxious-link">Anxious</a>
+            <a href="#sad-verse" class="emotion-link sad-link">Sad</a>
+            <a href="#grateful-verse" class="emotion-link grateful-link">Grateful</a>
+            <a href="#stressed-verse" class="emotion-link stressed-link">Stressed</a>
+            <a href="#peaceful-verse" class="emotion-link peaceful-link">Peaceful</a>
+            <a href="#lonely-verse" class="emotion-link lonely-link">Lonely</a>
+            <a href="#angry-verse" class="emotion-link angry-link">Angry</a>
+            <a href="#hopeful-verse" class="emotion-link hopeful-link">Hopeful</a>
+            <a href="#guilty-verse" class="emotion-link guilty-link">Guilty</a>
+            <a href="#fearful-verse" class="emotion-link fearful-link">Fearful</a>
+            <a href="#joyful-verse" class="emotion-link joyful-link">Joyful</a>
+            <a href="#tired-verse" class="emotion-link tired-link">Tired</a>
+            <a href="#confused-verse" class="emotion-link confused-link">Confused</a>
+            <a href="#content-verse" class="emotion-link content-link">Content</a>
+            <a href="#hurt-verse" class="emotion-link hurt-link">Hurt</a>
             <a href="#" id="random-verse-btn" class="random-link">Random Verse</a>
         </div>
 
