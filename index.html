@@ -201,6 +201,12 @@
         .hurt-link:hover {
             background: linear-gradient(#e76b19, #d35400);
         }
+        .random-link {
+            background: linear-gradient(#5d98db, #4878b2);
+        }
+        .random-link:hover {
+            background: linear-gradient(#7aaddf, #5d98db);
+        }
 
         /* Dark theme gradients */
         @media (prefers-color-scheme: dark) {
@@ -294,6 +300,12 @@
             .hurt-link:hover {
                 background: linear-gradient(#f48b4e, #e07b39);
             }
+            .random-link {
+                background: linear-gradient(#89b0f4, #6e9fdd);
+            }
+            .random-link:hover {
+                background: linear-gradient(#9ac0f6, #89b0f4);
+            }
         }
 
         .verse-container {
@@ -386,6 +398,7 @@
             <a href="#confused-verse" class="confused-link">Confused</a>
             <a href="#content-verse" class="content-link">Content</a>
             <a href="#hurt-verse" class="hurt-link">Hurt</a>
+            <a href="#" id="random-verse-btn" class="random-link">Random Verse</a>
         </div>
 
         <div id="anxious-verse" class="verse-container">
@@ -437,5 +450,6 @@
         <a href="#top" class="back-to-top">Back to Top</a>
     </div>
 
+    <script src="script.js"></script>
 </body>
 </html>
