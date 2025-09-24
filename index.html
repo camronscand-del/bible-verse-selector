@@ -50,7 +50,7 @@
             display: none;
             text-align: center;
         }
-        #auth-section, #profile-section, #main-content {
+        .hidden {
             display: none;
         }
     </style>
@@ -75,7 +75,7 @@
         </section>
 
         <!-- Authentication Section -->
-        <section id="auth-section" class="bg-white p-8 rounded-2xl shadow-lg max-w-lg mx-auto mb-8">
+        <section id="auth-section" class="bg-white p-8 rounded-2xl shadow-lg max-w-lg mx-auto mb-8 hidden">
             <h2 class="text-2xl font-semibold text-center mb-6">Log In or Sign Up</h2>
             <div id="login-form" class="space-y-4">
                 <input type="email" id="login-email-input" placeholder="Email" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -92,7 +92,7 @@
         </section>
 
         <!-- Profile Section -->
-        <section id="profile-section" class="flex-col items-center">
+        <section id="profile-section" class="flex-col items-center hidden">
             <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-lg mx-auto">
                 <h2 class="text-2xl font-semibold text-center mb-6">Your Profile</h2>
                 <div class="space-y-4">
@@ -113,7 +113,7 @@
         </section>
 
         <!-- Main Content (initially hidden) -->
-        <section id="main-content">
+        <section id="main-content" class="hidden">
             <!-- Daily Verse & Controls -->
             <section class="mt-8 text-center">
                 <div id="verse-of-the-day" class="bg-white p-6 rounded-2xl shadow-lg mb-6">
@@ -294,7 +294,6 @@
         import { 
             getAuth, 
             signInAnonymously,
-            signInWithCustomToken,
             signInWithEmailAndPassword, 
             createUserWithEmailAndPassword, 
             signOut, 
@@ -314,7 +313,6 @@
         // Global Firebase variables provided by the environment
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         const firebaseConfig = JSON.parse(window.__firebase_config);
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
@@ -472,7 +470,6 @@
                         // Apply loaded preferences
                         applyTheme(preferences.theme);
                         updateFontSize();
-                        getDailyVerse(true);
                     } else {
                         console.log("No preferences found. Using defaults.");
                         // Save the default preferences for the new user
@@ -486,48 +483,34 @@
             // --- Firebase Auth & Firestore Logic ---
             // This listener waits for the user's authentication state to be determined.
             onAuthStateChanged(auth, async (user) => {
-                loadingIndicator.style.display = 'none';
-
+                loadingIndicator.classList.add('hidden'); // Always hide loading spinner
+                
                 if (user) {
-                    // If a user is logged in, hide auth and show profile
+                    // User is logged in
                     userId = user.uid;
-                    console.log("User logged in with ID:", userId);
-                    authSection.style.display = 'none';
-                    profileSection.style.display = 'flex';
-                    mainContent.style.display = 'block';
+                    authSection.classList.add('hidden');
+                    profileSection.classList.remove('hidden');
+                    mainContent.classList.remove('hidden');
                     userNameDisplay.textContent = user.email; // Display email by default
                     loadProfile();
-                    loadPreferences();
+                    await loadPreferences();
+                    getDailyVerse(); // Load daily verse after preferences are loaded
                 } else {
-                    // If no user is logged in, show auth and hide profile
+                    // No user is logged in, sign in anonymously to get a UID
                     userId = null;
-                    console.log("No user is logged in.");
-                    authSection.style.display = 'block';
-                    profileSection.style.display = 'none';
-                    mainContent.style.display = 'none';
-                    userNameDisplay.textContent = 'Guest';
+                    try {
+                        await signInAnonymously(auth);
+                        // onAuthStateChanged will be triggered again with the new user object
+                    } catch (error) {
+                        console.error("Anonymous sign-in failed:", error);
+                        showMessage(`Anonymous sign-in failed: ${error.message}`, true);
+                        authSection.classList.remove('hidden');
+                        profileSection.classList.add('hidden');
+                        mainContent.classList.add('hidden');
+                    }
                 }
             });
-
-            // Initial authentication attempt
-            const authenticateUser = async () => {
-                loadingIndicator.style.display = 'flex';
-                try {
-                    if (initialAuthToken) {
-                        await signInWithCustomToken(auth, initialAuthToken);
-                        console.log("Signed in with custom token.");
-                    } else {
-                        await signInAnonymously(auth);
-                        console.log("Signed in anonymously.");
-                    }
-                } catch (error) {
-                    console.error("Initial authentication failed:", error);
-                    showMessage(`Initial authentication failed: ${error.message}`, true);
-                    loadingIndicator.style.display = 'none';
-                    authSection.style.display = 'block';
-                }
-            };
-
+            
             /** Handles user login with email and password. */
             const handleLogin = async () => {
                 const email = loginEmailInput.value;
@@ -613,7 +596,6 @@
                         nameInput.value = data.name || '';
                         bioInput.value = data.bio || '';
                         userNameDisplay.textContent = data.name || `User ID: ${userId}`;
-                        showMessage("Profile loaded from Firestore.", false);
                     } else {
                         nameInput.value = '';
                         bioInput.value = '';
@@ -678,12 +660,12 @@
              */
             function showVerseContainer(targetId) {
                 verseContainers.forEach(container => {
-                    container.style.display = 'none';
+                    container.classList.add('hidden');
                 });
 
                 const targetElement = document.getElementById(targetId);
                 if (targetElement) {
-                    targetElement.style.display = 'block';
+                    targetElement.classList.remove('hidden');
                     targetElement.scrollIntoView({ behavior: 'smooth' });
                 }
             }
@@ -711,12 +693,12 @@
             }
 
             // Verse of the Day logic
-            const getDailyVerse = (forceNew = false) => {
+            const getDailyVerse = () => {
                 const today = new Date().toDateString();
                 let dailyVerseId = preferences.dailyVerse;
                 const dailyVerseDate = preferences.dailyVerseDate;
 
-                if (forceNew || !dailyVerseId || dailyVerseDate !== today) {
+                if (!dailyVerseId || dailyVerseDate !== today) {
                     const randomIndex = Math.floor(Math.random() * verseIds.length);
                     dailyVerseId = verseIds[randomIndex];
                     preferences.dailyVerse = dailyVerseId;
@@ -775,26 +757,24 @@
             }
             
             if (fontSizeDecreaseBtn) {
-                fontSizeDecreaseBtn.addEventListener('click', () => {
-                    preferences.fontSize = Math.max(0.8, preferences.fontSize - 0.1);
-                    updateFontSize();
-                });
+                preferences.fontSize = Math.max(0.8, preferences.fontSize - 0.1);
+                updateFontSize();
             }
-
+            
             // --- Event Listeners for Authentication UI ---
             if (showSignupLink) {
                 showSignupLink.addEventListener('click', (e) => {
                     e.preventDefault();
-                    loginForm.style.display = 'none';
-                    signupForm.style.display = 'block';
+                    loginForm.classList.add('hidden');
+                    signupForm.classList.remove('hidden');
                 });
             }
 
             if (showLoginLink) {
                 showLoginLink.addEventListener('click', (e) => {
                     e.preventDefault();
-                    signupForm.style.display = 'none';
-                    loginForm.style.display = 'block';
+                    signupForm.classList.add('hidden');
+                    loginForm.classList.remove('hidden');
                 });
             }
 
@@ -821,10 +801,6 @@
             if (changePasswordBtn) {
                 changePasswordBtn.addEventListener('click', changePassword);
             }
-
-            // Initial calls
-            authenticateUser();
-
         });
     </script>
 </body>
