@@ -35,19 +35,11 @@
             --hero-text-color: #ffb7b7; /* Light red for contrast */
         }
         
-        /* New: Dark mode for the system preference */
+        /* New: Dark mode for the system preference.
+           This will just add the 'dark-mode' class to the body. */
         @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #2c2c2c;
-                --text-color: #f0f0f0;
-                --header-color: #ffb7b7;
-                --link-text-color: #ffffff;
-                --verse-bg: #4a4a4a;
-                --verse-border: #8b0000;
-                --verse-text-color: #f0f0f0;
-                --hero-bg-start: #3a3a3a;
-                --hero-bg-end: #1a1a1a;
-                --hero-text-color: #ffb7b7;
+            body {
+                background-color: #2c2c2c;
             }
         }
         
