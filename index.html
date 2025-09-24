@@ -21,6 +21,8 @@
             --hero-bg-start: #ffb7b7;
             --hero-bg-end: #ffa07a;
             --hero-text-color: #8b0000;
+            --message-bg: #fff;
+            --message-text: #444;
         }
 
         body[data-theme="light"] {
@@ -34,6 +36,8 @@
             --hero-bg-start: #ffb7b7;
             --hero-bg-end: #ffa07a;
             --hero-text-color: #8b0000;
+            --message-bg: #fff;
+            --message-text: #444;
         }
 
         body[data-theme="dark"] {
@@ -47,6 +51,8 @@
             --hero-bg-start: #3a3a3a;
             --hero-bg-end: #1a1a1a;
             --hero-text-color: #ffb7b7;
+            --message-bg: #555;
+            --message-text: #f0f0f0;
         }
 
         body[data-theme="ocean"] {
@@ -60,6 +66,8 @@
             --hero-bg-start: #81d4fa;
             --hero-bg-end: #03a9f4;
             --hero-text-color: #2c3e50;
+            --message-bg: #fff;
+            --message-text: #2c3e50;
         }
 
         body[data-theme="forest"] {
@@ -73,6 +81,8 @@
             --hero-bg-start: #a5d6a7;
             --hero-bg-end: #4caf50;
             --hero-text-color: #2d543e;
+            --message-bg: #fff;
+            --message-text: #2d543e;
         }
         
         body {
@@ -263,7 +273,7 @@
         }
 
         #profile-section {
-            display: flex;
+            display: none; /* Initially hidden */
             flex-direction: column;
             gap: 15px;
             margin: 20px auto;
@@ -293,6 +303,49 @@
             font-weight: bold;
             cursor: pointer;
         }
+        #auth-section {
+            display: block; /* Initially shown */
+            margin: 20px auto;
+            padding: 25px;
+            max-width: 500px;
+            border-radius: 12px;
+            background-color: var(--verse-bg);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        #auth-section input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--verse-border);
+            background-color: var(--verse-bg);
+            color: var(--text-color);
+        }
+        #auth-section button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--header-color);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        #auth-section p, #auth-section a {
+            text-align: center;
+            margin-top: 15px;
+        }
+        #message-box {
+            display: none;
+            text-align: center;
+            margin: 20px auto;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--message-bg);
+            color: var(--message-text);
+            max-width: 500px;
+        }
     </style>
 </head>
 <body data-theme="light">
@@ -303,6 +356,23 @@
     </div>
     
     <div class="main-content">
+        <section id="auth-section">
+            <h2>Log In or Sign Up</h2>
+            <div id="login-form">
+                <input type="email" id="login-email-input" placeholder="Email">
+                <input type="password" id="login-password-input" placeholder="Password">
+                <button id="login-btn">Log In</button>
+                <p>Don't have an account? <a href="#" id="show-signup">Sign Up here</a></p>
+            </div>
+            <div id="signup-form" style="display: none;">
+                <input type="email" id="signup-email-input" placeholder="Email">
+                <input type="password" id="signup-password-input" placeholder="Password">
+                <button id="signup-btn">Sign Up</button>
+                <p>Already have an account? <a href="#" id="show-login">Log In here</a></p>
+            </div>
+            <div id="message-box"></div>
+        </section>
+
         <section id="user-profile">
             <h2>My Profile</h2>
             <div id="profile-section">
@@ -310,6 +380,7 @@
                 <input type="text" id="name-input" placeholder="Your Name">
                 <textarea id="bio-input" placeholder="Tell us about yourself..." rows="3"></textarea>
                 <button id="save-profile-btn">Save Profile</button>
+                <button id="signout-btn">Sign Out</button>
             </div>
         </section>
 
@@ -405,7 +476,30 @@
 
         <a href="#top" class="back-to-top">Back to Top</a>
     </div>
+    
+    <!-- Firebase SDK Imports -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        
+        // These global variables are provided by the environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        
+        // Initialize Firebase services
+        const app = initializeApp(firebaseConfig);
+        window.db = getFirestore(app);
+        window.auth = getAuth(app);
+        window.getProfileDoc = (userId) => doc(window.db, `artifacts/${appId}/users/${userId}/profile/user_data`);
+        
+        // Expose Firebase auth methods to the global scope
+        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+        window.signOut = signOut;
+        window.onAuthStateChanged = onAuthStateChanged;
 
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
