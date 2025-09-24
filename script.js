@@ -129,6 +129,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const signupBtn = document.getElementById('signup-btn');
     const messageBox = document.getElementById('message-box');
 
+    // New profile management elements
+    const emailInput = document.getElementById('email-input');
+    const passwordInput = document.getElementById('password-input');
+    const changeEmailBtn = document.getElementById('change-email-btn');
+    const changePasswordBtn = document.getElementById('change-password-btn');
+
     // --- State Variables ---
     let userId = null;
     let isAuthReady = false;
@@ -211,7 +217,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const saveProfile = async () => {
-        if (!userId) {
+        const user = window.auth.currentUser;
+        if (!user) {
             showMessage("You must be logged in to save your profile.", true);
             return;
         }
@@ -220,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
             bio: bioInput.value,
         };
         try {
-            await window.setDoc(window.getProfileDoc(userId), profileData);
+            await window.setDoc(window.getProfileDoc(user.uid), profileData, { merge: true });
             showMessage("Profile saved successfully!", false);
             userNameDisplay.textContent = profileData.name || 'Guest';
         } catch (error) {
@@ -252,6 +259,47 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    const changeEmail = async () => {
+        const user = window.auth.currentUser;
+        if (!user) {
+            showMessage("You must be logged in to change your email.", true);
+            return;
+        }
+        const newEmail = emailInput.value;
+        if (!newEmail) {
+            showMessage("Please enter a new email.", true);
+            return;
+        }
+        try {
+            await window.updateEmail(user, newEmail);
+            showMessage("Email updated successfully! You may need to sign in again.", false);
+            emailInput.value = '';
+        } catch (error) {
+            console.error("Error changing email:", error);
+            showMessage(`Error changing email: ${error.message}`, true);
+        }
+    };
+
+    const changePassword = async () => {
+        const user = window.auth.currentUser;
+        if (!user) {
+            showMessage("You must be logged in to change your password.", true);
+            return;
+        }
+        const newPassword = passwordInput.value;
+        if (!newPassword || newPassword.length < 6) {
+            showMessage("Password must be at least 6 characters long.", true);
+            return;
+        }
+        try {
+            await window.updatePassword(user, newPassword);
+            showMessage("Password updated successfully!", false);
+            passwordInput.value = '';
+        } catch (error) {
+            console.error("Error changing password:", error);
+            showMessage(`Error changing password: ${error.message}`, true);
+        }
+    };
 
     // --- General Website Functionality ---
     
@@ -399,6 +447,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (signoutBtn) {
         signoutBtn.addEventListener('click', handleSignOut);
+    }
+    
+    if (changeEmailBtn) {
+        changeEmailBtn.addEventListener('click', changeEmail);
+    }
+
+    if (changePasswordBtn) {
+        changePasswordBtn.addEventListener('click', changePassword);
     }
 
     // Initial calls
