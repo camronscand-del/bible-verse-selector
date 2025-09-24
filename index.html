@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find a Verse</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* 1. Define variables for the light theme */
         :root {
@@ -31,7 +32,7 @@
 
         /* 3. Use the variables to style your page */
         body {
-            font-family: 'Bookman Old Style', Georgia, serif;
+            font-family: 'Merriweather', serif;
             line-height: 1.6;
             padding: 20px;
             margin: 0;
@@ -40,16 +41,11 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        h1 {
+        h1, h2 {
+            font-family: 'Open Sans', sans-serif;
             color: var(--header-color);
             text-align: center;
             margin-top: 30px;
-        }
-
-        h2 {
-            color: var(--header-color);
-            text-align: center;
-            margin-top: 20px;
         }
 
         p {
@@ -76,197 +72,198 @@
             text-decoration: none;
             color: var(--link-text-color);
             font-weight: 600;
-            transition: background-color 0.2s, transform 0.2s;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .emotion-links a:hover {
             transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
 
-        /* Link colors for light theme */
+        /* Light theme gradients */
         .anxious-link {
-            background-color: #8c8c8c;
+            background: linear-gradient(#9c9c9c, #7b7b7b);
         }
         .anxious-link:hover {
-            background-color: #6b6b6b;
+            background: linear-gradient(#b0b0b0, #9c9c9c);
         }
         .sad-link {
-            background-color: #4a6792;
+            background: linear-gradient(#4a6792, #384e70);
         }
         .sad-link:hover {
-            background-color: #384e70;
+            background: linear-gradient(#5d78a8, #4a6792);
         }
         .grateful-link {
-            background-color: #f39c12;
+            background: linear-gradient(#f39c12, #d68910);
         }
         .grateful-link:hover {
-            background-color: #d68910;
+            background: linear-gradient(#f6af3b, #f39c12);
         }
         .stressed-link {
-            background-color: #c0392b;
+            background: linear-gradient(#c0392b, #a93226);
         }
         .stressed-link:hover {
-            background-color: #a93226;
+            background: linear-gradient(#d54c3c, #c0392b);
         }
         .peaceful-link {
-            background-color: #2ecc71;
+            background: linear-gradient(#2ecc71, #27ae60);
         }
         .peaceful-link:hover {
-            background-color: #27ae60;
+            background: linear-gradient(#39e285, #2ecc71);
         }
         .lonely-link {
-            background-color: #34495e;
+            background: linear-gradient(#34495e, #2c3e50);
         }
         .lonely-link:hover {
-            background-color: #2c3e50;
+            background: linear-gradient(#4b6076, #34495e);
         }
         .angry-link {
-            background-color: #e74c3c;
+            background: linear-gradient(#e74c3c, #c0392b);
         }
         .angry-link:hover {
-            background-color: #c0392b;
+            background: linear-gradient(#ff6666, #e74c3c);
         }
         .hopeful-link {
-            background-color: #3498db;
+            background: linear-gradient(#3498db, #2980b9);
         }
         .hopeful-link:hover {
-            background-color: #2980b9;
+            background: linear-gradient(#4aa8e8, #3498db);
         }
         .guilty-link {
-            background-color: #6c5ce7;
+            background: linear-gradient(#6c5ce7, #5f4cb6);
         }
         .guilty-link:hover {
-            background-color: #5f4cb6;
+            background: linear-gradient(#7c6ef7, #6c5ce7);
         }
         .fearful-link {
-            background-color: #95a5a6;
+            background: linear-gradient(#95a5a6, #7f8c8d);
         }
         .fearful-link:hover {
-            background-color: #7f8c8d;
+            background: linear-gradient(#a8b8b9, #95a5a6);
         }
         .joyful-link {
-            background-color: #f1c40f;
+            background: linear-gradient(#f1c40f, #d4ac0d);
         }
         .joyful-link:hover {
-            background-color: #d4ac0d;
+            background: linear-gradient(#f5d415, #f1c40f);
         }
         .tired-link {
-            background-color: #7f8c8d;
+            background: linear-gradient(#7f8c8d, #6a7677);
         }
         .tired-link:hover {
-            background-color: #6a7677;
+            background: linear-gradient(#959ca2, #7f8c8d);
         }
         .confused-link {
-            background-color: #9b59b6;
+            background: linear-gradient(#9b59b6, #8e44ad);
         }
         .confused-link:hover {
-            background-color: #8e44ad;
+            background: linear-gradient(#a969c5, #9b59b6);
         }
         .content-link {
-            background-color: #1abc9c;
+            background: linear-gradient(#1abc9c, #16a085);
         }
         .content-link:hover {
-            background-color: #16a085;
+            background: linear-gradient(#26c1a1, #1abc9c);
         }
         .hurt-link {
-            background-color: #d35400;
+            background: linear-gradient(#d35400, #ba4a00);
         }
         .hurt-link:hover {
-            background-color: #ba4a00;
+            background: linear-gradient(#e76b19, #d35400);
         }
-        
-        /* Link colors for dark theme */
+
+        /* Dark theme gradients */
         @media (prefers-color-scheme: dark) {
             .anxious-link {
-                background-color: #5c5c5c;
+                background: linear-gradient(#5c5c5c, #444444);
             }
             .anxious-link:hover {
-                background-color: #444444;
+                background: linear-gradient(#6c6c6c, #5c5c5c);
             }
             .sad-link {
-                background-color: #6a85b5;
+                background: linear-gradient(#6a85b5, #5a75a5);
             }
             .sad-link:hover {
-                background-color: #5a75a5;
+                background: linear-gradient(#7a95c5, #6a85b5);
             }
             .grateful-link {
-                background-color: #c5862d;
+                background: linear-gradient(#c5862d, #9c6c24);
             }
             .grateful-link:hover {
-                background-color: #9c6c24;
+                background: linear-gradient(#d99d45, #c5862d);
             }
             .stressed-link {
-                background-color: #e74c3c;
+                background: linear-gradient(#e74c3c, #c0392b);
             }
             .stressed-link:hover {
-                background-color: #c0392b;
+                background: linear-gradient(#ff6666, #e74c3c);
             }
             .peaceful-link {
-                background-color: #48b17b;
+                background: linear-gradient(#48b17b, #3a986a);
             }
             .peaceful-link:hover {
-                background-color: #3a986a;
+                background: linear-gradient(#5ac18a, #48b17b);
             }
             .lonely-link {
-                background-color: #5d708f;
+                background: linear-gradient(#5d708f, #4b5a74);
             }
             .lonely-link:hover {
-                background-color: #4b5a74;
+                background: linear-gradient(#6e81a0, #5d708f);
             }
             .angry-link {
-                background-color: #ff6666;
+                background: linear-gradient(#ff6666, #ff4d4d);
             }
             .angry-link:hover {
-                background-color: #ff4d4d;
+                background: linear-gradient(#ff7a7a, #ff6666);
             }
             .hopeful-link {
-                background-color: #5d9ddf;
+                background: linear-gradient(#5d9ddf, #4a8ac2);
             }
             .hopeful-link:hover {
-                background-color: #4a8ac2;
+                background: linear-gradient(#71b0f1, #5d9ddf);
             }
             .guilty-link {
-                background-color: #8f79ff;
+                background: linear-gradient(#8f79ff, #7a63d9);
             }
             .guilty-link:hover {
-                background-color: #7a63d9;
+                background: linear-gradient(#a08ffb, #8f79ff);
             }
             .fearful-link {
-                background-color: #b0b8b9;
+                background: linear-gradient(#b0b8b9, #949c9d);
             }
             .fearful-link:hover {
-                background-color: #949c9d;
+                background: linear-gradient(#c4c9ca, #b0b8b9);
             }
             .joyful-link {
-                background-color: #f7da55;
+                background: linear-gradient(#f7da55, #d9bd4a);
             }
             .joyful-link:hover {
-                background-color: #d9bd4a;
+                background: linear-gradient(#fbe171, #f7da55);
             }
             .tired-link {
-                background-color: #9ba4a5;
+                background: linear-gradient(#9ba4a5, #848c8d);
             }
             .tired-link:hover {
-                background-color: #848c8d;
+                background: linear-gradient(#adbacb, #9ba4a5);
             }
             .confused-link {
-                background-color: #c38ff2;
+                background: linear-gradient(#c38ff2, #a779d4);
             }
             .confused-link:hover {
-                background-color: #a779d4;
+                background: linear-gradient(#d5a0f9, #c38ff2);
             }
             .content-link {
-                background-color: #37c2a4;
+                background: linear-gradient(#37c2a4, #2da187);
             }
             .content-link:hover {
-                background-color: #2da187;
+                background: linear-gradient(#4ecdae, #37c2a4);
             }
             .hurt-link {
-                background-color: #e07b39;
+                background: linear-gradient(#e07b39, #c96c2e);
             }
             .hurt-link:hover {
-                background-color: #c96c2e;
+                background: linear-gradient(#f48b4e, #e07b39);
             }
         }
 
