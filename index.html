@@ -11,33 +11,32 @@
             font-family: 'Inter', sans-serif;
             transition: background-color 0.3s, color 0.3s;
         }
+        /* --- Themes --- */
         .theme-dark {
             background-color: #1a202c;
             color: #e2e8f0;
         }
-        .theme-dark .bg-white {
-            background-color: #2d3748;
+        .theme-dark .bg-white { background-color: #2d3748; }
+        .theme-dark .text-gray-800 { color: #e2e8f0; }
+        .theme-dark .text-gray-500 { color: #a0aec0; }
+        .theme-dark input, .theme-dark textarea { background-color: #4a5568; border-color: #4a5568; color: #e2e8f0; }
+        .theme-dark input::placeholder, .theme-dark textarea::placeholder { color: #a0aec0; }
+        .theme-dark .border-gray-300 { border-color: #4a5568; }
+        .theme-dark .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.12); }
+        
+        .theme-ocean {
+            background-color: #e0f2fe;
+            color: #0c4a6e;
         }
-        .theme-dark .text-gray-800 {
-            color: #e2e8f0;
-        }
-        .theme-dark .text-gray-500 {
-            color: #a0aec0;
-        }
-        .theme-dark input, .theme-dark textarea {
-            background-color: #4a5568;
-            border-color: #4a5568;
-            color: #e2e8f0;
-        }
-        .theme-dark input::placeholder, .theme-dark textarea::placeholder {
-            color: #a0aec0;
-        }
-        .theme-dark .border-gray-300 {
-            border-color: #4a5568;
-        }
-        .theme-dark .shadow-md {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.12);
-        }
+        .theme-ocean .bg-white { background-color: #dbeafe; }
+        .theme-ocean .text-gray-800 { color: #0c4a6e; }
+        .theme-ocean .text-gray-500 { color: #3b82f6; }
+        .theme-ocean input, .theme-ocean textarea { background-color: #eff6ff; border-color: #93c5fd; color: #0c4a6e; }
+        .theme-ocean input::placeholder, .theme-ocean textarea::placeholder { color: #93c5fd; }
+        .theme-ocean .border-gray-300 { border-color: #93c5fd; }
+        .theme-ocean .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .theme-ocean .bg-blue-600 { background-color: #1d4ed8; }
+        
         .verse-card {
             background-size: cover;
             background-position: center;
@@ -106,10 +105,19 @@
                 <button data-emotion="fear" class="verse-card bg-orange-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/f97316/ffffff?text=Fear');">Fear</button>
                 <button data-emotion="anger" class="verse-card bg-red-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/ef4444/ffffff?text=Anger');">Anger</button>
                 <button data-emotion="strength" class="verse-card bg-indigo-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/6366f1/ffffff?text=Strength');">Strength</button>
+                <button data-emotion="hope" class="verse-card bg-yellow-400 text-gray-800 p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/fcd34d/ffffff?text=Hope');">Hope</button>
+                <button data-emotion="gratitude" class="verse-card bg-pink-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/f472b6/ffffff?text=Gratitude');">Gratitude</button>
+                <button data-emotion="healing" class="verse-card bg-teal-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/2dd4bf/ffffff?text=Healing');">Healing</button>
+            </div>
+            <div id="random-verse-container" class="mt-4">
+                 <button id="random-verse-button" class="w-full bg-gray-300 text-gray-800 p-3 rounded-lg hover:bg-gray-400 transition-colors duration-300 font-bold shadow-md">Get a Random Verse</button>
             </div>
             <div id="verse-result" class="mt-4 p-6 bg-gray-50 rounded-2xl shadow-md space-y-2 hidden">
                 <p id="result-text" class="text-gray-800 text-lg italic"></p>
                 <p id="result-reference" class="text-gray-500 text-sm font-semibold text-right"></p>
+                <div class="text-center pt-2">
+                    <a id="bible-link" href="#" target="_blank" class="text-blue-600 hover:underline text-sm font-semibold">Read on Bible Gateway</a>
+                </div>
             </div>
         </section>
 
@@ -129,14 +137,13 @@
                 </button>
             </div>
         </section>
-
     </div>
 
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // Global variables provided by the canvas environment
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
@@ -157,48 +164,33 @@
         const verseResultContainer = document.getElementById('verse-result');
         const resultText = document.getElementById('result-text');
         const resultReference = document.getElementById('result-reference');
+        const bibleLink = document.getElementById('bible-link');
         const themeToggleButton = document.getElementById('theme-toggle');
         const themeToggleCircle = themeToggleButton.querySelector('div');
         const body = document.body;
         const fontIncreaseButton = document.getElementById('font-increase');
         const fontDecreaseButton = document.getElementById('font-decrease');
+        const randomVerseButton = document.getElementById('random-verse-button');
         const mainContainer = document.getElementById('main-container');
 
         // Firebase variables
         let db, auth;
         let userId;
         let profileRef;
+        const THEMES = ['light', 'dark', 'ocean'];
 
-        // Verses data (simplified for this example)
+        // Verses data
         const verses = {
-            joy: {
-                text: "The Lord is my strength and my shield; in Him my heart trusts, and I am helped; my heart exults, and with my song I give thanks to Him.",
-                reference: "Psalm 28:7"
-            },
-            peace: {
-                text: "Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled and do not be afraid.",
-                reference: "John 14:27"
-            },
-            sadness: {
-                text: "The Lord is close to the brokenhearted and saves those who are crushed in spirit.",
-                reference: "Psalm 34:18"
-            },
-            fear: {
-                text: "For God has not given us a spirit of fear, but of power and of love and of a sound mind.",
-                reference: "2 Timothy 1:7"
-            },
-            anger: {
-                text: "A fool gives full vent to his anger, but a wise man keeps himself under control.",
-                reference: "Proverbs 29:11"
-            },
-            strength: {
-                text: "I can do all things through him who strengthens me.",
-                reference: "Philippians 4:13"
-            },
-            votd: {
-                text: "For where two or three are gathered in my name, there am I among them.",
-                reference: "Matthew 18:20"
-            }
+            joy: { text: "The Lord is my strength and my shield; in Him my heart trusts, and I am helped; my heart exults, and with my song I give thanks to Him.", reference: "Psalm 28:7" },
+            peace: { text: "Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled and do not be afraid.", reference: "John 14:27" },
+            sadness: { text: "The Lord is close to the brokenhearted and saves those who are crushed in spirit.", reference: "Psalm 34:18" },
+            fear: { text: "For God has not given us a spirit of fear, but of power and of love and of a sound mind.", reference: "2 Timothy 1:7" },
+            anger: { text: "A fool gives full vent to his anger, but a wise man keeps himself under control.", reference: "Proverbs 29:11" },
+            strength: { text: "I can do all things through him who strengthens me.", reference: "Philippians 4:13" },
+            hope: { text: "May the God of hope fill you with all joy and peace as you trust in him, so that you may overflow with hope by the power of the Holy Spirit.", reference: "Romans 15:13" },
+            gratitude: { text: "Give thanks in all circumstances; for this is God’s will for you in Christ Jesus.", reference: "1 Thessalonians 5:18" },
+            healing: { text: "Heal me, O Lord, and I shall be healed; save me, and I shall be saved, for you are my praise.", reference: "Jeremiah 17:14" },
+            votd: { text: "For where two or three are gathered in my name, there am I among them.", reference: "Matthew 18:20" }
         };
 
         // Initialize Firebase and Auth
@@ -248,18 +240,12 @@
                     const data = docSnap.data();
                     profileNameInput.value = data.name || '';
                     profileBioInput.value = data.bio || '';
-                    if (data.darkMode) {
-                        body.classList.add('theme-dark');
-                        themeToggleCircle.classList.add('translate-x-full', '!bg-blue-600');
-                        themeToggleButton.classList.add('bg-gray-600');
-                    } else {
-                        body.classList.remove('theme-dark');
-                        themeToggleCircle.classList.remove('translate-x-full', '!bg-blue-600');
-                        themeToggleButton.classList.remove('bg-gray-600');
-                    }
+                    applyTheme(data.theme || 'light');
                     if (data.fontSize) {
                         mainContainer.style.fontSize = `${data.fontSize}px`;
                     }
+                } else {
+                    applyTheme('light');
                 }
             }, (error) => {
                 console.error("Error fetching profile:", error);
@@ -269,18 +255,47 @@
         const saveUserProfile = async () => {
             if (!profileRef) return;
             try {
-                const darkMode = body.classList.contains('theme-dark');
+                const currentTheme = body.dataset.theme || 'light';
                 const fontSize = parseFloat(getComputedStyle(mainContainer).fontSize);
                 await setDoc(profileRef, {
                     name: profileNameInput.value,
                     bio: profileBioInput.value,
-                    darkMode: darkMode,
+                    theme: currentTheme,
                     fontSize: fontSize
                 }, { merge: true });
                 console.log("Profile saved successfully!");
             } catch (error) {
                 console.error("Error saving profile:", error);
             }
+        };
+
+        // Theme management
+        const applyTheme = (themeName) => {
+            body.className = '';
+            body.classList.add('min-h-screen', 'flex', 'flex-col', 'items-center', 'p-4', 'transition-colors', 'duration-300');
+            body.classList.add(`theme-${themeName}`);
+            body.dataset.theme = themeName;
+            
+            if (themeName === 'dark') {
+                themeToggleButton.classList.add('bg-gray-600');
+                themeToggleCircle.classList.add('translate-x-full');
+                themeToggleCircle.classList.add('!bg-blue-600');
+            } else if (themeName === 'ocean') {
+                themeToggleButton.classList.add('bg-blue-300');
+                themeToggleCircle.classList.add('translate-x-full');
+                themeToggleCircle.classList.add('!bg-blue-800');
+            } else {
+                themeToggleButton.classList.remove('bg-gray-600', 'bg-blue-300');
+                themeToggleCircle.classList.remove('translate-x-full', '!bg-blue-600', '!bg-blue-800');
+            }
+        };
+
+        // Display a verse
+        const displayVerse = (verse) => {
+            resultText.textContent = `“${verse.text}”`;
+            resultReference.textContent = `— ${verse.reference}`;
+            bibleLink.href = `https://www.biblegateway.com/passage/?search=${encodeURIComponent(verse.reference)}&version=NIV`;
+            verseResultContainer.classList.remove('hidden');
         };
 
         // Event listeners
@@ -301,18 +316,23 @@
                 const emotion = e.target.dataset.emotion;
                 const verse = verses[emotion];
                 if (verse) {
-                    resultText.textContent = `“${verse.text}”`;
-                    resultReference.textContent = `— ${verse.reference}`;
-                    verseResultContainer.classList.remove('hidden');
+                    displayVerse(verse);
                 }
             });
         });
 
+        randomVerseButton.addEventListener('click', () => {
+            const verseKeys = Object.keys(verses);
+            const randomKey = verseKeys[Math.floor(Math.random() * verseKeys.length)];
+            const randomVerse = verses[randomKey];
+            displayVerse(randomVerse);
+        });
+
         themeToggleButton.addEventListener('click', () => {
-            body.classList.toggle('theme-dark');
-            themeToggleCircle.classList.toggle('translate-x-full');
-            themeToggleCircle.classList.toggle('!bg-blue-600');
-            themeToggleButton.classList.toggle('bg-gray-600');
+            const currentThemeIndex = THEMES.indexOf(body.dataset.theme);
+            const nextThemeIndex = (currentThemeIndex + 1) % THEMES.length;
+            const nextTheme = THEMES[nextThemeIndex];
+            applyTheme(nextTheme);
             saveUserProfile();
         });
 
