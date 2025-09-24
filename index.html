@@ -130,11 +130,13 @@
                     <button id="font-increase" class="p-2 w-8 h-8 flex justify-center items-center text-gray-500 rounded-full border border-gray-300 hover:bg-gray-200 transition-colors duration-300">+</button>
                 </div>
             </div>
-            <div class="flex items-center space-x-4">
-                <span class="text-gray-800 font-semibold">Theme:</span>
-                <button id="theme-toggle" class="p-2 w-12 h-6 flex items-center rounded-full bg-gray-300 transition-colors duration-300">
-                    <div class="w-4 h-4 rounded-full bg-white shadow-md transform transition-transform duration-300"></div>
-                </button>
+            <div class="flex flex-col items-end space-y-2" id="theme-controls">
+                <span class="text-gray-800 font-semibold">Themes:</span>
+                <div class="flex space-x-2">
+                    <button data-theme="light" class="w-8 h-8 rounded-full bg-white border border-gray-300 hover:ring-2 hover:ring-blue-500 transition-all"></button>
+                    <button data-theme="dark" class="w-8 h-8 rounded-full bg-gray-800 border border-gray-300 hover:ring-2 hover:ring-blue-500 transition-all"></button>
+                    <button data-theme="ocean" class="w-8 h-8 rounded-full bg-blue-300 border border-gray-300 hover:ring-2 hover:ring-blue-500 transition-all"></button>
+                </div>
             </div>
         </section>
     </div>
@@ -165,8 +167,7 @@
         const resultText = document.getElementById('result-text');
         const resultReference = document.getElementById('result-reference');
         const bibleLink = document.getElementById('bible-link');
-        const themeToggleButton = document.getElementById('theme-toggle');
-        const themeToggleCircle = themeToggleButton.querySelector('div');
+        const themeControls = document.getElementById('theme-controls');
         const body = document.body;
         const fontIncreaseButton = document.getElementById('font-increase');
         const fontDecreaseButton = document.getElementById('font-decrease');
@@ -276,18 +277,7 @@
             body.classList.add(`theme-${themeName}`);
             body.dataset.theme = themeName;
             
-            if (themeName === 'dark') {
-                themeToggleButton.classList.add('bg-gray-600');
-                themeToggleCircle.classList.add('translate-x-full');
-                themeToggleCircle.classList.add('!bg-blue-600');
-            } else if (themeName === 'ocean') {
-                themeToggleButton.classList.add('bg-blue-300');
-                themeToggleCircle.classList.add('translate-x-full');
-                themeToggleCircle.classList.add('!bg-blue-800');
-            } else {
-                themeToggleButton.classList.remove('bg-gray-600', 'bg-blue-300');
-                themeToggleCircle.classList.remove('translate-x-full', '!bg-blue-600', '!bg-blue-800');
-            }
+            // This is now handled by separate buttons and doesn't need to be toggled
         };
 
         // Display a verse
@@ -328,12 +318,13 @@
             displayVerse(randomVerse);
         });
 
-        themeToggleButton.addEventListener('click', () => {
-            const currentThemeIndex = THEMES.indexOf(body.dataset.theme);
-            const nextThemeIndex = (currentThemeIndex + 1) % THEMES.length;
-            const nextTheme = THEMES[nextThemeIndex];
-            applyTheme(nextTheme);
-            saveUserProfile();
+        themeControls.addEventListener('click', (e) => {
+            const themeButton = e.target.closest('button');
+            if (themeButton) {
+                const theme = themeButton.dataset.theme;
+                applyTheme(theme);
+                saveUserProfile();
+            }
         });
 
         fontIncreaseButton.addEventListener('click', () => {
