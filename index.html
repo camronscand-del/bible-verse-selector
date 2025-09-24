@@ -13,7 +13,7 @@
             --link-hover-bg: #e5533d; /* Darker red-orange */
             --link-text-color: #ffffff; /* White text on links */
             --verse-bg: #fff0f5; /* Very light, soft pink */
-            --verse-border: #d4a9a9;
+            --verse-border: #d44949; /* A darker pink for the border */
             --verse-text-color: #555;
         }
 
@@ -27,7 +27,7 @@
                 --link-hover-bg: #5f0000;
                 --link-text-color: #ffffff;
                 --verse-bg: #4a4a4a; /* Darker grey box */
-                --verse-border: #777;
+                --verse-border: #8b0000; /* Darker red border */
                 --verse-text-color: #f0f0f0;
             }
         }
@@ -42,7 +42,19 @@
             color: var(--text-color);
             transition: background-color 0.3s, color 0.3s;
         }
+
+        h1 {
+            color: var(--header-color);
+            text-align: center;
+            margin-top: 30px;
         }
+
+        p {
+            text-align: center;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 20px;
         }
 
         .emotion-links {
@@ -51,6 +63,7 @@
             justify-content: center;
             gap: 12px;
             margin-bottom: 30px;
+            padding: 0 10px;
         }
 
         .emotion-links a {
@@ -71,7 +84,7 @@
         }
 
         .verse-container {
-            display: none;
+            display: none; /* This hides all verse boxes by default */
             margin-top: 20px;
             padding: 25px;
             border-radius: 12px;
@@ -91,12 +104,14 @@
             font-size: 1.1rem;
         }
 
+        /* This is the key rule: It only displays the ONE box that is targeted */
         .verse-container:target {
             display: block;
         }
     </style>
 </head>
 <body>
+
     <h1>Find a Bible Verse</h1>
     <p>How are you feeling today? Click an emotion to find a comforting verse.</p>
 
@@ -167,7 +182,3 @@
 
 </body>
 </html>
-
-
-
-
