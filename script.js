@@ -17,32 +17,6 @@ const verseIds = [
     'hurt-verse'
 ];
 
-// Get the random verse button
-const randomBtn = document.getElementById('random-verse-btn');
-
-// Get all the verse containers
-const verseContainers = document.querySelectorAll('.verse-container');
-
-// Get the body element to toggle themes
-const body = document.body;
-
-// Get all theme buttons
-const themeButtons = document.querySelectorAll('[data-theme]');
-
-// Get font size buttons and all verse paragraph elements
-const fontSizeIncreaseBtn = document.getElementById('font-size-increase-btn');
-const fontSizeDecreaseBtn = document.getElementById('font-size-decrease-btn');
-const allVerseParagraphs = document.querySelectorAll('.verse-container p');
-
-// Get profile elements
-const userNameDisplay = document.getElementById('user-name-display');
-const nameInput = document.getElementById('name-input');
-const bioInput = document.getElementById('bio-input');
-const saveProfileBtn = document.getElementById('save-profile-btn');
-
-// Get the verse of the day container
-const dailyVerseContainer = document.getElementById('verse-of-the-day');
-
 // All verse content data in a single object for easy access
 const allVerses = {
     'anxious-verse': {
@@ -122,130 +96,164 @@ const allVerses = {
     }
 };
 
-/**
- * Shows a specific verse container and hides all others.
- * @param {string} targetId - The ID of the verse container to show.
- */
-function showVerseContainer(targetId) {
-    verseContainers.forEach(container => {
-        container.style.display = 'none';
-    });
+// This ensures the script only runs after the page is fully loaded.
+document.addEventListener('DOMContentLoaded', () => {
 
-    const targetElement = document.getElementById(targetId);
-    if (targetElement) {
-        targetElement.style.display = 'block';
-        targetElement.scrollIntoView({ behavior: 'smooth' });
+    const randomBtn = document.getElementById('random-verse-btn');
+    const verseContainers = document.querySelectorAll('.verse-container');
+    const body = document.body;
+    const dailyVerseContainer = document.getElementById('verse-of-the-day');
+    const themeButtons = document.querySelectorAll('[data-theme]');
+    const fontSizeIncreaseBtn = document.getElementById('font-size-increase-btn');
+    const fontSizeDecreaseBtn = document.getElementById('font-size-decrease-btn');
+    const allVerseParagraphs = document.querySelectorAll('.verse-container p');
+    const userNameDisplay = document.getElementById('user-name-display');
+    const nameInput = document.getElementById('name-input');
+    const bioInput = document.getElementById('bio-input');
+    const saveProfileBtn = document.getElementById('save-profile-btn');
+
+    /**
+     * Shows a specific verse container and hides all others.
+     * @param {string} targetId - The ID of the verse container to show.
+     */
+    function showVerseContainer(targetId) {
+        verseContainers.forEach(container => {
+            container.style.display = 'none';
+        });
+
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+            targetElement.style.display = 'block';
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
     }
-}
 
-// Event listener for the Random Verse button
-randomBtn.addEventListener('click', (event) => {
-    event.preventDefault();
-    const randomIndex = Math.floor(Math.random() * verseIds.length);
-    const randomVerseId = verseIds[randomIndex];
-    showVerseContainer(randomVerseId);
-});
+    // Event listener for the Random Verse button
+    if (randomBtn) {
+        randomBtn.addEventListener('click', (event) => {
+            event.preventDefault();
+            const randomIndex = Math.floor(Math.random() * verseIds.length);
+            const randomVerseId = verseIds[randomIndex];
+            showVerseContainer(randomVerseId);
+        });
+    }
 
-// Event listeners for emotion links
-const emotionLinks = document.querySelectorAll('.emotion-link');
-emotionLinks.forEach(link => {
-    link.addEventListener('click', (event) => {
-        event.preventDefault();
-        const verseId = link.getAttribute('data-verse-id');
-        showVerseContainer(verseId);
-    });
-});
+    // Event listeners for emotion links
+    const emotionLinks = document.querySelectorAll('.emotion-link');
+    if (emotionLinks) {
+        emotionLinks.forEach(link => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+                const verseId = link.getAttribute('data-verse-id');
+                showVerseContainer(verseId);
+            });
+        });
+    }
 
-// Verse of the Day logic
-function getDailyVerse() {
-    const today = new Date().toDateString();
-    const storedDate = localStorage.getItem('dailyVerseDate');
-    let dailyVerseId = localStorage.getItem('dailyVerseId');
+    // Verse of the Day logic
+    function getDailyVerse() {
+        const today = new Date().toDateString();
+        const storedDate = localStorage.getItem('dailyVerseDate');
+        let dailyVerseId = localStorage.getItem('dailyVerseId');
 
-    if (!dailyVerseId || storedDate !== today) {
-        const randomIndex = Math.floor(Math.random() * verseIds.length);
-        dailyVerseId = verseIds[randomIndex];
-        localStorage.setItem('dailyVerseDate', today);
-        localStorage.setItem('dailyVerseId', dailyVerseId);
+        if (!dailyVerseId || storedDate !== today) {
+            const randomIndex = Math.floor(Math.random() * verseIds.length);
+            dailyVerseId = verseIds[randomIndex];
+            localStorage.setItem('dailyVerseDate', today);
+            localStorage.setItem('dailyVerseId', dailyVerseId);
+        }
+        
+        const verseData = allVerses[dailyVerseId];
+        if (dailyVerseContainer && verseData) {
+            dailyVerseContainer.innerHTML = `
+                <h3>Verse of the Day</h3>
+                <p>"${verseData.text}" - <a href="${verseData.link}" class="citation-link">${verseData.citation}</a> &#10013;</p>
+            `;
+        } else if (dailyVerseContainer) {
+            dailyVerseContainer.innerHTML = `
+                <h3>Verse of the Day</h3>
+                <p>Error loading verse. Please try again later.</p>
+            `;
+        }
+    }
+
+    // User Profile
+    function saveProfile() {
+        const name = nameInput.value;
+        const bio = bioInput.value;
+        localStorage.setItem('userName', name);
+        localStorage.setItem('userBio', bio);
+        userNameDisplay.textContent = name || 'Guest';
+        console.log('Profile saved!'); // Using console.log instead of alert
+    }
+
+    function loadProfile() {
+        const name = localStorage.getItem('userName');
+        const bio = localStorage.getItem('userBio');
+        if (name && nameInput) {
+            nameInput.value = name;
+            userNameDisplay.textContent = name;
+        }
+        if (bio && bioInput) {
+            bioInput.value = bio;
+        }
     }
     
-    const verseData = allVerses[dailyVerseId];
-    if (verseData) {
-        dailyVerseContainer.innerHTML = `
-            <h3>Verse of the Day</h3>
-            <p>"${verseData.text}" - <a href="${verseData.link}" class="citation-link">${verseData.citation}</a> &#10013;</p>
-        `;
-    } else {
-        dailyVerseContainer.innerHTML = `
-            <h3>Verse of the Day</h3>
-            <p>Error loading verse. Please try again later.</p>
-        `;
+    if (saveProfileBtn) {
+        saveProfileBtn.addEventListener('click', saveProfile);
     }
-}
+    loadProfile();
 
-// User Profile (Idea #22)
-function saveProfile() {
-    const name = nameInput.value;
-    const bio = bioInput.value;
-    localStorage.setItem('userName', name);
-    localStorage.setItem('userBio', bio);
-    userNameDisplay.textContent = name || 'Guest';
-    // No alert()
-}
-
-function loadProfile() {
-    const name = localStorage.getItem('userName');
-    const bio = localStorage.getItem('userBio');
-    if (name) {
-        nameInput.value = name;
-        userNameDisplay.textContent = name;
+    // Customizable Themes
+    function applyTheme(themeName) {
+        if (body) {
+            body.setAttribute('data-theme', themeName);
+            localStorage.setItem('theme', themeName);
+        }
     }
-    if (bio) {
-        bioInput.value = bio;
+
+    if (themeButtons) {
+        themeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const theme = button.getAttribute('data-theme');
+                applyTheme(theme);
+            });
+        });
     }
-}
 
-saveProfileBtn.addEventListener('click', saveProfile);
-loadProfile();
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        applyTheme(savedTheme);
+    }
 
-// Customizable Themes (Idea #37)
-function applyTheme(themeName) {
-    body.setAttribute('data-theme', themeName);
-    localStorage.setItem('theme', themeName);
-}
+    // Font Sizer
+    let currentFontSize = parseFloat(localStorage.getItem('fontSize')) || 1.1;
 
-themeButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        const theme = button.getAttribute('data-theme');
-        applyTheme(theme);
-    });
-});
-
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme) {
-    applyTheme(savedTheme);
-}
-
-// Font Sizer (Idea #40)
-let currentFontSize = parseFloat(localStorage.getItem('fontSize')) || 1.1;
-
-function updateFontSize() {
-    allVerseParagraphs.forEach(p => {
-        p.style.fontSize = `${currentFontSize}rem`;
-    });
-    localStorage.setItem('fontSize', currentFontSize);
-}
-
-fontSizeIncreaseBtn.addEventListener('click', () => {
-    currentFontSize += 0.1;
+    function updateFontSize() {
+        if (allVerseParagraphs) {
+            allVerseParagraphs.forEach(p => {
+                p.style.fontSize = `${currentFontSize}rem`;
+            });
+            localStorage.setItem('fontSize', currentFontSize);
+        }
+    }
+    
+    if (fontSizeIncreaseBtn) {
+        fontSizeIncreaseBtn.addEventListener('click', () => {
+            currentFontSize += 0.1;
+            updateFontSize();
+        });
+    }
+    
+    if (fontSizeDecreaseBtn) {
+        fontSizeDecreaseBtn.addEventListener('click', () => {
+            currentFontSize = Math.max(0.8, currentFontSize - 0.1);
+            updateFontSize();
+        });
+    }
+    
+    // Initial calls
+    getDailyVerse();
     updateFontSize();
-});
 
-fontSizeDecreaseBtn.addEventListener('click', () => {
-    currentFontSize = Math.max(0.8, currentFontSize - 0.1);
-    updateFontSize();
 });
-
-// Initial load
-getDailyVerse();
-updateFontSize();
