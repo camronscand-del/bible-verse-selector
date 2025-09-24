@@ -9,8 +9,6 @@
             --bg-color: #fcebeb; /* A soft, warm pink background */
             --text-color: #444; /* Slightly softer text color */
             --header-color: #8b0000; /* Rich, deep red */
-            --link-bg: #ff6347; /* Vibrant red-orange */
-            --link-hover-bg: #e5533d; /* Darker red-orange */
             --link-text-color: #ffffff; /* White text on links */
             --verse-bg: #fff0f5; /* Very light, soft pink */
             --verse-border: #d44949; /* A darker pink for the border */
@@ -23,8 +21,6 @@
                 --bg-color: #2c2c2c; /* Dark grey background */
                 --text-color: #f0f0f0; /* Light text */
                 --header-color: #ffb7b7; /* Light red */
-                --link-bg: #8b0000; /* Darker red for links */
-                --link-hover-bg: #5f0000;
                 --link-text-color: #ffffff;
                 --verse-bg: #4a4a4a; /* Darker grey box */
                 --verse-border: #8b0000; /* Darker red border */
@@ -71,7 +67,6 @@
             border: none;
             border-radius: 25px; /* Pill-shaped buttons */
             text-decoration: none;
-            background-color: var(--link-bg);
             color: var(--link-text-color);
             font-weight: 600;
             transition: background-color 0.2s, transform 0.2s;
@@ -79,106 +74,51 @@
         }
 
         .emotion-links a:hover {
-            background-color: var(--link-hover-bg);
             transform: translateY(-2px);
         }
 
-        .verse-container {
-            display: none; /* This hides all verse boxes by default */
-            margin-top: 20px;
-            padding: 25px;
-            border-radius: 12px;
-            background-color: var(--verse-bg);
-            color: var(--verse-text-color);
-            border-left: 5px solid var(--verse-border);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
+        /* Link colors for light theme */
+        .anxious-link {
+            background-color: #8c8c8c;
         }
-
-        .verse-container p {
-            font-style: italic;
-            margin: 0;
-            font-size: 1.1rem;
+        .anxious-link:hover {
+            background-color: #6b6b6b;
         }
-
-        /* This is the key rule: It only displays the ONE box that is targeted */
-        .verse-container:target {
-            display: block;
+        .sad-link {
+            background-color: #4a6792;
         }
-    </style>
-</head>
-<body>
-
-    <h1>Find a Bible Verse</h1>
-    <p>How are you feeling today? Click an emotion to find a comforting verse.</p>
-
-    <div class="emotion-links">
-        <a href="#anxious-verse">Anxious</a>
-        <a href="#sad-verse">Sad</a>
-        <a href="#grateful-verse">Grateful</a>
-        <a href="#stressed-verse">Stressed</a>
-        <a href="#peaceful-verse">Peaceful</a>
-        <a href="#lonely-verse">Lonely</a>
-        <a href="#angry-verse">Angry</a>
-        <a href="#hopeful-verse">Hopeful</a>
-        <a href="#guilty-verse">Guilty</a>
-        <a href="#fearful-verse">Fearful</a>
-        <a href="#joyful-verse">Joyful</a>
-        <a href="#tired-verse">Tired</a>
-        <a href="#confused-verse">Confused</a>
-        <a href="#content-verse">Content</a>
-        <a href="#hurt-verse">Hurt</a>
-    </div>
-
-    <!-- Verse containers for each link -->
-    <div id="anxious-verse" class="verse-container">
-        <p>Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. - Philippians 4:6 &#10013;</p>
-    </div>
-    <div id="sad-verse" class="verse-container">
-        <p>The Lord is close to the brokenhearted and saves those who are crushed in spirit. - Psalm 34:18 &#10013;</p>
-    </div>
-    <div id="grateful-verse" class="verse-container">
-        <p>Give thanks to the Lord, for he is good; his love endures forever. - Psalm 107:1 &#10013;</p>
-    </div>
-    <div id="stressed-verse" class="verse-container">
-        <p>Come to me, all you who are weary and burdened, and I will give you rest. - Matthew 11:28 &#10013;</p>
-    </div>
-    <div id="peaceful-verse" class="verse-container">
-        <p>I have told you these things, so that in me you may have peace. In this world you will have trouble. But take heart! I have overcome the world. - John 16:33 &#10013;</p>
-    </div>
-    <div id="lonely-verse" class="verse-container">
-        <p>The Lord is on my side; I will not fear. What can man do to me? - Psalm 118:6 &#10013;</p>
-    </div>
-    <div id="angry-verse" class="verse-container">
-        <p>A gentle answer turns away wrath, but a harsh word stirs up anger. - Proverbs 15:1 &#10013;</p>
-    </div>
-    <div id="hopeful-verse" class="verse-container">
-        <p>For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future. - Jeremiah 29:11 &#10013;</p>
-    </div>
-    <div id="guilty-verse" class="verse-container">
-        <p>If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness. - 1 John 1:9 &#10013;</p>
-    </div>
-    <div id="fearful-verse" class="verse-container">
-        <p>Do not be afraid or discouraged, for the Lord your God will be with you wherever you go. - Joshua 1:9 &#10013;</p>
-    </div>
-    <div id="joyful-verse" class="verse-container">
-        <p>Rejoice in the Lord always. I will say it again: Rejoice! - Philippians 4:4 &#10013;</p>
-    </div>
-    <div id="tired-verse" class="verse-container">
-        <p>But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint. - Isaiah 40:31 &#10013;</p>
-    </div>
-    <div id="confused-verse" class="verse-container">
-        <p>For God is not a God of confusion but of peace. - 1 Corinthians 14:33 &#10013;</p>
-    </div>
-    <div id="content-verse" class="verse-container">
-        <p>I know what it is to be in need, and I know what it is to have plenty. I have learned the secret of being content in any and every situation. - Philippians 4:12 &#10013;</p>
-    </div>
-    <div id="hurt-verse" class="verse-container">
-        <p>He heals the brokenhearted and binds up their wounds. - Psalm 147:3 &#10013;</p>
-    </div>
-
-</body>
-</html>
+        .sad-link:hover {
+            background-color: #384e70;
+        }
+        .grateful-link {
+            background-color: #f39c12;
+        }
+        .grateful-link:hover {
+            background-color: #d68910;
+        }
+        .stressed-link {
+            background-color: #c0392b;
+        }
+        .stressed-link:hover {
+            background-color: #a93226;
+        }
+        .peaceful-link {
+            background-color: #2ecc71;
+        }
+        .peaceful-link:hover {
+            background-color: #27ae60;
+        }
+        .lonely-link {
+            background-color: #34495e;
+        }
+        .lonely-link:hover {
+            background-color: #2c3e50;
+        }
+        .angry-link {
+            background-color: #e74c3c;
+        }
+        .angry-link:hover {
+            background-color: #c0392b;
+        }
+        .hopeful-link {
+            background-color: #3498
