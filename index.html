@@ -4,804 +4,336 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find a Verse</title>
-    <!-- Tailwind CSS CDN for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom styles for themes and layout */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
             transition: background-color 0.3s, color 0.3s;
         }
-        [data-theme="light"] {
-            background-color: #f8fafc;
-            color: #1f2937;
+        .theme-dark {
+            background-color: #1a202c;
+            color: #e2e8f0;
         }
-        [data-theme="dark"] {
-            background-color: #111827;
-            color: #f9fafb;
+        .theme-dark .bg-white {
+            background-color: #2d3748;
         }
-        [data-theme="blue"] {
-            background-color: #e0f2fe;
-            color: #0c4a6e;
+        .theme-dark .text-gray-800 {
+            color: #e2e8f0;
         }
-        [data-theme="green"] {
-            background-color: #d1fae5;
-            color: #065f46;
+        .theme-dark .text-gray-500 {
+            color: #a0aec0;
         }
-        .emotion-card {
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
+        .theme-dark input, .theme-dark textarea {
+            background-color: #4a5568;
+            border-color: #4a5568;
+            color: #e2e8f0;
         }
-        .emotion-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        .theme-dark input::placeholder, .theme-dark textarea::placeholder {
+            color: #a0aec0;
         }
-        .message-box {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 1rem;
-            border-radius: 0.5rem;
-            background-color: #fff;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            z-index: 1000;
-            display: none;
-            text-align: center;
+        .theme-dark .border-gray-300 {
+            border-color: #4a5568;
         }
-        .hidden {
-            display: none;
+        .theme-dark .shadow-md {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.12);
+        }
+        .verse-card {
+            background-size: cover;
+            background-position: center;
+        }
+        .verse-card:hover {
+            transform: scale(1.03);
+        }
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #3b82f6;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 transition-colors duration-300" data-theme="light">
+<body class="bg-gray-100 min-h-screen flex flex-col items-center p-4 transition-colors duration-300">
+    <!-- Main Container -->
+    <div id="main-container" class="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-8 space-y-8 transition-colors duration-300">
+        <!-- Header -->
+        <header class="text-center space-y-2">
+            <h1 class="text-5xl font-extrabold text-blue-600">Find a Verse</h1>
+            <p class="text-gray-500">Get a verse that speaks to your heart.</p>
+        </header>
 
-    <!-- Header Section -->
-    <header class="bg-white shadow-md py-4 px-6 flex justify-between items-center sticky top-0 z-50 rounded-b-lg">
-        <h1 class="text-3xl font-bold text-indigo-600">Find a Verse</h1>
-        <div id="user-display" class="flex items-center space-x-4">
-            <span id="user-name-display" class="text-xl font-medium">Guest</span>
-        </div>
-    </header>
-
-    <main class="container mx-auto p-6 lg:p-12">
-        <div id="message-box" class="message-box"></div>
-
-        <!-- Loading Indicator -->
-        <section id="loading-indicator" class="flex flex-col items-center justify-center p-12">
-            <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-indigo-500"></div>
-            <p class="mt-4 text-xl font-medium text-gray-600">Loading...</p>
-        </section>
-
-        <!-- Authentication Section -->
-        <section id="auth-section" class="bg-white p-8 rounded-2xl shadow-lg max-w-lg mx-auto mb-8 hidden">
-            <h2 class="text-2xl font-semibold text-center mb-6">Log In or Sign Up</h2>
-            <div id="login-form" class="space-y-4">
-                <input type="email" id="login-email-input" placeholder="Email" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <input type="password" id="login-password-input" placeholder="Password" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <button id="login-btn" class="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-indigo-700 transition-colors">Log In</button>
-                <p class="text-center text-sm mt-4">Don't have an account? <a href="#" id="show-signup" class="text-indigo-600 hover:underline">Sign up here</a>.</p>
+        <!-- User Profile Section -->
+        <section id="profile-section" class="border-t border-gray-300 pt-6">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-bold text-gray-800">My Profile</h2>
+                <button id="profile-toggle-button" class="text-blue-600 hover:text-blue-800 transition-colors duration-300 text-sm font-semibold">Hide</button>
             </div>
-            <div id="signup-form" class="space-y-4 hidden">
-                <input type="email" id="signup-email-input" placeholder="Email" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <input type="password" id="signup-password-input" placeholder="Password" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <button id="signup-btn" class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-green-700 transition-colors">Sign Up</button>
-                <p class="text-center text-sm mt-4">Already have an account? <a href="#" id="show-login" class="text-green-600 hover:underline">Log in here</a>.</p>
-            </div>
-        </section>
-
-        <!-- Profile Section -->
-        <section id="profile-section" class="flex-col items-center hidden">
-            <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-lg mx-auto">
-                <h2 class="text-2xl font-semibold text-center mb-6">Your Profile</h2>
-                <div class="space-y-4">
-                    <input type="text" id="name-input" placeholder="Your Name" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <textarea id="bio-input" placeholder="A short bio..." rows="3" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
-                    <button id="save-profile-btn" class="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-indigo-700 transition-colors">Save Profile</button>
-                    <button id="signout-btn" class="w-full bg-red-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-red-700 transition-colors mt-4">Sign Out</button>
-                    
-                    <h3 class="text-xl font-semibold mt-8">Account Management</h3>
-                    <div class="space-y-4">
-                        <input type="email" id="email-input" placeholder="Change Email" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <button id="change-email-btn" class="w-full bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl hover:bg-gray-300 transition-colors">Change Email</button>
-                        <input type="password" id="password-input" placeholder="Change Password (min 6 chars)" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <button id="change-password-btn" class="w-full bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl hover:bg-gray-300 transition-colors">Change Password</button>
-                    </div>
+            <div id="profile-content" class="mt-4 space-y-4">
+                <div id="loading-profile" class="flex justify-center items-center h-24">
+                    <div class="loading-spinner"></div>
+                </div>
+                <div id="profile-form" class="hidden space-y-4">
+                    <input id="profile-name" type="text" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                    <textarea id="profile-bio" rows="3" placeholder="A short bio..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"></textarea>
+                    <button id="profile-save-button" class="w-full bg-green-500 text-white p-3 rounded-lg hover:bg-green-600 transition-colors duration-300 font-bold shadow-md">Save Profile</button>
+                    <p id="user-id" class="text-center text-gray-500 text-xs mt-2"></p>
                 </div>
             </div>
         </section>
 
-        <!-- Main Content (initially hidden) -->
-        <section id="main-content" class="hidden">
-            <!-- Daily Verse & Controls -->
-            <section class="mt-8 text-center">
-                <div id="verse-of-the-day" class="bg-white p-6 rounded-2xl shadow-lg mb-6">
-                    <!-- Verse of the day will be loaded here by JavaScript -->
+        <!-- The Verse of the Day Section -->
+        <section class="border-t border-gray-300 pt-6 space-y-4">
+            <h2 class="text-xl font-bold text-gray-800">Verse of the Day</h2>
+            <div id="verse-of-day" class="p-6 bg-blue-500 text-white rounded-2xl shadow-md space-y-2 text-center transition-transform duration-300">
+                <div id="votd-text" class="text-lg font-medium italic">Loading verse...</div>
+                <div id="votd-reference" class="text-sm font-semibold"></div>
+            </div>
+        </section>
+
+        <!-- Mood-Based Verses Section -->
+        <section class="border-t border-gray-300 pt-6 space-y-4">
+            <h2 class="text-xl font-bold text-gray-800">Find a Verse by Emotion</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <button data-emotion="joy" class="verse-card bg-green-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/22c55e/ffffff?text=Joy');">Joy</button>
+                <button data-emotion="peace" class="verse-card bg-purple-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/a855f7/ffffff?text=Peace');">Peace</button>
+                <button data-emotion="sadness" class="verse-card bg-blue-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/3b82f6/ffffff?text=Sadness');">Sadness</button>
+                <button data-emotion="fear" class="verse-card bg-orange-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/f97316/ffffff?text=Fear');">Fear</button>
+                <button data-emotion="anger" class="verse-card bg-red-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/ef4444/ffffff?text=Anger');">Anger</button>
+                <button data-emotion="strength" class="verse-card bg-indigo-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/6366f1/ffffff?text=Strength');">Strength</button>
+            </div>
+            <div id="verse-result" class="mt-4 p-6 bg-gray-50 rounded-2xl shadow-md space-y-2 hidden">
+                <p id="result-text" class="text-gray-800 text-lg italic"></p>
+                <p id="result-reference" class="text-gray-500 text-sm font-semibold text-right"></p>
+            </div>
+        </section>
+
+        <!-- Theme and Font Size Controls -->
+        <section class="border-t border-gray-300 pt-6 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <span class="text-gray-800 font-semibold">Font Size:</span>
+                <div class="flex items-center space-x-2">
+                    <button id="font-decrease" class="p-2 w-8 h-8 flex justify-center items-center text-gray-500 rounded-full border border-gray-300 hover:bg-gray-200 transition-colors duration-300">-</button>
+                    <button id="font-increase" class="p-2 w-8 h-8 flex justify-center items-center text-gray-500 rounded-full border border-gray-300 hover:bg-gray-200 transition-colors duration-300">+</button>
                 </div>
-                <button id="random-verse-btn" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition-colors transform hover:scale-105">
-                    Find a Random Verse
+            </div>
+            <div class="flex items-center space-x-4">
+                <span class="text-gray-800 font-semibold">Theme:</span>
+                <button id="theme-toggle" class="p-2 w-12 h-6 flex items-center rounded-full bg-gray-300 transition-colors duration-300">
+                    <div class="w-4 h-4 rounded-full bg-white shadow-md transform transition-transform duration-300"></div>
                 </button>
-                <div class="mt-8 flex justify-center space-x-4">
-                    <button id="font-size-decrease-btn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-full hover:bg-gray-300 transition-colors">-A</button>
-                    <button id="font-size-increase-btn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-full hover:bg-gray-300 transition-colors">+A</button>
-                </div>
-            </section>
-
-            <!-- Emotion Grid -->
-            <section class="mt-12">
-                <h2 class="text-3xl font-bold text-center mb-8">What are you feeling today?</h2>
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                    <!-- Each emotion card links to a specific verse -->
-                    <a href="#anxious" data-verse-id="anxious-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
-                        <img src="https://placehold.co/100x100/A3A3A3/000000?text=Anxious" alt="Anxious" class="mx-auto rounded-full mb-4">
-                        <span class="font-semibold text-lg">Anxious</span>
-                    </a>
-                    <a href="#sad" data-verse-id="sad-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
-                        <img src="https://placehold.co/100x100/A3A3A3/000000?text=Sad" alt="Sad" class="mx-auto rounded-full mb-4">
-                        <span class="font-semibold text-lg">Sad</span>
-                    </a>
-                    <a href="#grateful" data-verse-id="grateful-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
-                        <img src="https://placehold.co/100x100/A3A3A3/000000?text=Grateful" alt="Grateful" class="mx-auto rounded-full mb-4">
-                        <span class="font-semibold text-lg">Grateful</span>
-                    </a>
-                    <a href="#stressed" data-verse-id="stressed-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
-                        <img src="https://placehold.co/100x100/A3A3A3/000000?text=Stressed" alt="Stressed" class="mx-auto rounded-full mb-4">
-                        <span class="font-semibold text-lg">Stressed</span>
-                    </a>
-                    <a href="#peaceful" data-verse-id="peaceful-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
-                        <img src="https://placehold.co/100x100/A3A3A3/000000?text=Peaceful" alt="Peaceful" class="mx-auto rounded-full mb-4">
-                        <span class="font-semibold text-lg">Peaceful</span>
-                    </a>
-                    <a href="#lonely" data-verse-id="lonely-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
-                        <img src="https://placehold.co/100x100/A3A3A3/000000?text=Lonely" alt="Lonely" class="mx-auto rounded-full mb-4">
-                        <span class="font-semibold text-lg">Lonely</span>
-                    </a>
-                    <a href="#angry" data-verse-id="angry-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
-                        <img src="https://placehold.co/100x100/A3A3A3/000000?text=Angry" alt="Angry" class="mx-auto rounded-full mb-4">
-                        <span class="font-semibold text-lg">Angry</span>
-                    </a>
-                    <a href="#hopeful" data-verse-id="hopeful-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
-                        <img src="https://placehold.co/100x100/A3A3A3/000000?text=Hopeful" alt="Hopeful" class="mx-auto rounded-full mb-4">
-                        <span class="font-semibold text-lg">Hopeful</span>
-                    </a>
-                    <a href="#guilty" data-verse-id="guilty-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
-                        <img src="https://placehold.co/100x100/A3A3A3/000000?text=Guilty" alt="Guilty" class="mx-auto rounded-full mb-4">
-                        <span class="font-semibold text-lg">Guilty</span>
-                    </a>
-                    <a href="#fearful" data-verse-id="fearful-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
-                        <img src="https://placehold.co/100x100/A3A3A3/000000?text=Fearful" alt="Fearful" class="mx-auto rounded-full mb-4">
-                        <span class="font-semibold text-lg">Fearful</span>
-                    </a>
-                    <a href="#joyful" data-verse-id="joyful-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
-                        <img src="https://placehold.co/100x100/A3A3A3/000000?text=Joyful" alt="Joyful" class="mx-auto rounded-full mb-4">
-                        <span class="font-semibold text-lg">Joyful</span>
-                    </a>
-                    <a href="#tired" data-verse-id="tired-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
-                        <img src="https://placehold.co/100x100/A3A3A3/000000?text=Tired" alt="Tired" class="mx-auto rounded-full mb-4">
-                        <span class="font-semibold text-lg">Tired</span>
-                    </a>
-                    <a href="#confused" data-verse-id="confused-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
-                        <img src="https://placehold.co/100x100/A3A3A3/000000?text=Confused" alt="Confused" class="mx-auto rounded-full mb-4">
-                        <span class="font-semibold text-lg">Confused</span>
-                    </a>
-                    <a href="#content" data-verse-id="content-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
-                        <img src="https://placehold.co/100x100/A3A3A3/000000?text=Content" alt="Content" class="mx-auto rounded-full mb-4">
-                        <span class="font-semibold text-lg">Content</span>
-                    </a>
-                    <a href="#hurt" data-verse-id="hurt-verse" class="emotion-link bg-white p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform transform hover:scale-105">
-                        <img src="https://placehold.co/100x100/A3A3A3/000000?text=Hurt" alt="Hurt" class="mx-auto rounded-full mb-4">
-                        <span class="font-semibold text-lg">Hurt</span>
-                    </a>
-                </div>
-            </section>
-
-            <!-- Verses Section (Initially hidden) -->
-            <section class="mt-12 space-y-8">
-                <div id="anxious-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
-                    <h2 class="text-3xl font-bold mb-4">Anxious</h2>
-                    <p class="text-xl leading-relaxed">"Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God."</p>
-                    <p class="mt-4 text-sm font-light text-gray-500">- Philippians 4:6</p>
-                </div>
-                <div id="sad-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
-                    <h2 class="text-3xl font-bold mb-4">Sad</h2>
-                    <p class="text-xl leading-relaxed">"The Lord is close to the brokenhearted and saves those who are crushed in spirit."</p>
-                    <p class="mt-4 text-sm font-light text-gray-500">- Psalm 34:18</p>
-                </div>
-                <div id="grateful-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
-                    <h2 class="text-3xl font-bold mb-4">Grateful</h2>
-                    <p class="text-xl leading-relaxed">"Give thanks to the Lord, for he is good; his love endures forever."</p>
-                    <p class="mt-4 text-sm font-light text-gray-500">- Psalm 107:1</p>
-                </div>
-                <div id="stressed-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
-                    <h2 class="text-3xl font-bold mb-4">Stressed</h2>
-                    <p class="text-xl leading-relaxed">"Come to me, all you who are weary and burdened, and I will give you rest."</p>
-                    <p class="mt-4 text-sm font-light text-gray-500">- Matthew 11:28</p>
-                </div>
-                <div id="peaceful-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
-                    <h2 class="text-3xl font-bold mb-4">Peaceful</h2>
-                    <p class="text-xl leading-relaxed">"I have told you these things, so that in me you may have peace. In this world you will have trouble. But take heart! I have overcome the world."</p>
-                    <p class="mt-4 text-sm font-light text-gray-500">- John 16:33</p>
-                </div>
-                <div id="lonely-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
-                    <h2 class="text-3xl font-bold mb-4">Lonely</h2>
-                    <p class="text-xl leading-relaxed">"The Lord is on my side; I will not fear. What can man do to me?"</p>
-                    <p class="mt-4 text-sm font-light text-gray-500">- Psalm 118:6</p>
-                </div>
-                <div id="angry-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
-                    <h2 class="text-3xl font-bold mb-4">Angry</h2>
-                    <p class="text-xl leading-relaxed">"A gentle answer turns away wrath, but a harsh word stirs up anger."</p>
-                    <p class="mt-4 text-sm font-light text-gray-500">- Proverbs 15:1</p>
-                </div>
-                <div id="hopeful-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
-                    <h2 class="text-3xl font-bold mb-4">Hopeful</h2>
-                    <p class="text-xl leading-relaxed">"For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future."</p>
-                    <p class="mt-4 text-sm font-light text-gray-500">- Jeremiah 29:11</p>
-                </div>
-                <div id="guilty-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
-                    <h2 class="text-3xl font-bold mb-4">Guilty</h2>
-                    <p class="text-xl leading-relaxed">"If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness."</p>
-                    <p class="mt-4 text-sm font-light text-gray-500">- 1 John 1:9</p>
-                </div>
-                <div id="fearful-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
-                    <h2 class="text-3xl font-bold mb-4">Fearful</h2>
-                    <p class="text-xl leading-relaxed">"Do not be afraid or discouraged, for the Lord your God will be with you wherever you go."</p>
-                    <p class="mt-4 text-sm font-light text-gray-500">- Joshua 1:9</p>
-                </div>
-                <div id="joyful-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
-                    <h2 class="text-3xl font-bold mb-4">Joyful</h2>
-                    <p class="text-xl leading-relaxed">"Rejoice in the Lord always. I will say it again: Rejoice!"</p>
-                    <p class="mt-4 text-sm font-light text-gray-500">- Philippians 4:4</p>
-                </div>
-                <div id="tired-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
-                    <h2 class="text-3xl font-bold mb-4">Tired</h2>
-                    <p class="text-xl leading-relaxed">"But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint."</p>
-                    <p class="mt-4 text-sm font-light text-gray-500">- Isaiah 40:31</p>
-                </div>
-                <div id="confused-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
-                    <h2 class="text-3xl font-bold mb-4">Confused</h2>
-                    <p class="text-xl leading-relaxed">"For God is not a God of confusion but of peace."</p>
-                    <p class="mt-4 text-sm font-light text-gray-500">- 1 Corinthians 14:33</p>
-                </div>
-                <div id="content-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
-                    <h2 class="text-3xl font-bold mb-4">Content</h2>
-                    <p class="text-xl leading-relaxed">"I know what it is to be in need, and I know what it is to have plenty. I have learned the secret of being content in any and every situation."</p>
-                    <p class="mt-4 text-sm font-light text-gray-500">- Philippians 4:12</p>
-                </div>
-                <div id="hurt-verse" class="verse-container hidden bg-white p-8 rounded-2xl shadow-lg text-center max-w-2xl mx-auto">
-                    <h2 class="text-3xl font-bold mb-4">Hurt</h2>
-                    <p class="text-xl leading-relaxed">"He heals the brokenhearted and binds up their wounds."</p>
-                    <p class="mt-4 text-sm font-light text-gray-500">- Psalm 147:3</p>
-                </div>
-            </section>
-
-            <!-- Theme Switcher -->
-            <section class="mt-12 text-center">
-                <h2 class="text-2xl font-bold mb-4">Choose a Theme</h2>
-                <div class="flex justify-center space-x-4">
-                    <button data-theme="light" class="w-12 h-12 rounded-full border-4 border-white shadow-md bg-gray-50 hover:scale-110 transition-transform transform"></button>
-                    <button data-theme="dark" class="w-12 h-12 rounded-full border-4 border-white shadow-md bg-gray-800 hover:scale-110 transition-transform transform"></button>
-                    <button data-theme="blue" class="w-12 h-12 rounded-full border-4 border-white shadow-md bg-sky-200 hover:scale-110 transition-transform transform"></button>
-                    <button data-theme="green" class="w-12 h-12 rounded-full border-4 border-white shadow-md bg-teal-200 hover:scale-110 transition-transform transform"></button>
-                </div>
-            </section>
+            </div>
         </section>
-    </main>
-    
+
+    </div>
+
+    <!-- Firebase SDKs -->
     <script type="module">
-        // Firebase imports
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { 
-            getAuth, 
-            signInAnonymously,
-            signInWithEmailAndPassword, 
-            createUserWithEmailAndPassword, 
-            signOut, 
-            onAuthStateChanged, 
-            updateEmail, 
-            updatePassword 
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { 
-            getFirestore, 
-            doc, 
-            setDoc, 
-            getDoc 
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        setLogLevel('Debug');
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Global Firebase variables provided by the environment
+        // Global variables provided by the canvas environment
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = JSON.parse(window.__firebase_config);
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        
+        // UI element references
+        const profileToggleButton = document.getElementById('profile-toggle-button');
+        const profileContent = document.getElementById('profile-content');
+        const loadingProfile = document.getElementById('loading-profile');
+        const profileForm = document.getElementById('profile-form');
+        const profileNameInput = document.getElementById('profile-name');
+        const profileBioInput = document.getElementById('profile-bio');
+        const profileSaveButton = document.getElementById('profile-save-button');
+        const userIdDisplay = document.getElementById('user-id');
+        const verseOfDayText = document.getElementById('votd-text');
+        const verseOfDayReference = document.getElementById('votd-reference');
+        const verseResultContainer = document.getElementById('verse-result');
+        const resultText = document.getElementById('result-text');
+        const resultReference = document.getElementById('result-reference');
+        const themeToggleButton = document.getElementById('theme-toggle');
+        const themeToggleCircle = themeToggleButton.querySelector('div');
+        const body = document.body;
+        const fontIncreaseButton = document.getElementById('font-increase');
+        const fontDecreaseButton = document.getElementById('font-decrease');
+        const mainContainer = document.getElementById('main-container');
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        // Firebase variables
+        let db, auth;
+        let userId;
+        let profileRef;
 
-        // Function to get the user's profile document reference
-        const getProfileDoc = (uid) => doc(db, `artifacts/${appId}/users/${uid}/profile/main`);
-        const getPreferencesDoc = (uid) => doc(db, `artifacts/${appId}/users/${uid}/preferences/main`);
-
-        // A list of the verse IDs from your HTML file
-        const verseIds = [
-            'anxious-verse', 'sad-verse', 'grateful-verse', 'stressed-verse', 'peaceful-verse',
-            'lonely-verse', 'angry-verse', 'hopeful-verse', 'guilty-verse', 'fearful-verse',
-            'joyful-verse', 'tired-verse', 'confused-verse', 'content-verse', 'hurt-verse'
-        ];
-
-        // All verse content data in a single object for easy access
-        const allVerses = {
-            'anxious-verse': { text: 'Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God.', citation: 'Philippians 4:6', link: 'https://www.biblegateway.com/passage/?search=Philippians+4%3A6&version=NIV' },
-            'sad-verse': { text: 'The Lord is close to the brokenhearted and saves those who are crushed in spirit.', citation: 'Psalm 34:18', link: 'https://www.biblegateway.com/passage/?search=Psalm+34%3A18&version=NIV' },
-            'grateful-verse': { text: 'Give thanks to the Lord, for he is good; his love endures forever.', citation: 'Psalm 107:1', link: 'https://www.biblegateway.com/passage/?search=Psalm+107%3A1&version=NIV' },
-            'stressed-verse': { text: 'Come to me, all you who are weary and burdened, and I will give you rest.', citation: 'Matthew 11:28', link: 'https://www.biblegateway.com/passage/?search=Matthew+11%3A28&version=NIV' },
-            'peaceful-verse': { text: 'I have told you these things, so that in me you may have peace. In this world you will have trouble. But take heart! I have overcome the world.', citation: 'John 16:33', link: 'https://www.biblegateway.com/passage/?search=John+16%3A33&version=NIV' },
-            'lonely-verse': { text: 'The Lord is on my side; I will not fear. What can man do to me?', citation: 'Psalm 118:6', link: 'https://www.biblegateway.com/passage/?search=Psalm+118%3A6&version=NIV' },
-            'angry-verse': { text: 'A gentle answer turns away wrath, but a harsh word stirs up anger.', citation: 'Proverbs 15:1', link: 'https://www.biblegateway.com/passage/?search=Proverbs+15%3A1&version=NIV' },
-            'hopeful-verse': { text: 'For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future.', citation: 'Jeremiah 29:11', link: 'https://www.biblegateway.com/passage/?search=Jeremiah+29%3A11&version=NIV' },
-            'guilty-verse': { text: 'If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness.', citation: '1 John 1:9', link: 'https://www.biblegateway.com/passage/?search=1+John+1%3A9&version=NIV' },
-            'fearful-verse': { text: 'Do not be afraid or discouraged, for the Lord your God will be with you wherever you go.', citation: 'Joshua 1:9', link: 'https://www.biblegateway.com/passage/?search=Joshua+1%3A9&version=NIV' },
-            'joyful-verse': { text: 'Rejoice in the Lord always. I will say it again: Rejoice!', citation: 'Philippians 4:4', link: 'https://www.biblegateway.com/passage/?search=Philippians+4%3A4&version=NIV' },
-            'tired-verse': { text: 'But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.', citation: 'Isaiah 40:31', link: 'https://www.biblegateway.com/passage/?search=Isaiah+40%3A31&version=NIV' },
-            'confused-verse': { text: 'For God is not a God of confusion but of peace.', citation: '1 Corinthians 14:33', link: 'https://www.biblegateway.com/passage/?search=1+Corinthians+14%3A33&version=NIV' },
-            'content-verse': { text: 'I know what it is to be in need, and I know what it is to have plenty. I have learned the secret of being content in any and every situation.', citation: 'Philippians 4:12', link: 'https://www.biblegateway.com/passage/?search=Philippians+4%3A12&version=NIV' },
-            'hurt-verse': { text: 'He heals the brokenhearted and binds up their wounds.', citation: 'Psalm 147:3', link: 'https://www.biblegateway.com/passage/?search=Psalm+147%3A3&version=NIV' }
+        // Verses data (simplified for this example)
+        const verses = {
+            joy: {
+                text: "The Lord is my strength and my shield; in Him my heart trusts, and I am helped; my heart exults, and with my song I give thanks to Him.",
+                reference: "Psalm 28:7"
+            },
+            peace: {
+                text: "Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled and do not be afraid.",
+                reference: "John 14:27"
+            },
+            sadness: {
+                text: "The Lord is close to the brokenhearted and saves those who are crushed in spirit.",
+                reference: "Psalm 34:18"
+            },
+            fear: {
+                text: "For God has not given us a spirit of fear, but of power and of love and of a sound mind.",
+                reference: "2 Timothy 1:7"
+            },
+            anger: {
+                text: "A fool gives full vent to his anger, but a wise man keeps himself under control.",
+                reference: "Proverbs 29:11"
+            },
+            strength: {
+                text: "I can do all things through him who strengthens me.",
+                reference: "Philippians 4:13"
+            },
+            votd: {
+                text: "For where two or three are gathered in my name, there am I among them.",
+                reference: "Matthew 18:20"
+            }
         };
 
-        // This ensures the script only runs after the page is fully loaded.
-        document.addEventListener('DOMContentLoaded', () => {
-
-            // --- DOM Elements ---
-            const randomBtn = document.getElementById('random-verse-btn');
-            const verseContainers = document.querySelectorAll('.verse-container');
-            const body = document.body;
-            const dailyVerseContainer = document.getElementById('verse-of-the-day');
-            const themeButtons = document.querySelectorAll('[data-theme]');
-            const fontSizeIncreaseBtn = document.getElementById('font-size-increase-btn');
-            const fontSizeDecreaseBtn = document.getElementById('font-size-decrease-btn');
-            const allVerseParagraphs = document.querySelectorAll('.verse-container p');
-            const userNameDisplay = document.getElementById('user-name-display');
-            const nameInput = document.getElementById('name-input');
-            const bioInput = document.getElementById('bio-input');
-            const saveProfileBtn = document.getElementById('save-profile-btn');
-            const signoutBtn = document.getElementById('signout-btn');
-            
-            // Auth-related elements
-            const authSection = document.getElementById('auth-section');
-            const profileSection = document.getElementById('profile-section');
-            const mainContent = document.getElementById('main-content');
-            const loginForm = document.getElementById('login-form');
-            const signupForm = document.getElementById('signup-form');
-            const showSignupLink = document.getElementById('show-signup');
-            const showLoginLink = document.getElementById('show-login');
-            const loginEmailInput = document.getElementById('login-email-input');
-            const loginPasswordInput = document.getElementById('login-password-input');
-            const loginBtn = document.getElementById('login-btn');
-            const signupEmailInput = document.getElementById('signup-email-input');
-            const signupPasswordInput = document.getElementById('signup-password-input');
-            const signupBtn = document.getElementById('signup-btn');
-            const messageBox = document.getElementById('message-box');
-            const loadingIndicator = document.getElementById('loading-indicator');
-
-            // New profile management elements
-            const emailInput = document.getElementById('email-input');
-            const passwordInput = document.getElementById('password-input');
-            const changeEmailBtn = document.getElementById('change-email-btn');
-            const changePasswordBtn = document.getElementById('change-password-btn');
-
-            // --- State Variables ---
-            let userId = null;
-            let preferences = {
-                theme: 'light',
-                fontSize: 1.1,
-                dailyVerse: null,
-                dailyVerseDate: null
-            };
-
-            // --- Helper Functions ---
-
-            /**
-             * Displays a message to the user in the message box.
-             * @param {string} message The message to display.
-             * @param {boolean} isError True if the message is an error, false otherwise.
-             */
-            const showMessage = (message, isError = false) => {
-                messageBox.textContent = message;
-                messageBox.className = `message-box ${isError ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`;
-                messageBox.style.display = 'block';
-                setTimeout(() => {
-                    messageBox.style.display = 'none';
-                }, 5000);
-            };
-
-            /**
-             * Displays a custom modal instead of a native alert.
-             * @param {string} message The message to display.
-             * @param {string} title The title of the modal.
-             */
-            const showModal = (message, title = "Info") => {
-                const modalHtml = `
-                    <div id="custom-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-[1000] flex justify-center items-center">
-                        <div class="relative p-5 border w-96 shadow-lg rounded-md bg-white text-gray-800">
-                            <div class="mt-3 text-center">
-                                <h3 class="text-lg leading-6 font-medium text-gray-900">${title}</h3>
-                                <div class="mt-2 px-3 py-1">
-                                    <p class="text-sm text-gray-500">${message}</p>
-                                </div>
-                                <div class="items-center px-4 py-3">
-                                    <button id="modal-close-btn" class="px-4 py-2 bg-indigo-600 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                        Close
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                document.body.insertAdjacentHTML('beforeend', modalHtml);
-                document.getElementById('modal-close-btn').addEventListener('click', () => {
-                    document.getElementById('custom-modal').remove();
-                });
-            };
-
-            /**
-             * Saves the user's preferences to Firestore.
-             */
-            const savePreferences = async () => {
-                if (!userId) return;
-                try {
-                    await setDoc(getPreferencesDoc(userId), preferences, { merge: true });
-                    console.log("Preferences saved successfully!");
-                } catch (error) {
-                    console.error("Error saving preferences:", error);
+        // Initialize Firebase and Auth
+        const initFirebase = async () => {
+            try {
+                if (Object.keys(firebaseConfig).length === 0) {
+                    throw new Error("Firebase configuration is missing.");
                 }
-            };
-            
-            /**
-             * Loads the user's preferences from Firestore.
-             */
-            const loadPreferences = async () => {
-                if (!userId) return;
-                try {
-                    const docSnap = await getDoc(getPreferencesDoc(userId));
-                    if (docSnap.exists()) {
-                        preferences = { ...preferences, ...docSnap.data() };
-                        console.log("Preferences loaded from Firestore.");
-                        // Apply loaded preferences
-                        applyTheme(preferences.theme);
-                        updateFontSize();
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                // Start authentication listener
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        userIdDisplay.textContent = `User ID: ${userId}`;
+                        profileRef = doc(db, `artifacts/${appId}/users/${userId}/profile/data`);
+                        await loadUserProfile();
                     } else {
-                        console.log("No preferences found. Using defaults.");
-                        // Save the default preferences for the new user
-                        savePreferences();
-                    }
-                } catch (error) {
-                    console.error("Error loading preferences:", error);
-                }
-            };
-
-            // --- Firebase Auth & Firestore Logic ---
-            // This listener waits for the user's authentication state to be determined.
-            onAuthStateChanged(auth, async (user) => {
-                loadingIndicator.classList.add('hidden'); // Always hide loading spinner
-                
-                if (user) {
-                    // User is logged in
-                    userId = user.uid;
-                    authSection.classList.add('hidden');
-                    profileSection.classList.remove('hidden');
-                    mainContent.classList.remove('hidden');
-                    userNameDisplay.textContent = user.email; // Display email by default
-                    loadProfile();
-                    await loadPreferences();
-                    getDailyVerse(); // Load daily verse after preferences are loaded
-                } else {
-                    // No user is logged in, sign in anonymously to get a UID
-                    userId = null;
-                    try {
                         await signInAnonymously(auth);
-                        // onAuthStateChanged will be triggered again with the new user object
-                    } catch (error) {
-                        console.error("Anonymous sign-in failed:", error);
-                        showMessage(`Anonymous sign-in failed: ${error.message}`, true);
-                        authSection.classList.remove('hidden');
-                        profileSection.classList.add('hidden');
-                        mainContent.classList.add('hidden');
                     }
-                }
-            });
-            
-            /** Handles user login with email and password. */
-            const handleLogin = async () => {
-                const email = loginEmailInput.value;
-                const password = loginPasswordInput.value;
+                });
 
-                if (!email || !password) {
-                    showMessage("Please enter both email and password.", true);
-                    return;
-                }
-                
-                try {
-                    showMessage("Logging in...", false);
-                    await signInWithEmailAndPassword(auth, email, password);
-                    showMessage("Login successful!", false);
-                } catch (error) {
-                    console.error("Login failed:", error);
-                    showMessage(`Login failed: ${error.message}`, true);
-                }
-            };
-
-            /** Handles user sign-up with email and password. */
-            const handleSignUp = async () => {
-                const email = signupEmailInput.value;
-                const password = signupPasswordInput.value;
-                
-                if (!email || !password) {
-                    showMessage("Please enter a valid email and password.", true);
-                    return;
+                // Authenticate with custom token or anonymously
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
                 }
 
-                try {
-                    showMessage("Creating account...", false);
-                    await createUserWithEmailAndPassword(auth, email, password);
-                    showMessage("Account created successfully! You are now logged in.", false);
-                } catch (error) {
-                    console.error("Sign up failed:", error);
-                    showMessage(`Sign up failed: ${error.message}`, true);
-                }
-            };
+            } catch (error) {
+                console.error("Firebase initialization failed:", error);
+                loadingProfile.classList.add('hidden');
+                profileForm.classList.remove('hidden');
+                profileForm.innerHTML = `<p class="text-red-500 text-center">Error loading profile. Check the console for details.</p>`;
+            }
+        };
 
-            /** Handles user sign-out. */
-            const handleSignOut = async () => {
-                try {
-                    await signOut(auth);
-                    showMessage("Signed out successfully.", false);
-                    userNameDisplay.textContent = 'Guest';
-                } catch (error) {
-                    console.error("Sign out failed:", error);
-                    showMessage(`Sign out failed: ${error.message}`, true);
-                }
-            };
+        // Profile and Settings Management
+        const loadUserProfile = async () => {
+            loadingProfile.classList.add('hidden');
+            profileForm.classList.remove('hidden');
 
-            /** Saves the user's name and bio to Firestore. */
-            const saveProfile = async () => {
-                const user = auth.currentUser;
-                if (!user) {
-                    showModal("You must be logged in to save your profile.", "Error");
-                    return;
-                }
-                const profileData = {
-                    name: nameInput.value,
-                    bio: bioInput.value,
-                    userId: user.uid, // Always save the user ID
-                };
-                try {
-                    await setDoc(getProfileDoc(user.uid), profileData, { merge: true });
-                    showMessage("Profile saved successfully!", false);
-                    userNameDisplay.textContent = profileData.name || 'Guest';
-                } catch (error) {
-                    console.error("Error saving profile:", error);
-                    showMessage(`Error saving profile: ${error.message}`, true);
-                }
-            };
-
-            /** Loads the user's profile from Firestore and populates the form fields. */
-            const loadProfile = async () => {
-                if (!userId) return;
-                try {
-                    const profileRef = getProfileDoc(userId);
-                    const docSnap = await getDoc(profileRef);
-                    if (docSnap.exists()) {
-                        const data = docSnap.data();
-                        nameInput.value = data.name || '';
-                        bioInput.value = data.bio || '';
-                        userNameDisplay.textContent = data.name || `User ID: ${userId}`;
+            onSnapshot(profileRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    profileNameInput.value = data.name || '';
+                    profileBioInput.value = data.bio || '';
+                    if (data.darkMode) {
+                        body.classList.add('theme-dark');
+                        themeToggleCircle.classList.add('translate-x-full', '!bg-blue-600');
+                        themeToggleButton.classList.add('bg-gray-600');
                     } else {
-                        nameInput.value = '';
-                        bioInput.value = '';
-                        userNameDisplay.textContent = `User ID: ${userId}`;
-                        showMessage("No profile found. Please create one.", true);
+                        body.classList.remove('theme-dark');
+                        themeToggleCircle.classList.remove('translate-x-full', '!bg-blue-600');
+                        themeToggleButton.classList.remove('bg-gray-600');
                     }
-                } catch (error) {
-                    console.error("Error loading profile:", error);
-                    showMessage(`Error loading profile: ${error.message}`, true);
+                    if (data.fontSize) {
+                        mainContainer.style.fontSize = `${data.fontSize}px`;
+                    }
                 }
-            };
+            }, (error) => {
+                console.error("Error fetching profile:", error);
+            });
+        };
 
-            /** Changes the user's email address. */
-            const changeEmail = async () => {
-                const user = auth.currentUser;
-                if (!user) {
-                    showModal("You must be logged in to change your email.", "Error");
-                    return;
-                }
-                const newEmail = emailInput.value;
-                if (!newEmail) {
-                    showModal("Please enter a new email.", "Error");
-                    return;
-                }
-                try {
-                    await updateEmail(user, newEmail);
-                    showModal("Email updated successfully! You may need to sign in again.", "Success");
-                    emailInput.value = '';
-                } catch (error) {
-                    console.error("Error changing email:", error);
-                    showModal(`Error changing email: ${error.message}`, "Error");
-                }
-            };
-
-            /** Changes the user's password. */
-            const changePassword = async () => {
-                const user = auth.currentUser;
-                if (!user) {
-                    showModal("You must be logged in to change your password.", "Error");
-                    return;
-                }
-                const newPassword = passwordInput.value;
-                if (!newPassword || newPassword.length < 6) {
-                    showModal("Password must be at least 6 characters long.", "Error");
-                    return;
-                }
-                try {
-                    await updatePassword(user, newPassword);
-                    showModal("Password updated successfully!", "Success");
-                    passwordInput.value = '';
-                } catch (error) {
-                    console.error("Error changing password:", error);
-                    showModal(`Error changing password: ${error.message}`, "Error");
-                }
-            };
-
-            // --- General Website Functionality ---
-            
-            /**
-             * Shows a specific verse container and hides all others.
-             * @param {string} targetId - The ID of the verse container to show.
-             */
-            function showVerseContainer(targetId) {
-                verseContainers.forEach(container => {
-                    container.classList.add('hidden');
-                });
-
-                const targetElement = document.getElementById(targetId);
-                if (targetElement) {
-                    targetElement.classList.remove('hidden');
-                    targetElement.scrollIntoView({ behavior: 'smooth' });
-                }
+        const saveUserProfile = async () => {
+            if (!profileRef) return;
+            try {
+                const darkMode = body.classList.contains('theme-dark');
+                const fontSize = parseFloat(getComputedStyle(mainContainer).fontSize);
+                await setDoc(profileRef, {
+                    name: profileNameInput.value,
+                    bio: profileBioInput.value,
+                    darkMode: darkMode,
+                    fontSize: fontSize
+                }, { merge: true });
+                console.log("Profile saved successfully!");
+            } catch (error) {
+                console.error("Error saving profile:", error);
             }
+        };
 
-            // Event listener for the Random Verse button
-            if (randomBtn) {
-                randomBtn.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    const randomIndex = Math.floor(Math.random() * verseIds.length);
-                    const randomVerseId = verseIds[randomIndex];
-                    showVerseContainer(randomVerseId);
-                });
-            }
-
-            // Event listeners for emotion links
-            const emotionLinks = document.querySelectorAll('.emotion-link');
-            if (emotionLinks) {
-                emotionLinks.forEach(link => {
-                    link.addEventListener('click', (event) => {
-                        event.preventDefault();
-                        const verseId = link.getAttribute('data-verse-id');
-                        showVerseContainer(verseId);
-                    });
-                });
-            }
-
-            // Verse of the Day logic
-            const getDailyVerse = () => {
-                const today = new Date().toDateString();
-                let dailyVerseId = preferences.dailyVerse;
-                const dailyVerseDate = preferences.dailyVerseDate;
-
-                if (!dailyVerseId || dailyVerseDate !== today) {
-                    const randomIndex = Math.floor(Math.random() * verseIds.length);
-                    dailyVerseId = verseIds[randomIndex];
-                    preferences.dailyVerse = dailyVerseId;
-                    preferences.dailyVerseDate = today;
-                    savePreferences();
-                }
-                
-                const verseData = allVerses[dailyVerseId];
-                if (dailyVerseContainer && verseData) {
-                    dailyVerseContainer.innerHTML = `
-                        <h3 class="font-bold text-2xl mb-2">Verse of the Day</h3>
-                        <p class="text-xl leading-relaxed">"${verseData.text}"</p>
-                        <p class="mt-4 text-sm font-light text-gray-500">- <a href="${verseData.link}" class="citation-link text-indigo-500 hover:underline" target="_blank">${verseData.citation}</a></p>
-                    `;
-                } else if (dailyVerseContainer) {
-                    dailyVerseContainer.innerHTML = `
-                        <h3 class="font-bold text-2xl mb-2">Verse of the Day</h3>
-                        <p>Error loading verse. Please try again later.</p>
-                    `;
-                }
-            };
-
-            // Customizable Themes
-            function applyTheme(themeName) {
-                if (body) {
-                    body.setAttribute('data-theme', themeName);
-                    preferences.theme = themeName;
-                    savePreferences();
-                }
-            }
-
-            if (themeButtons) {
-                themeButtons.forEach(button => {
-                    button.addEventListener('click', () => {
-                        const theme = button.getAttribute('data-theme');
-                        applyTheme(theme);
-                    });
-                });
-            }
-
-            // Font Sizer
-            function updateFontSize() {
-                if (allVerseParagraphs) {
-                    allVerseParagraphs.forEach(p => {
-                        p.style.fontSize = `${preferences.fontSize}rem`;
-                    });
-                    savePreferences();
-                }
-            }
-            
-            if (fontSizeIncreaseBtn) {
-                fontSizeIncreaseBtn.addEventListener('click', () => {
-                    preferences.fontSize += 0.1;
-                    updateFontSize();
-                });
-            }
-            
-            if (fontSizeDecreaseBtn) {
-                preferences.fontSize = Math.max(0.8, preferences.fontSize - 0.1);
-                updateFontSize();
-            }
-            
-            // --- Event Listeners for Authentication UI ---
-            if (showSignupLink) {
-                showSignupLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    loginForm.classList.add('hidden');
-                    signupForm.classList.remove('hidden');
-                });
-            }
-
-            if (showLoginLink) {
-                showLoginLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    signupForm.classList.add('hidden');
-                    loginForm.classList.remove('hidden');
-                });
-            }
-
-            if (loginBtn) {
-                loginBtn.addEventListener('click', handleLogin);
-            }
-
-            if (signupBtn) {
-                signupBtn.addEventListener('click', handleSignUp);
-            }
-            
-            if (saveProfileBtn) {
-                saveProfileBtn.addEventListener('click', saveProfile);
-            }
-
-            if (signoutBtn) {
-                signoutBtn.addEventListener('click', handleSignOut);
-            }
-            
-            if (changeEmailBtn) {
-                changeEmailBtn.addEventListener('click', changeEmail);
-            }
-
-            if (changePasswordBtn) {
-                changePasswordBtn.addEventListener('click', changePassword);
+        // Event listeners
+        profileToggleButton.addEventListener('click', () => {
+            if (profileContent.classList.contains('hidden')) {
+                profileContent.classList.remove('hidden');
+                profileToggleButton.textContent = 'Hide';
+            } else {
+                profileContent.classList.add('hidden');
+                profileToggleButton.textContent = 'Show';
             }
         });
+
+        profileSaveButton.addEventListener('click', saveUserProfile);
+
+        document.querySelectorAll('.verse-card').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const emotion = e.target.dataset.emotion;
+                const verse = verses[emotion];
+                if (verse) {
+                    resultText.textContent = `“${verse.text}”`;
+                    resultReference.textContent = `— ${verse.reference}`;
+                    verseResultContainer.classList.remove('hidden');
+                }
+            });
+        });
+
+        themeToggleButton.addEventListener('click', () => {
+            body.classList.toggle('theme-dark');
+            themeToggleCircle.classList.toggle('translate-x-full');
+            themeToggleCircle.classList.toggle('!bg-blue-600');
+            themeToggleButton.classList.toggle('bg-gray-600');
+            saveUserProfile();
+        });
+
+        fontIncreaseButton.addEventListener('click', () => {
+            const currentSize = parseFloat(getComputedStyle(mainContainer).fontSize);
+            mainContainer.style.fontSize = `${currentSize + 1}px`;
+            saveUserProfile();
+        });
+
+        fontDecreaseButton.addEventListener('click', () => {
+            const currentSize = parseFloat(getComputedStyle(mainContainer).fontSize);
+            mainContainer.style.fontSize = `${currentSize - 1}px`;
+            saveUserProfile();
+        });
+
+        // Set the Verse of the Day on load
+        verseOfDayText.textContent = `“${verses.votd.text}”`;
+        verseOfDayReference.textContent = `— ${verses.votd.reference}`;
+
+        // Initialize the app on window load
+        window.onload = initFirebase;
     </script>
 </body>
 </html>
