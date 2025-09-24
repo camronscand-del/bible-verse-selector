@@ -99,6 +99,7 @@ const allVerses = {
 // This ensures the script only runs after the page is fully loaded.
 document.addEventListener('DOMContentLoaded', () => {
 
+    // --- DOM Elements ---
     const randomBtn = document.getElementById('random-verse-btn');
     const verseContainers = document.querySelectorAll('.verse-container');
     const body = document.body;
@@ -111,7 +112,149 @@ document.addEventListener('DOMContentLoaded', () => {
     const nameInput = document.getElementById('name-input');
     const bioInput = document.getElementById('bio-input');
     const saveProfileBtn = document.getElementById('save-profile-btn');
+    const signoutBtn = document.getElementById('signout-btn');
+    
+    // Auth-related elements
+    const authSection = document.getElementById('auth-section');
+    const profileSection = document.getElementById('profile-section');
+    const loginForm = document.getElementById('login-form');
+    const signupForm = document.getElementById('signup-form');
+    const showSignupLink = document.getElementById('show-signup');
+    const showLoginLink = document.getElementById('show-login');
+    const loginEmailInput = document.getElementById('login-email-input');
+    const loginPasswordInput = document.getElementById('login-password-input');
+    const loginBtn = document.getElementById('login-btn');
+    const signupEmailInput = document.getElementById('signup-email-input');
+    const signupPasswordInput = document.getElementById('signup-password-input');
+    const signupBtn = document.getElementById('signup-btn');
+    const messageBox = document.getElementById('message-box');
 
+    // --- State Variables ---
+    let userId = null;
+    let isAuthReady = false;
+
+    // --- Firebase Auth & Firestore Logic ---
+    window.onAuthStateChanged(window.auth, (user) => {
+        isAuthReady = true;
+        if (user) {
+            userId = user.uid;
+            console.log("User logged in with ID:", userId);
+            authSection.style.display = 'none';
+            profileSection.style.display = 'flex';
+            loadProfile(userId);
+        } else {
+            userId = null;
+            console.log("No user is logged in.");
+            authSection.style.display = 'block';
+            profileSection.style.display = 'none';
+        }
+    });
+
+    const showMessage = (message, isError = false) => {
+        messageBox.textContent = message;
+        messageBox.style.display = 'block';
+        messageBox.style.color = isError ? 'red' : 'green';
+        setTimeout(() => {
+            messageBox.style.display = 'none';
+        }, 5000);
+    };
+
+    const handleLogin = async () => {
+        const email = loginEmailInput.value;
+        const password = loginPasswordInput.value;
+
+        if (!email || !password) {
+            showMessage("Please enter both email and password.", true);
+            return;
+        }
+        
+        try {
+            showMessage("Logging in...", false);
+            await window.signInWithEmailAndPassword(window.auth, email, password);
+            showMessage("Login successful!", false);
+        } catch (error) {
+            console.error("Login failed:", error);
+            showMessage(`Login failed: ${error.message}`, true);
+        }
+    };
+
+    const handleSignUp = async () => {
+        const email = signupEmailInput.value;
+        const password = signupPasswordInput.value;
+        
+        if (!email || !password) {
+            showMessage("Please enter a valid email and password.", true);
+            return;
+        }
+
+        try {
+            showMessage("Creating account...", false);
+            await window.createUserWithEmailAndPassword(window.auth, email, password);
+            showMessage("Account created successfully! You are now logged in.", false);
+        } catch (error) {
+            console.error("Sign up failed:", error);
+            showMessage(`Sign up failed: ${error.message}`, true);
+        }
+    };
+
+    const handleSignOut = async () => {
+        try {
+            await window.signOut(window.auth);
+            showMessage("Signed out successfully.", false);
+            userNameDisplay.textContent = 'Guest';
+            nameInput.value = '';
+            bioInput.value = '';
+        } catch (error) {
+            console.error("Sign out failed:", error);
+            showMessage(`Sign out failed: ${error.message}`, true);
+        }
+    };
+
+    const saveProfile = async () => {
+        if (!userId) {
+            showMessage("You must be logged in to save your profile.", true);
+            return;
+        }
+        const profileData = {
+            name: nameInput.value,
+            bio: bioInput.value,
+        };
+        try {
+            await window.setDoc(window.getProfileDoc(userId), profileData);
+            showMessage("Profile saved successfully!", false);
+            userNameDisplay.textContent = profileData.name || 'Guest';
+        } catch (error) {
+            console.error("Error saving profile:", error);
+            showMessage(`Error saving profile: ${error.message}`, true);
+        }
+    };
+
+    const loadProfile = async (id) => {
+        if (!id) return;
+        try {
+            const profileRef = window.getProfileDoc(id);
+            const docSnap = await window.getDoc(profileRef);
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                nameInput.value = data.name || '';
+                bioInput.value = data.bio || '';
+                userNameDisplay.textContent = data.name || 'Guest';
+                showMessage("Profile loaded from Firestore.", false);
+            } else {
+                nameInput.value = '';
+                bioInput.value = '';
+                userNameDisplay.textContent = 'Guest';
+                showMessage("No profile found. Please create one.", true);
+            }
+        } catch (error) {
+            console.error("Error loading profile:", error);
+            showMessage(`Error loading profile: ${error.message}`, true);
+        }
+    };
+
+
+    // --- General Website Functionality ---
+    
     /**
      * Shows a specific verse container and hides all others.
      * @param {string} targetId - The ID of the verse container to show.
@@ -177,33 +320,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // User Profile
-    function saveProfile() {
-        const name = nameInput.value;
-        const bio = bioInput.value;
-        localStorage.setItem('userName', name);
-        localStorage.setItem('userBio', bio);
-        userNameDisplay.textContent = name || 'Guest';
-        console.log('Profile saved!'); // Using console.log instead of alert
-    }
-
-    function loadProfile() {
-        const name = localStorage.getItem('userName');
-        const bio = localStorage.getItem('userBio');
-        if (name && nameInput) {
-            nameInput.value = name;
-            userNameDisplay.textContent = name;
-        }
-        if (bio && bioInput) {
-            bioInput.value = bio;
-        }
-    }
-    
-    if (saveProfileBtn) {
-        saveProfileBtn.addEventListener('click', saveProfile);
-    }
-    loadProfile();
-
     // Customizable Themes
     function applyTheme(themeName) {
         if (body) {
@@ -251,7 +367,40 @@ document.addEventListener('DOMContentLoaded', () => {
             updateFontSize();
         });
     }
+
+    // --- Event Listeners for Authentication UI ---
+    if (showSignupLink) {
+        showSignupLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginForm.style.display = 'none';
+            signupForm.style.display = 'block';
+        });
+    }
+
+    if (showLoginLink) {
+        showLoginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            signupForm.style.display = 'none';
+            loginForm.style.display = 'block';
+        });
+    }
+
+    if (loginBtn) {
+        loginBtn.addEventListener('click', handleLogin);
+    }
+
+    if (signupBtn) {
+        signupBtn.addEventListener('click', handleSignUp);
+    }
     
+    if (saveProfileBtn) {
+        saveProfileBtn.addEventListener('click', saveProfile);
+    }
+
+    if (signoutBtn) {
+        signoutBtn.addEventListener('click', handleSignOut);
+    }
+
     // Initial calls
     getDailyVerse();
     updateFontSize();
