@@ -23,6 +23,8 @@
             --hero-text-color: #8b0000;
             --message-bg: #fff;
             --message-text: #444;
+            --button-bg: #8b0000;
+            --button-hover: #a04040;
         }
 
         body[data-theme="light"] {
@@ -180,6 +182,31 @@
         .hurt-link:hover { background: linear-gradient(#e76b19, #d35400); }
         .random-link { background: linear-gradient(#5d98db, #4878b2); }
         .random-link:hover { background: linear-gradient(#7aaddf, #5d98db); }
+        
+        /* General input and button styles */
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--verse-border);
+            border-radius: 8px;
+            background-color: var(--verse-bg);
+            color: var(--text-color);
+        }
+        .section-header {
+            font-size: 1.2em;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            color: var(--header-color);
+        }
 
         /* Verse of the Day styles */
         #verse-of-the-day {
@@ -262,14 +289,14 @@
             padding: 8px 16px;
             border: none;
             border-radius: 8px;
-            background-color: var(--header-color);
+            background-color: var(--button-bg);
             color: white;
             font-weight: bold;
             cursor: pointer;
             transition: background-color 0.2s;
         }
         .controls button:hover {
-            background-color: #a04040;
+            background-color: var(--button-hover);
         }
 
         #profile-section {
@@ -298,11 +325,16 @@
             padding: 10px 20px;
             border: none;
             border-radius: 8px;
-            background-color: var(--header-color);
+            background-color: var(--button-bg);
             color: white;
             font-weight: bold;
             cursor: pointer;
+            transition: background-color 0.2s;
         }
+        #profile-section button:hover {
+            background-color: var(--button-hover);
+        }
+
         #auth-section {
             display: block; /* Initially shown */
             margin: 20px auto;
@@ -327,10 +359,14 @@
             padding: 10px;
             border: none;
             border-radius: 8px;
-            background-color: var(--header-color);
+            background-color: var(--button-bg);
             color: white;
             font-weight: bold;
             cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        #auth-section button:hover {
+            background-color: var(--button-hover);
         }
         #auth-section p, #auth-section a {
             text-align: center;
@@ -345,6 +381,13 @@
             background-color: var(--message-bg);
             color: var(--message-text);
             max-width: 500px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .separator {
+            border: 0;
+            height: 1px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0), var(--header-color), rgba(0, 0, 0, 0));
+            margin: 20px 0;
         }
     </style>
 </head>
@@ -377,9 +420,35 @@
             <h2>My Profile</h2>
             <div id="profile-section">
                 <p>Welcome back, <span id="user-name-display">Guest</span>!</p>
-                <input type="text" id="name-input" placeholder="Your Name">
-                <textarea id="bio-input" placeholder="Tell us about yourself..." rows="3"></textarea>
+
+                <div class="section-header">Edit Your Profile</div>
+                <div class="input-group">
+                    <label for="name-input">Name</label>
+                    <input type="text" id="name-input" placeholder="Your Name">
+                </div>
+                <div class="input-group">
+                    <label for="bio-input">Bio</label>
+                    <textarea id="bio-input" placeholder="Tell us about yourself..." rows="3"></textarea>
+                </div>
                 <button id="save-profile-btn">Save Profile</button>
+                
+                <hr class="separator">
+
+                <div class="section-header">Change Email and Password</div>
+                <div class="input-group">
+                    <label for="email-input">New Email</label>
+                    <input type="email" id="email-input" placeholder="New Email">
+                </div>
+                <button id="change-email-btn">Change Email</button>
+
+                <div class="input-group" style="margin-top: 15px;">
+                    <label for="password-input">New Password</label>
+                    <input type="password" id="password-input" placeholder="New Password">
+                </div>
+                <button id="change-password-btn">Change Password</button>
+
+                <hr class="separator">
+
                 <button id="signout-btn">Sign Out</button>
             </div>
         </section>
@@ -480,7 +549,7 @@
     <!-- Firebase SDK Imports -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateEmail, updatePassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         
         // These global variables are provided by the environment
@@ -498,6 +567,8 @@
         window.signInWithEmailAndPassword = signInWithEmailAndPassword;
         window.signOut = signOut;
         window.onAuthStateChanged = onAuthStateChanged;
+        window.updateEmail = updateEmail;
+        window.updatePassword = updatePassword;
 
     </script>
     <script src="script.js"></script>
