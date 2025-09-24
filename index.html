@@ -19,6 +19,7 @@
         .theme-light .bg-white { background-color: #ffffff; }
         .theme-light .text-gray-800 { color: #1f2937; }
         .theme-light .text-gray-500 { color: #6b7280; }
+        .theme-light .bg-gray-100 { background-color: #f9fafb; }
         .theme-light input, .theme-light textarea { background-color: #ffffff; border-color: #d1d5db; color: #1f2937; }
         .theme-light input::placeholder, .theme-light textarea::placeholder { color: #9ca3af; }
         .theme-light .border-gray-300 { border-color: #d1d5db; }
@@ -29,6 +30,7 @@
             color: #e2e8f0;
         }
         .theme-dark .bg-white { background-color: #2d3748; }
+        .theme-dark .bg-gray-100 { background-color: #4a5568; }
         .theme-dark .text-gray-800 { color: #e2e8f0; }
         .theme-dark .text-gray-500 { color: #a0aec0; }
         .theme-dark input, .theme-dark textarea { background-color: #4a5568; border-color: #4a5568; color: #e2e8f0; }
@@ -41,6 +43,7 @@
             color: #0c4a6e;
         }
         .theme-ocean .bg-white { background-color: #dbeafe; }
+        .theme-ocean .bg-gray-100 { background-color: #eff6ff; }
         .theme-ocean .text-gray-800 { color: #0c4a6e; }
         .theme-ocean .text-gray-500 { color: #3b82f6; }
         .theme-ocean input, .theme-ocean textarea { background-color: #eff6ff; border-color: #93c5fd; color: #0c4a6e; }
@@ -54,6 +57,7 @@
             color: #166534;
         }
         .theme-forest-green .bg-white { background-color: #dcfce7; }
+        .theme-forest-green .bg-gray-100 { background-color: #dcfce7; }
         .theme-forest-green .text-gray-800 { color: #166534; }
         .theme-forest-green .text-gray-500 { color: #4ade80; }
         .theme-forest-green input, .theme-forest-green textarea { background-color: #f0fdf4; border-color: #bbf7d0; color: #166534; }
@@ -63,10 +67,6 @@
         .theme-forest-green .bg-blue-600 { background-color: #15803d; }
         .theme-forest-green .text-blue-600 { color: #15803d; }
         
-        .verse-card {
-            background-size: cover;
-            background-position: center;
-        }
         .verse-card:hover {
             transform: scale(1.03);
         }
@@ -125,20 +125,20 @@
         <section class="border-t border-gray-300 pt-6 space-y-4">
             <h2 class="text-xl font-bold text-gray-800">Find a Verse by Emotion</h2>
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                <button data-emotion="joy" class="verse-card bg-green-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/22c55e/ffffff');">Joy</button>
-                <button data-emotion="peace" class="verse-card bg-purple-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/a855f7/ffffff');">Peace</button>
-                <button data-emotion="sadness" class="verse-card bg-blue-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/3b82f6/ffffff');">Sadness</button>
-                <button data-emotion="fear" class="verse-card bg-orange-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/f97316/ffffff');">Fear</button>
-                <button data-emotion="anger" class="verse-card bg-red-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/ef4444/ffffff');">Anger</button>
-                <button data-emotion="strength" class="verse-card bg-indigo-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/6366f1/ffffff');">Strength</button>
-                <button data-emotion="hope" class="verse-card bg-yellow-400 text-gray-800 p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/fcd34d/ffffff');">Hope</button>
-                <button data-emotion="gratitude" class="verse-card bg-pink-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/f472b6/ffffff');">Gratitude</button>
-                <button data-emotion="healing" class="verse-card bg-teal-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105" style="background-image: url('https://placehold.co/400x200/2dd4bf/ffffff');">Healing</button>
+                <button data-emotion="joy" class="verse-card bg-green-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105">Joy</button>
+                <button data-emotion="peace" class="verse-card bg-purple-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105">Peace</button>
+                <button data-emotion="sadness" class="verse-card bg-blue-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105">Sadness</button>
+                <button data-emotion="fear" class="verse-card bg-orange-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105">Fear</button>
+                <button data-emotion="anger" class="verse-card bg-red-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105">Anger</button>
+                <button data-emotion="strength" class="verse-card bg-indigo-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105">Strength</button>
+                <button data-emotion="hope" class="verse-card bg-amber-500 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105">Hope</button>
+                <button data-emotion="gratitude" class="verse-card bg-pink-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105">Gratitude</button>
+                <button data-emotion="healing" class="verse-card bg-teal-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105">Healing</button>
             </div>
             <div id="random-verse-container" class="mt-4">
                  <button id="random-verse-button" class="w-full bg-gray-300 text-gray-800 p-3 rounded-lg hover:bg-gray-400 transition-colors duration-300 font-bold shadow-md">Get a Random Verse</button>
             </div>
-            <div id="verse-result" class="mt-4 p-6 bg-gray-50 rounded-2xl shadow-md space-y-2 hidden">
+            <div id="verse-result" class="mt-4 p-6 bg-gray-100 rounded-2xl shadow-md space-y-2 hidden">
                 <p id="result-text" class="text-gray-800 text-lg italic"></p>
                 <p id="result-reference" class="text-gray-500 text-sm font-semibold text-right"></p>
                 <div class="text-center pt-2">
