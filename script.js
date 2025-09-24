@@ -1,201 +1,317 @@
-// A list of the verse IDs from your HTML file
-const verseIds = [
-    'anxious-verse',
-    'sad-verse',
-    'grateful-verse',
-    'stressed-verse',
-    'peaceful-verse',
-    'lonely-verse',
-    'angry-verse',
-    'hopeful-verse',
-    'guilty-verse',
-    'fearful-verse',
-    'joyful-verse',
-    'tired-verse',
-    'confused-verse',
-    'content-verse',
-    'hurt-verse'
-];
-
-// Get the random verse button
-const randomBtn = document.getElementById('random-verse-btn');
-
-// Get all the verse containers
-const verseContainers = document.querySelectorAll('.verse-container');
-
-// Get the dark mode toggle button and body element
-const modeToggle = document.getElementById('mode-toggle');
-const body = document.body;
-
-// Get all emotion links to add scroll behavior
-const emotionLinks = document.querySelectorAll('.emotion-link');
-
-// Get the verse of the day container
-const dailyVerseContainer = document.getElementById('verse-of-the-day');
-
-// All verse content data in a single object for easy access
-const allVerses = {
-    'anxious-verse': {
-        text: 'Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God.',
-        citation: 'Philippians 4:6',
-        link: 'https://www.biblegateway.com/passage/?search=Philippians+4%3A6&version=NIV'
-    },
-    'sad-verse': {
-        text: 'The Lord is close to the brokenhearted and saves those who are crushed in spirit.',
-        citation: 'Psalm 34:18',
-        link: 'https://www.biblegateway.com/passage/?search=Psalm+34%3A18&version=NIV'
-    },
-    'grateful-verse': {
-        text: 'Give thanks to the Lord, for he is good; his love endures forever.',
-        citation: 'Psalm 107:1',
-        link: 'https://www.biblegateway.com/passage/?search=Psalm+107%3A1&version=NIV'
-    },
-    'stressed-verse': {
-        text: 'Come to me, all you who are weary and burdened, and I will give you rest.',
-        citation: 'Matthew 11:28',
-        link: 'https://www.biblegateway.com/passage/?search=Matthew+11%3A28&version=NIV'
-    },
-    'peaceful-verse': {
-        text: 'I have told you these things, so that in me you may have peace. In this world you will have trouble. But take heart! I have overcome the world.',
-        citation: 'John 16:33',
-        link: 'https://www.biblegateway.com/passage/?search=John+16%3A33&version=NIV'
-    },
-    'lonely-verse': {
-        text: 'The Lord is on my side; I will not fear. What can man do to me?',
-        citation: 'Psalm 118:6',
-        link: 'https://www.biblegateway.com/passage/?search=Psalm+118%3A6&version=NIV'
-    },
-    'angry-verse': {
-        text: 'A gentle answer turns away wrath, but a harsh word stirs up anger.',
-        citation: 'Proverbs 15:1',
-        link: 'https://www.biblegateway.com/passage/?search=Proverbs+15%3A1&version=NIV'
-    },
-    'hopeful-verse': {
-        text: 'For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future.',
-        citation: 'Jeremiah 29:11',
-        link: 'https://www.biblegateway.com/passage/?search=Jeremiah+29%3A11&version=NIV'
-    },
-    'guilty-verse': {
-        text: 'If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness.',
-        citation: '1 John 1:9',
-        link: 'https://www.biblegateway.com/passage/?search=1+John+1%3A9&version=NIV'
-    },
-    'fearful-verse': {
-        text: 'Do not be afraid or discouraged, for the Lord your God will be with you wherever you go.',
-        citation: 'Joshua 1:9',
-        link: 'https://www.biblegateway.com/passage/?search=Joshua+1%3A9&version=NIV'
-    },
-    'joyful-verse': {
-        text: 'Rejoice in the Lord always. I will say it again: Rejoice!',
-        citation: 'Philippians 4:4',
-        link: 'https://www.biblegateway.com/passage/?search=Philippians+4%3A4&version=NIV'
-    },
-    'tired-verse': {
-        text: 'But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.',
-        citation: 'Isaiah 40:31',
-        link: 'https://www.biblegateway.com/passage/?search=Isaiah+40%3A31&version=NIV'
-    },
-    'confused-verse': {
-        text: 'For God is not a God of confusion but of peace.',
-        citation: '1 Corinthians 14:33',
-        link: 'https://www.biblegateway.com/passage/?search=1+Corinthians+14%3A33&version=NIV'
-    },
-    'content-verse': {
-        text: 'I know what it is to be in need, and I know what it is to have plenty. I have learned the secret of being content in any and every situation.',
-        citation: 'Philippians 4:12',
-        link: 'https://www.biblegateway.com/passage/?search=Philippians+4%3A12&version=NIV'
-    },
-    'hurt-verse': {
-        text: 'He heals the brokenhearted and binds up their wounds.',
-        citation: 'Psalm 147:3',
-        link: 'https://www.biblegateway.com/passage/?search=Psalm+147%3A3&version=NIV'
-    }
-};
-
-/**
- * Shows a specific verse container and hides all others.
- * @param {string} targetId - The ID of the verse container to show.
- */
-function showVerseContainer(targetId) {
-    // Hide all verses
-    verseContainers.forEach(container => {
-        container.style.display = 'none';
-        container.classList.remove('flipped');
-    });
-
-    // Show the target verse and flip the card
-    const targetElement = document.getElementById(targetId);
-    if (targetElement) {
-        targetElement.style.display = 'block';
-        setTimeout(() => {
-            targetElement.classList.add('flipped');
-        }, 100); // Small delay to allow the element to be displayed before flipping
-    }
-}
-
-// Event listener for the Random Verse button
-randomBtn.addEventListener('click', (event) => {
-    event.preventDefault(); 
-    const randomIndex = Math.floor(Math.random() * verseIds.length);
-    const randomVerseId = verseIds[randomIndex];
-    showVerseContainer(randomVerseId);
-});
-
-// Dark Mode Toggle Functionality
-modeToggle.addEventListener('click', () => {
-    body.classList.toggle('dark-mode');
-    if (body.classList.contains('dark-mode')) {
-        modeToggle.textContent = 'Light Mode';
-    } else {
-        modeToggle.textContent = 'Dark Mode';
-    }
-});
-
-// Smooth Scroll for Emotion Links
-emotionLinks.forEach(link => {
-    link.addEventListener('click', (event) => {
-        event.preventDefault();
-        const targetId = link.getAttribute('data-verse-id');
-        const targetElement = document.getElementById(targetId);
-        
-        showVerseContainer(targetId);
-        
-        if (targetElement) {
-            targetElement.scrollIntoView({
-                behavior: 'smooth'
-            });
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find a Verse</title>
+    <!-- New Fonts from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Favicon: Adds an icon to the browser tab -->
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/google/material-design-icons/master/png/social/public/baseline_book_black_48dp.png">
+    <style>
+        /* 1. Define variables for the light theme */
+        :root {
+            --bg-color: #fcebeb; /* A soft, warm pink background */
+            --text-color: #444; /* Slightly softer text color */
+            --header-color: #8b0000; /* Rich, deep red */
+            --link-text-color: #ffffff; /* White text on links */
+            --verse-bg: #fff0f5; /* Very light, soft pink */
+            --verse-border: #d44949; /* A darker pink for the border */
+            --verse-text-color: #555;
+            --hero-bg-start: #ffb7b7; /* Light salmon */
+            --hero-bg-end: #ffa07a;   /* Light coral */
+            --hero-text-color: #8b0000; /* Darker red for contrast */
         }
-    });
-});
 
-// Verse of the Day logic
-function getDailyVerse() {
-    const today = new Date().toDateString();
-    const storedDate = localStorage.getItem('dailyVerseDate');
-    let dailyVerseId = localStorage.getItem('dailyVerseId');
+        /* 2. Define variables for the dark theme */
+        body.dark-mode {
+            --bg-color: #2c2c2c; /* Dark grey background */
+            --text-color: #f0f0f0; /* Light text */
+            --header-color: #ffb7b7; /* Light red */
+            --link-text-color: #ffffff;
+            --verse-bg: #4a4a4a; /* Darker grey box */
+            --verse-border: #8b0000; /* Darker red border */
+            --verse-text-color: #f0f0f0;
+            --hero-bg-start: #3a3a3a; /* Darker grey */
+            --hero-bg-end: #1a1a1a;   /* Very dark grey */
+            --hero-text-color: #ffb7b7; /* Light red for contrast */
+        }
+        
+        /* New: Dark mode for the system preference.
+           This will just add the 'dark-mode' class to the body. */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #2c2c2c;
+            }
+        }
+        
+        /* 3. Use the variables to style your page */
+        body {
+            font-family: 'Merriweather', serif;
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            /* Custom Cursor */
+            cursor: url('https://cur.cursors-4u.com/cursors/cur-2/cur118.cur'), auto;
+        }
+        .hero-section {
+            background: linear-gradient(to right, var(--hero-bg-start), var(--hero-bg-end));
+            color: var(--hero-text-color);
+            padding: 60px 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative; /* Needed for the toggle button */
+        }
+        .hero-section h1 {
+            font-family: 'Open Sans', sans-serif;
+            color: var(--hero-text-color);
+            margin-top: 0;
+            font-size: 2.8em;
+            margin-bottom: 10px;
+        }
+        .hero-section p {
+            max-width: 800px;
+            margin: 0 auto 20px auto;
+            font-size: 1.1em;
+            color: var(--hero-text-color);
+        }
+        h2 {
+            font-family: 'Open Sans', sans-serif;
+            color: var(--header-color);
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .emotion-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            padding: 0 10px;
+        }
+        .emotion-links a {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            color: var(--link-text-color);
+            font-weight: 600;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .emotion-links a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        .anxious-link { background: linear-gradient(#9c9c9c, #7b7b7b); }
+        .anxious-link:hover { background: linear-gradient(#b0b0b0, #9c9c9c); }
+        .sad-link { background: linear-gradient(#4a6792, #384e70); }
+        .sad-link:hover { background: linear-gradient(#5d78a8, #4a6792); }
+        .grateful-link { background: linear-gradient(#f39c12, #d68910); }
+        .grateful-link:hover { background: linear-gradient(#f6af3b, #f39c12); }
+        .stressed-link { background: linear-gradient(#c0392b, #a93226); }
+        .stressed-link:hover { background: linear-gradient(#d54c3c, #c0392b); }
+        .peaceful-link { background: linear-gradient(#2ecc71, #27ae60); }
+        .peaceful-link:hover { background: linear-gradient(#39e285, #2ecc71); }
+        .lonely-link { background: linear-gradient(#34495e, #2c3e50); }
+        .lonely-link:hover { background: linear-gradient(#4b6076, #34495e); }
+        .angry-link { background: linear-gradient(#e74c3c, #c0392b); }
+        .angry-link:hover { background: linear-gradient(#ff6666, #e74c3c); }
+        .hopeful-link { background: linear-gradient(#3498db, #2980b9); }
+        .hopeful-link:hover { background: linear-gradient(#4aa8e8, #3498db); }
+        .guilty-link { background: linear-gradient(#6c5ce7, #5f4cb6); }
+        .guilty-link:hover { background: linear-gradient(#7c6ef7, #6c5ce7); }
+        .fearful-link { background: linear-gradient(#95a5a6, #7f8c8d); }
+        .fearful-link:hover { background: linear-gradient(#a8b8b9, #95a5a6); }
+        .joyful-link { background: linear-gradient(#f1c40f, #d4ac0d); }
+        .joyful-link:hover { background: linear-gradient(#f5d415, #f1c40f); }
+        .tired-link { background: linear-gradient(#7f8c8d, #6a7677); }
+        .tired-link:hover { background: linear-gradient(#959ca2, #7f8c8d); }
+        .confused-link { background: linear-gradient(#9b59b6, #8e44ad); }
+        .confused-link:hover { background: linear-gradient(#a969c5, #9b59b6); }
+        .content-link { background: linear-gradient(#1abc9c, #16a085); }
+        .content-link:hover { background: linear-gradient(#26c1a1, #1abc9c); }
+        .hurt-link { background: linear-gradient(#d35400, #ba4a00); }
+        .hurt-link:hover { background: linear-gradient(#e76b19, #d35400); }
+        .random-link { background: linear-gradient(#5d98db, #4878b2); }
+        .random-link:hover { background: linear-gradient(#7aaddf, #5d98db); }
+        
+        /* Verse of the Day styles */
+        #verse-of-the-day {
+            text-align: center;
+            margin: 40px auto;
+            padding: 30px;
+            max-width: 700px;
+            border: 2px solid var(--header-color);
+            border-radius: 12px;
+            background: rgba(139, 0, 0, 0.05);
+            box-shadow: inset 0 0 10px rgba(139, 0, 0, 0.2);
+        }
+        #verse-of-the-day h3 {
+            color: var(--header-color);
+            font-size: 1.8em;
+            margin-top: 0;
+        }
 
-    // If no verse is stored or the date is different, get a new one
-    if (!dailyVerseId || storedDate !== today) {
-        const randomIndex = Math.floor(Math.random() * verseIds.length);
-        dailyVerseId = verseIds[randomIndex];
-        localStorage.setItem('dailyVerseDate', today);
-        localStorage.setItem('dailyVerseId', dailyVerseId);
-    }
+        .verse-container {
+            display: none;
+            margin-top: 20px;
+            padding: 25px;
+            border-radius: 12px;
+            background-color: var(--verse-bg);
+            color: var(--verse-text-color);
+            border-left: 5px solid var(--verse-border);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .verse-container p {
+            font-style: italic;
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        .home-link {
+            display: block;
+            text-align: center;
+            margin: 20px auto;
+            color: var(--header-color);
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .back-to-top {
+            display: block;
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+        .citation-link {
+            color: var(--header-color);
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .citation-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Styles for the Dark Mode Toggle Button */
+        #mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 12px;
+            background-color: var(--hero-bg-end);
+            border: 1px solid var(--hero-text-color);
+            border-radius: 5px;
+            color: var(--hero-text-color);
+            cursor: pointer;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        #mode-toggle:hover {
+            background-color: var(--hero-text-color);
+            color: var(--hero-bg-end);
+        }
+    </style>
+</head>
+<body>
+    <a id="top"></a>
+    <div class="hero-section">
+        <h1>Find a Bible Verse</h1>
+        <p>How are you feeling today? Click an emotion to find a comforting verse.</p>
+        <a href="#" class="home-link" style="color: var(--hero-text-color);">Home</a>
+        <button id="mode-toggle">Dark Mode</button>
+    </div>
     
-    // Get the verse data from the object
-    const verseData = allVerses[dailyVerseId];
-    if (verseData) {
-        dailyVerseContainer.innerHTML = `
-            <h3>Verse of the Day</h3>
-            <p>"${verseData.text}" - <a href="${verseData.link}" class="citation-link">${verseData.citation}</a> &#10013;</p>
-        `;
-    } else {
-        dailyVerseContainer.innerHTML = `
-            <h3>Verse of the Day</h3>
-            <p>Error loading verse. Please try again later.</p>
-        `;
-    }
-}
+    <div class="main-content">
+        <h2>Verse of the Day</h2>
+        <div id="verse-of-the-day">
+            <h3>Loading...</h3>
+        </div>
 
-// Call the function on page load to display the daily verse
-getDailyVerse();
+        <h2>What is This?</h2>
+        <p>This website is a simple tool to help you find a Bible verse for how you are feeling. The Bible is a source of comfort and guidance, and this page can help you find a verse that speaks to your heart.</p>
+        <hr>
+        
+        <div class="emotion-links">
+            <a href="#anxious-verse" class="emotion-link anxious-link" data-verse-id="anxious-verse">Anxious</a>
+            <a href="#sad-verse" class="emotion-link sad-link" data-verse-id="sad-verse">Sad</a>
+            <a href="#grateful-verse" class="emotion-link grateful-link" data-verse-id="grateful-verse">Grateful</a>
+            <a href="#stressed-verse" class="emotion-link stressed-link" data-verse-id="stressed-verse">Stressed</a>
+            <a href="#peaceful-verse" class="emotion-link peaceful-link" data-verse-id="peaceful-verse">Peaceful</a>
+            <a href="#lonely-verse" class="emotion-link lonely-link" data-verse-id="lonely-verse">Lonely</a>
+            <a href="#angry-verse" class="emotion-link angry-link" data-verse-id="angry-verse">Angry</a>
+            <a href="#hopeful-verse" class="emotion-link hopeful-link" data-verse-id="hopeful-verse">Hopeful</a>
+            <a href="#guilty-verse" class="emotion-link guilty-link" data-verse-id="guilty-verse">Guilty</a>
+            <a href="#fearful-link" class="emotion-link fearful-link" data-verse-id="fearful-verse">Fearful</a>
+            <a href="#joyful-verse" class="emotion-link joyful-link" data-verse-id="joyful-verse">Joyful</a>
+            <a href="#tired-verse" class="emotion-link tired-link" data-verse-id="tired-verse">Tired</a>
+            <a href="#confused-verse" class="emotion-link confused-link" data-verse-id="confused-verse">Confused</a>
+            <a href="#content-verse" class="emotion-link content-link" data-verse-id="content-verse">Content</a>
+            <a href="#hurt-verse" class="emotion-link hurt-link" data-verse-id="hurt-verse">Hurt</a>
+            <a href="#" id="random-verse-btn" class="random-link">Random Verse</a>
+        </div>
+
+        <div id="anxious-verse" class="verse-container">
+            <p>Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. - <a href="https://www.biblegateway.com/passage/?search=Philippians+4%3A6&version=NIV" class="citation-link">Philippians 4:6</a> &#10013;</p>
+        </div>
+        <div id="sad-verse" class="verse-container">
+            <p>The Lord is close to the brokenhearted and saves those who are crushed in spirit. - <a href="https://www.biblegateway.com/passage/?search=Psalm+34%3A18&version=NIV" class="citation-link">Psalm 34:18</a> &#10013;</p>
+        </div>
+        <div id="grateful-verse" class="verse-container">
+            <p>Give thanks to the Lord, for he is good; his love endures forever. - <a href="https://www.biblegateway.com/passage/?search=Psalm+107%3A1&version=NIV" class="citation-link">Psalm 107:1</a> &#10013;</p>
+        </div>
+        <div id="stressed-verse" class="verse-container">
+            <p>Come to me, all you who are weary and burdened, and I will give you rest. - <a href="https://www.biblegateway.com/passage/?search=Matthew+11%3A28&version=NIV" class="citation-link">Matthew 11:28</a> &#10013;</p>
+        </div>
+        <div id="peaceful-verse" class="verse-container">
+            <p>I have told you these things, so that in me you may have peace. In this world you will have trouble. But take heart! I have overcome the world. - <a href="https://www.biblegateway.com/passage/?search=John+16%3A33&version=NIV" class="citation-link">John 16:33</a> &#10013;</p>
+        </div>
+        <div id="lonely-verse" class="verse-container">
+            <p>The Lord is on my side; I will not fear. What can man do to me? - <a href="https://www.biblegateway.com/passage/?search=Psalm+118%3A6&version=NIV" class="citation-link">Psalm 118:6</a> &#10013;</p>
+        </div>
+        <div id="angry-verse" class="verse-container">
+            <p>A gentle answer turns away wrath, but a harsh word stirs up anger. - <a href="https://www.biblegateway.com/passage/?search=Proverbs+15%3A1&version=NIV" class="citation-link">Proverbs 15:1</a> &#10013;</p>
+        </div>
+        <div id="hopeful-verse" class="verse-container">
+            <p>For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future. - <a href="https://www.biblegateway.com/passage/?search=Jeremiah+29%3A11&version=NIV" class="citation-link">Jeremiah 29:11</a> &#10013;</p>
+        </div>
+        <div id="guilty-verse" class="verse-container">
+            <p>If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness. - <a href="https://www.biblegateway.com/passage/?search=1+John+1%3A9&version=NIV" class="citation-link">1 John 1:9</a> &#10013;</p>
+        </div>
+        <div id="fearful-verse" class="verse-container">
+            <p>Do not be afraid or discouraged, for the Lord your God will be with you wherever you go. - <a href="https://www.biblegateway.com/passage/?search=Joshua+1%3A9&version=NIV" class="citation-link">Joshua 1:9</a> &#10013;</p>
+        </div>
+        <div id="joyful-verse" class="verse-container">
+            <p>Rejoice in the Lord always. I will say it again: Rejoice! - <a href="https://www.biblegateway.com/passage/?search=Philippians+4%3A4&version=NIV" class="citation-link">Philippians 4:4</a> &#10013;</p>
+        </div>
+        <div id="tired-verse" class="verse-container">
+            <p>But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint. - <a href="https://www.biblegateway.com/passage/?search=Isaiah+40%3A31&version=NIV" class="citation-link">Isaiah 40:31</a> &#10013;</p>
+        </div>
+        <div id="confused-verse" class="verse-container">
+            <p>For God is not a God of confusion but of peace. - <a href="https://www.biblegateway.com/passage/?search=1+Corinthians+14%3A33&version=NIV" class="citation-link">1 Corinthians 14:33</a> &#10013;</p>
+        </div>
+        <div id="content-verse" class="verse-container">
+            <p>I know what it is to be in need, and I know what it is to have plenty. I have learned the secret of being content in any and every situation. - <a href="https://www.biblegateway.com/passage/?search=Philippians+4%3A12&version=NIV" class="citation-link">Philippians 4:12</a> &#10013;</p>
+        </div>
+        <div id="hurt-verse" class="verse-container">
+            <p>He heals the brokenhearted and binds up their wounds. - <a href="https://www.biblegateway.com/passage/?search=Psalm+147%3A3&version=NIV" class="citation-link">Psalm 147:3</a> &#10013;</p>
+        </div>
+
+        <a href="#top" class="back-to-top">Back to Top</a>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
