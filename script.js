@@ -1,99 +1,55 @@
+// Firebase imports
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { 
+    getAuth, 
+    signInWithEmailAndPassword, 
+    createUserWithEmailAndPassword, 
+    signOut, 
+    onAuthStateChanged, 
+    updateEmail, 
+    updatePassword 
+} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { 
+    getFirestore, 
+    doc, 
+    setDoc, 
+    getDoc 
+} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+// Global Firebase variables provided by the environment
+const firebaseConfig = JSON.parse(window.__firebase_config);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// Function to get the user's profile document reference
+const getProfileDoc = (uid) => doc(db, 'artifacts/' + window.__app_id + '/users/' + uid + '/profile/' + 'main');
+window.getProfileDoc = getProfileDoc; // Make it globally accessible for other functions
+
 // A list of the verse IDs from your HTML file
 const verseIds = [
-    'anxious-verse',
-    'sad-verse',
-    'grateful-verse',
-    'stressed-verse',
-    'peaceful-verse',
-    'lonely-verse',
-    'angry-verse',
-    'hopeful-verse',
-    'guilty-verse',
-    'fearful-verse',
-    'joyful-verse',
-    'tired-verse',
-    'confused-verse',
-    'content-verse',
-    'hurt-verse'
+    'anxious-verse', 'sad-verse', 'grateful-verse', 'stressed-verse', 'peaceful-verse',
+    'lonely-verse', 'angry-verse', 'hopeful-verse', 'guilty-verse', 'fearful-verse',
+    'joyful-verse', 'tired-verse', 'confused-verse', 'content-verse', 'hurt-verse'
 ];
 
 // All verse content data in a single object for easy access
 const allVerses = {
-    'anxious-verse': {
-        text: 'Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God.',
-        citation: 'Philippians 4:6',
-        link: 'https://www.biblegateway.com/passage/?search=Philippians+4%3A6&version=NIV'
-    },
-    'sad-verse': {
-        text: 'The Lord is close to the brokenhearted and saves those who are crushed in spirit.',
-        citation: 'Psalm 34:18',
-        link: 'https://www.biblegateway.com/passage/?search=Psalm+34%3A18&version=NIV'
-    },
-    'grateful-verse': {
-        text: 'Give thanks to the Lord, for he is good; his love endures forever.',
-        citation: 'Psalm 107:1',
-        link: 'https://www.biblegateway.com/passage/?search=Psalm+107%3A1&version=NIV'
-    },
-    'stressed-verse': {
-        text: 'Come to me, all you who are weary and burdened, and I will give you rest.',
-        citation: 'Matthew 11:28',
-        link: 'https://www.biblegateway.com/passage/?search=Matthew+11%3A28&version=NIV'
-    },
-    'peaceful-verse': {
-        text: 'I have told you these things, so that in me you may have peace. In this world you will have trouble. But take heart! I have overcome the world.',
-        citation: 'John 16:33',
-        link: 'https://www.biblegateway.com/passage/?search=John+16%3A33&version=NIV'
-    },
-    'lonely-verse': {
-        text: 'The Lord is on my side; I will not fear. What can man do to me?',
-        citation: 'Psalm 118:6',
-        link: 'https://www.biblegateway.com/passage/?search=Psalm+118%3A6&version=NIV'
-    },
-    'angry-verse': {
-        text: 'A gentle answer turns away wrath, but a harsh word stirs up anger.',
-        citation: 'Proverbs 15:1',
-        link: 'https://www.biblegateway.com/passage/?search=Proverbs+15%3A1&version=NIV'
-    },
-    'hopeful-verse': {
-        text: 'For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future.',
-        citation: 'Jeremiah 29:11',
-        link: 'https://www.biblegateway.com/passage/?search=Jeremiah+29%3A11&version=NIV'
-    },
-    'guilty-verse': {
-        text: 'If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness.',
-        citation: '1 John 1:9',
-        link: 'https://www.biblegateway.com/passage/?search=1+John+1%3A9&version=NIV'
-    },
-    'fearful-verse': {
-        text: 'Do not be afraid or discouraged, for the Lord your God will be with you wherever you go.',
-        citation: 'Joshua 1:9',
-        link: 'https://www.biblegateway.com/passage/?search=Joshua+1%3A9&version=NIV'
-    },
-    'joyful-verse': {
-        text: 'Rejoice in the Lord always. I will say it again: Rejoice!',
-        citation: 'Philippians 4:4',
-        link: 'https://www.biblegateway.com/passage/?search=Philippians+4%3A4&version=NIV'
-    },
-    'tired-verse': {
-        text: 'But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.',
-        citation: 'Isaiah 40:31',
-        link: 'https://www.biblegateway.com/passage/?search=Isaiah+40%3A31&version=NIV'
-    },
-    'confused-verse': {
-        text: 'For God is not a God of confusion but of peace.',
-        citation: '1 Corinthians 14:33',
-        link: 'https://www.biblegateway.com/passage/?search=1+Corinthians+14%3A33&version=NIV'
-    },
-    'content-verse': {
-        text: 'I know what it is to be in need, and I know what it is to have plenty. I have learned the secret of being content in any and every situation.',
-        citation: 'Philippians 4:12',
-        link: 'https://www.biblegateway.com/passage/?search=Philippians+4%3A12&version=NIV'
-    },
-    'hurt-verse': {
-        text: 'He heals the brokenhearted and binds up their wounds.',
-        citation: 'Psalm 147:3',
-        link: 'https://www.biblegateway.com/passage/?search=Psalm+147%3A3&version=NIV'
-    }
+    'anxious-verse': { text: 'Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God.', citation: 'Philippians 4:6', link: 'https://www.biblegateway.com/passage/?search=Philippians+4%3A6&version=NIV' },
+    'sad-verse': { text: 'The Lord is close to the brokenhearted and saves those who are crushed in spirit.', citation: 'Psalm 34:18', link: 'https://www.biblegateway.com/passage/?search=Psalm+34%3A18&version=NIV' },
+    'grateful-verse': { text: 'Give thanks to the Lord, for he is good; his love endures forever.', citation: 'Psalm 107:1', link: 'https://www.biblegateway.com/passage/?search=Psalm+107%3A1&version=NIV' },
+    'stressed-verse': { text: 'Come to me, all you who are weary and burdened, and I will give you rest.', citation: 'Matthew 11:28', link: 'https://www.biblegateway.com/passage/?search=Matthew+11%3A28&version=NIV' },
+    'peaceful-verse': { text: 'I have told you these things, so that in me you may have peace. In this world you will have trouble. But take heart! I have overcome the world.', citation: 'John 16:33', link: 'https://www.biblegateway.com/passage/?search=John+16%3A33&version=NIV' },
+    'lonely-verse': { text: 'The Lord is on my side; I will not fear. What can man do to me?', citation: 'Psalm 118:6', link: 'https://www.biblegateway.com/passage/?search=Psalm+118%3A6&version=NIV' },
+    'angry-verse': { text: 'A gentle answer turns away wrath, but a harsh word stirs up anger.', citation: 'Proverbs 15:1', link: 'https://www.biblegateway.com/passage/?search=Proverbs+15%3A1&version=NIV' },
+    'hopeful-verse': { text: 'For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future.', citation: 'Jeremiah 29:11', link: 'https://www.biblegateway.com/passage/?search=Jeremiah+29%3A11&version=NIV' },
+    'guilty-verse': { text: 'If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness.', citation: '1 John 1:9', link: 'https://www.biblegateway.com/passage/?search=1+John+1%3A9&version=NIV' },
+    'fearful-verse': { text: 'Do not be afraid or discouraged, for the Lord your God will be with you wherever you go.', citation: 'Joshua 1:9', link: 'https://www.biblegateway.com/passage/?search=Joshua+1%3A9&version=NIV' },
+    'joyful-verse': { text: 'Rejoice in the Lord always. I will say it again: Rejoice!', citation: 'Philippians 4:4', link: 'https://www.biblegateway.com/passage/?search=Philippians+4%3A4&version=NIV' },
+    'tired-verse': { text: 'But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.', citation: 'Isaiah 40:31', link: 'https://www.biblegateway.com/passage/?search=Isaiah+40%3A31&version=NIV' },
+    'confused-verse': { text: 'For God is not a God of confusion but of peace.', citation: '1 Corinthians 14:33', link: 'https://www.biblegateway.com/passage/?search=1+Corinthians+14%3A33&version=NIV' },
+    'content-verse': { text: 'I know what it is to be in need, and I know what it is to have plenty. I have learned the secret of being content in any and every situation.', citation: 'Philippians 4:12', link: 'https://www.biblegateway.com/passage/?search=Philippians+4%3A12&version=NIV' },
+    'hurt-verse': { text: 'He heals the brokenhearted and binds up their wounds.', citation: 'Psalm 147:3', link: 'https://www.biblegateway.com/passage/?search=Psalm+147%3A3&version=NIV' }
 };
 
 // This ensures the script only runs after the page is fully loaded.
@@ -140,15 +96,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let isAuthReady = false;
 
     // --- Firebase Auth & Firestore Logic ---
-    window.onAuthStateChanged(window.auth, (user) => {
+    // This listener waits for the user's authentication state to be determined.
+    onAuthStateChanged(auth, (user) => {
         isAuthReady = true;
         if (user) {
+            // If a user is logged in, hide auth and show profile
             userId = user.uid;
             console.log("User logged in with ID:", userId);
             authSection.style.display = 'none';
             profileSection.style.display = 'flex';
             loadProfile(userId);
         } else {
+            // If no user is logged in, show auth and hide profile
             userId = null;
             console.log("No user is logged in.");
             authSection.style.display = 'block';
@@ -156,15 +115,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    /**
+     * Displays a message to the user in the message box.
+     * @param {string} message The message to display.
+     * @param {boolean} isError True if the message is an error, false otherwise.
+     */
     const showMessage = (message, isError = false) => {
         messageBox.textContent = message;
+        messageBox.classList.remove('success', 'error');
+        messageBox.classList.add(isError ? 'error' : 'success');
         messageBox.style.display = 'block';
-        messageBox.style.color = isError ? 'red' : 'green';
         setTimeout(() => {
             messageBox.style.display = 'none';
         }, 5000);
     };
 
+    /** Handles user login with email and password. */
     const handleLogin = async () => {
         const email = loginEmailInput.value;
         const password = loginPasswordInput.value;
@@ -176,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         try {
             showMessage("Logging in...", false);
-            await window.signInWithEmailAndPassword(window.auth, email, password);
+            await signInWithEmailAndPassword(auth, email, password);
             showMessage("Login successful!", false);
         } catch (error) {
             console.error("Login failed:", error);
@@ -184,6 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    /** Handles user sign-up with email and password. */
     const handleSignUp = async () => {
         const email = signupEmailInput.value;
         const password = signupPasswordInput.value;
@@ -195,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             showMessage("Creating account...", false);
-            await window.createUserWithEmailAndPassword(window.auth, email, password);
+            await createUserWithEmailAndPassword(auth, email, password);
             showMessage("Account created successfully! You are now logged in.", false);
         } catch (error) {
             console.error("Sign up failed:", error);
@@ -203,9 +170,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    /** Handles user sign-out. */
     const handleSignOut = async () => {
         try {
-            await window.signOut(window.auth);
+            await signOut(auth);
             showMessage("Signed out successfully.", false);
             userNameDisplay.textContent = 'Guest';
             nameInput.value = '';
@@ -216,8 +184,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    /** Saves the user's name and bio to Firestore. */
     const saveProfile = async () => {
-        const user = window.auth.currentUser;
+        const user = auth.currentUser;
         if (!user) {
             showMessage("You must be logged in to save your profile.", true);
             return;
@@ -227,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
             bio: bioInput.value,
         };
         try {
-            await window.setDoc(window.getProfileDoc(user.uid), profileData, { merge: true });
+            await setDoc(getProfileDoc(user.uid), profileData, { merge: true });
             showMessage("Profile saved successfully!", false);
             userNameDisplay.textContent = profileData.name || 'Guest';
         } catch (error) {
@@ -236,11 +205,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    /** Loads the user's profile from Firestore and populates the form fields. */
     const loadProfile = async (id) => {
         if (!id) return;
         try {
-            const profileRef = window.getProfileDoc(id);
-            const docSnap = await window.getDoc(profileRef);
+            const profileRef = getProfileDoc(id);
+            const docSnap = await getDoc(profileRef);
             if (docSnap.exists()) {
                 const data = docSnap.data();
                 nameInput.value = data.name || '';
@@ -259,8 +229,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    /** Changes the user's email address. */
     const changeEmail = async () => {
-        const user = window.auth.currentUser;
+        const user = auth.currentUser;
         if (!user) {
             showMessage("You must be logged in to change your email.", true);
             return;
@@ -271,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         try {
-            await window.updateEmail(user, newEmail);
+            await updateEmail(user, newEmail);
             showMessage("Email updated successfully! You may need to sign in again.", false);
             emailInput.value = '';
         } catch (error) {
@@ -280,8 +251,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    /** Changes the user's password. */
     const changePassword = async () => {
-        const user = window.auth.currentUser;
+        const user = auth.currentUser;
         if (!user) {
             showMessage("You must be logged in to change your password.", true);
             return;
@@ -292,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         try {
-            await window.updatePassword(user, newPassword);
+            await updatePassword(user, newPassword);
             showMessage("Password updated successfully!", false);
             passwordInput.value = '';
         } catch (error) {
