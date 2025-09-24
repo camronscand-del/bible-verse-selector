@@ -6,7 +6,7 @@
     <title>Find a Verse</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
             transition: background-color 0.3s, color 0.3s;
@@ -78,7 +78,7 @@
             border-left-color: #3b82f6;
             animation: spin 1s linear infinite;
         }
-        @keyframes spin {
+@keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
@@ -93,20 +93,42 @@
             <p class="text-gray-500">Get a verse that speaks to your heart.</p>
         </header>
 
+        <!-- Authentication Section -->
+        <section id="auth-section" class="border-t border-gray-300 pt-6 space-y-4">
+            <h2 class="text-xl font-bold text-gray-800">Account</h2>
+            <div id="auth-status" class="text-center text-gray-500 text-sm">Loading...</div>
+            <div id="auth-forms" class="space-y-4">
+                <div id="login-form" class="space-y-4">
+                    <input id="login-email" type="email" placeholder="Email" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                    <input id="login-password" type="password" placeholder="Password" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                    <button id="login-button" class="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 font-bold shadow-md">Log In</button>
+                    <button id="signup-toggle-button" class="w-full text-blue-600 hover:underline text-sm font-semibold">Don't have an account? Sign Up</button>
+                    <button id="password-reset-button" class="w-full text-gray-500 hover:underline text-xs">Forgot Password?</button>
+                </div>
+                <div id="signup-form" class="hidden space-y-4">
+                    <input id="signup-email" type="email" placeholder="Email" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                    <input id="signup-password" type="password" placeholder="Password" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                    <button id="signup-button" class="w-full bg-green-600 text-white p-3 rounded-lg hover:bg-green-700 transition-colors duration-300 font-bold shadow-md">Sign Up</button>
+                    <button id="login-toggle-button" class="w-full text-blue-600 hover:underline text-sm font-semibold">Already have an account? Log In</button>
+                </div>
+            </div>
+        </section>
+
         <!-- User Profile Section -->
-        <section id="profile-section" class="border-t border-gray-300 pt-6">
+        <section id="profile-section" class="border-t border-gray-300 pt-6 hidden">
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-bold text-gray-800">My Profile</h2>
                 <button id="profile-toggle-button" class="text-blue-600 hover:text-blue-800 transition-colors duration-300 text-sm font-semibold">Hide</button>
             </div>
             <div id="profile-content" class="mt-4 space-y-4">
-                <div id="loading-profile" class="flex justify-center items-center h-24">
+                <div id="loading-profile" class="flex justify-center items-center h-24 hidden">
                     <div class="loading-spinner"></div>
                 </div>
-                <div id="profile-form" class="hidden space-y-4">
+                <div id="profile-form" class="space-y-4">
                     <input id="profile-name" type="text" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
                     <textarea id="profile-bio" rows="3" placeholder="A short bio..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"></textarea>
                     <button id="profile-save-button" class="w-full bg-green-500 text-white p-3 rounded-lg hover:bg-green-600 transition-colors duration-300 font-bold shadow-md">Save Profile</button>
+                    <button id="logout-button" class="w-full bg-red-500 text-white p-3 rounded-lg hover:bg-red-600 transition-colors duration-300 font-bold shadow-md mt-4">Log Out</button>
                     <p id="user-id" class="text-center text-gray-500 text-xs mt-2"></p>
                 </div>
             </div>
@@ -171,15 +193,38 @@
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getAuth, 
+            onAuthStateChanged, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword, 
+            signOut,
+            sendPasswordResetEmail
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // Global variables provided by the canvas environment
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
         
         // UI element references
+        const mainContainer = document.getElementById('main-container');
+        const authSection = document.getElementById('auth-section');
+        const authStatus = document.getElementById('auth-status');
+        const authForms = document.getElementById('auth-forms');
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+        const loginEmailInput = document.getElementById('login-email');
+        const loginPasswordInput = document.getElementById('login-password');
+        const signupEmailInput = document.getElementById('signup-email');
+        const signupPasswordInput = document.getElementById('signup-password');
+        const loginButton = document.getElementById('login-button');
+        const signupButton = document.getElementById('signup-button');
+        const logoutButton = document.getElementById('logout-button');
+        const signupToggleButton = document.getElementById('signup-toggle-button');
+        const loginToggleButton = document.getElementById('login-toggle-button');
+        const passwordResetButton = document.getElementById('password-reset-button');
+        const profileSection = document.getElementById('profile-section');
         const profileToggleButton = document.getElementById('profile-toggle-button');
         const profileContent = document.getElementById('profile-content');
         const loadingProfile = document.getElementById('loading-profile');
@@ -199,7 +244,6 @@
         const fontIncreaseButton = document.getElementById('font-increase');
         const fontDecreaseButton = document.getElementById('font-decrease');
         const randomVerseButton = document.getElementById('random-verse-button');
-        const mainContainer = document.getElementById('main-container');
 
         // Firebase variables
         let db, auth;
@@ -234,27 +278,30 @@
                 // Start authentication listener
                 onAuthStateChanged(auth, async (user) => {
                     if (user) {
+                        // User is signed in
                         userId = user.uid;
+                        authSection.classList.add('hidden');
+                        profileSection.classList.remove('hidden');
+                        authStatus.textContent = `Logged in as: ${user.email}`;
                         userIdDisplay.textContent = `User ID: ${userId}`;
                         profileRef = doc(db, `artifacts/${appId}/users/${userId}/profile/data`);
                         await loadUserProfile();
                     } else {
-                        await signInAnonymously(auth);
+                        // User is signed out
+                        userId = null;
+                        authSection.classList.remove('hidden');
+                        profileSection.classList.add('hidden');
+                        authStatus.textContent = `You are not logged in.`;
+                        profileNameInput.value = '';
+                        profileBioInput.value = '';
+                        applyTheme('light');
+                        mainContainer.style.fontSize = '';
                     }
                 });
 
-                // Authenticate with custom token or anonymously
-                if (initialAuthToken) {
-                    await signInWithCustomToken(auth, initialAuthToken);
-                } else {
-                    await signInAnonymously(auth);
-                }
-
             } catch (error) {
                 console.error("Firebase initialization failed:", error);
-                loadingProfile.classList.add('hidden');
-                profileForm.classList.remove('hidden');
-                profileForm.innerHTML = `<p class="text-red-500 text-center">Error loading profile. Check the console for details.</p>`;
+                authStatus.textContent = `Error: Firebase initialization failed. Check the console for details.`;
             }
         };
 
@@ -262,6 +309,8 @@
         const loadUserProfile = async () => {
             loadingProfile.classList.add('hidden');
             profileForm.classList.remove('hidden');
+
+            if (!profileRef) return;
 
             onSnapshot(profileRef, (docSnap) => {
                 if (docSnap.exists()) {
@@ -297,19 +346,65 @@
             }
         };
 
+        // Authentication functions
+        const handleSignUp = async () => {
+            const email = signupEmailInput.value;
+            const password = signupPasswordInput.value;
+            try {
+                await createUserWithEmailAndPassword(auth, email, password);
+                alert("Sign up successful! You are now logged in.");
+            } catch (error) {
+                console.error("Sign up failed:", error);
+                alert(`Sign up failed: ${error.message}`);
+            }
+        };
+
+        const handleLogin = async () => {
+            const email = loginEmailInput.value;
+            const password = loginPasswordInput.value;
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                alert("Login successful!");
+            } catch (error) {
+                console.error("Login failed:", error);
+                alert(`Login failed: ${error.message}`);
+            }
+        };
+
+        const handleLogout = async () => {
+            try {
+                await signOut(auth);
+                alert("You have been logged out.");
+            } catch (error) {
+                console.error("Logout failed:", error);
+                alert(`Logout failed: ${error.message}`);
+            }
+        };
+
+        const handlePasswordReset = async () => {
+            const email = loginEmailInput.value;
+            if (!email) {
+                alert("Please enter your email in the login field to reset your password.");
+                return;
+            }
+            try {
+                await sendPasswordResetEmail(auth, email);
+                alert("Password reset email sent! Check your inbox.");
+            } catch (error) {
+                console.error("Password reset failed:", error);
+                alert(`Password reset failed: ${error.message}`);
+            }
+        };
+
         // Theme management
         const applyTheme = (themeName) => {
-            // Remove all existing theme classes
-            body.classList.remove('theme-light', 'theme-dark', 'theme-ocean', 'theme-forest-green');
-            
-            // Add the new theme class
+            body.classList.remove(...THEMES.map(t => `theme-${t}`));
             body.classList.add(`theme-${themeName}`);
             body.dataset.theme = themeName;
         };
 
         // Display a verse
         const displayVerse = (verse) => {
-            // Explicitly clear existing text content to prevent overlap
             resultText.textContent = '';
             resultReference.textContent = '';
             
@@ -331,6 +426,20 @@
         });
 
         profileSaveButton.addEventListener('click', saveUserProfile);
+        loginButton.addEventListener('click', handleLogin);
+        signupButton.addEventListener('click', handleSignUp);
+        logoutButton.addEventListener('click', handleLogout);
+        passwordResetButton.addEventListener('click', handlePasswordReset);
+
+        signupToggleButton.addEventListener('click', () => {
+            loginForm.classList.add('hidden');
+            signupForm.classList.remove('hidden');
+        });
+
+        loginToggleButton.addEventListener('click', () => {
+            signupForm.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+        });
 
         document.querySelectorAll('.verse-card').forEach(button => {
             button.addEventListener('click', (e) => {
@@ -378,4 +487,16 @@
         window.onload = initFirebase;
     </script>
 </body>
-</html>
+</html>I have updated your code to include a full user authentication system with sign-up, login, and logout functionality. This is a significant change from the previous anonymous authentication.
+
+The new code now has:
+*   **Sign-up and Login Forms:** A new "Account" section with forms for users to create an account with an email and password or log in to an existing one.
+*   **User Profiles:** The profile section is now hidden until a user is successfully logged in. Once logged in, they can view and edit their profile.
+*   **Log Out:** A "Log Out" button has been added to the profile section.
+*   **Password Reset:** A "Forgot Password?" link has been added, which will send a password reset email to the user.
+
+You will need to use your own Firebase project credentials to replace the placeholder `__firebase_config` variable in the script for the authentication and profile features to work correctly.
+
+I have saved the updated code to a file named `index.html`.
+
+index.html
