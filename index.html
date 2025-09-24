@@ -9,43 +9,72 @@
     <!-- Favicon: Adds an icon to the browser tab -->
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/google/material-design-icons/master/png/social/public/baseline_book_black_48dp.png">
     <style>
-        /* 1. Define variables for the light theme */
+        /* Base Variables and Cursor */
         :root {
-            --bg-color: #fcebeb; /* A soft, warm pink background */
-            --text-color: #444; /* Slightly softer text color */
-            --header-color: #8b0000; /* Rich, deep red */
-            --link-text-color: #ffffff; /* White text on links */
-            --verse-bg: #fff0f5; /* Very light, soft pink */
-            --verse-border: #d44949; /* A darker pink for the border */
+            --bg-color: #fcebeb;
+            --text-color: #444;
+            --header-color: #8b0000;
+            --link-text-color: #ffffff;
+            --verse-bg: #fff0f5;
+            --verse-border: #d44949;
             --verse-text-color: #555;
-            --hero-bg-start: #ffb7b7; /* Light salmon */
-            --hero-bg-end: #ffa07a;   /* Light coral */
-            --hero-text-color: #8b0000; /* Darker red for contrast */
+            --hero-bg-start: #ffb7b7;
+            --hero-bg-end: #ffa07a;
+            --hero-text-color: #8b0000;
         }
 
-        /* 2. Define variables for the dark theme */
-        body.dark-mode {
-            --bg-color: #2c2c2c; /* Dark grey background */
-            --text-color: #f0f0f0; /* Light text */
-            --header-color: #ffb7b7; /* Light red */
+        body[data-theme="light"] {
+            --bg-color: #fcebeb;
+            --text-color: #444;
+            --header-color: #8b0000;
             --link-text-color: #ffffff;
-            --verse-bg: #4a4a4a; /* Darker grey box */
-            --verse-border: #8b0000; /* Darker red border */
+            --verse-bg: #fff0f5;
+            --verse-border: #d44949;
+            --verse-text-color: #555;
+            --hero-bg-start: #ffb7b7;
+            --hero-bg-end: #ffa07a;
+            --hero-text-color: #8b0000;
+        }
+
+        body[data-theme="dark"] {
+            --bg-color: #2c2c2c;
+            --text-color: #f0f0f0;
+            --header-color: #ffb7b7;
+            --link-text-color: #ffffff;
+            --verse-bg: #4a4a4a;
+            --verse-border: #8b0000;
             --verse-text-color: #f0f0f0;
-            --hero-bg-start: #3a3a3a; /* Darker grey */
-            --hero-bg-end: #1a1a1a;   /* Very dark grey */
-            --hero-text-color: #ffb7b7; /* Light red for contrast */
+            --hero-bg-start: #3a3a3a;
+            --hero-bg-end: #1a1a1a;
+            --hero-text-color: #ffb7b7;
+        }
+
+        body[data-theme="ocean"] {
+            --bg-color: #e0f7fa;
+            --text-color: #2c3e50;
+            --header-color: #3498db;
+            --link-text-color: #ffffff;
+            --verse-bg: #bbdefb;
+            --verse-border: #2196f3;
+            --verse-text-color: #2c3e50;
+            --hero-bg-start: #81d4fa;
+            --hero-bg-end: #03a9f4;
+            --hero-text-color: #2c3e50;
+        }
+
+        body[data-theme="forest"] {
+            --bg-color: #f0fff0;
+            --text-color: #2d543e;
+            --header-color: #4caf50;
+            --link-text-color: #ffffff;
+            --verse-bg: #c8e6c9;
+            --verse-border: #388e3c;
+            --verse-text-color: #2d543e;
+            --hero-bg-start: #a5d6a7;
+            --hero-bg-end: #4caf50;
+            --hero-text-color: #2d543e;
         }
         
-        /* New: Dark mode for the system preference.
-           This will just add the 'dark-mode' class to the body. */
-        @media (prefers-color-scheme: dark) {
-            body {
-                background-color: #2c2c2c;
-            }
-        }
-        
-        /* 3. Use the variables to style your page */
         body {
             font-family: 'Merriweather', serif;
             line-height: 1.6;
@@ -54,7 +83,6 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             transition: background-color 0.3s, color 0.3s;
-            /* **FIXED CURSOR HERE:** Using an embedded SVG for reliability */
             cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23f58a43" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>'), auto;
         }
         .hero-section {
@@ -63,7 +91,7 @@
             padding: 60px 20px;
             text-align: center;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            position: relative; /* Needed for the toggle button */
+            position: relative;
         }
         .hero-section h1 {
             font-family: 'Open Sans', sans-serif;
@@ -142,7 +170,7 @@
         .hurt-link:hover { background: linear-gradient(#e76b19, #d35400); }
         .random-link { background: linear-gradient(#5d98db, #4878b2); }
         .random-link:hover { background: linear-gradient(#7aaddf, #5d98db); }
-        
+
         /* Verse of the Day styles */
         #verse-of-the-day {
             text-align: center;
@@ -173,6 +201,7 @@
             max-width: 700px;
             margin-left: auto;
             margin-right: auto;
+            transition: font-size 0.3s ease;
         }
         .verse-container p {
             font-style: italic;
@@ -203,38 +232,103 @@
         .citation-link:hover {
             text-decoration: underline;
         }
-
-        /* Styles for the Dark Mode Toggle Button */
-        #mode-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 8px 12px;
-            background-color: var(--hero-bg-end);
-            border: 1px solid var(--hero-text-color);
-            border-radius: 5px;
-            color: var(--hero-text-color);
-            cursor: pointer;
-            font-family: 'Open Sans', sans-serif;
-            font-weight: bold;
-            transition: background-color 0.3s, color 0.3s;
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin: 20px auto;
+            padding: 15px;
+            border-radius: 12px;
+            background-color: var(--verse-bg);
+            max-width: 500px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        #mode-toggle:hover {
-            background-color: var(--hero-text-color);
-            color: var(--hero-bg-end);
+        .controls h3 {
+            margin: 0;
+            color: var(--header-color);
+        }
+        .controls button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--header-color);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .controls button:hover {
+            background-color: #a04040;
+        }
+
+        #profile-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px auto;
+            padding: 25px;
+            max-width: 500px;
+            border-radius: 12px;
+            background-color: var(--verse-bg);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #profile-section input, #profile-section textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--verse-border);
+            border-radius: 8px;
+            background-color: var(--verse-bg);
+            color: var(--text-color);
+        }
+
+        #profile-section button {
+            align-self: flex-start;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--header-color);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
         }
     </style>
 </head>
-<body>
+<body data-theme="light">
     <a id="top"></a>
     <div class="hero-section">
         <h1>Find a Bible Verse</h1>
         <p>How are you feeling today? Click an emotion to find a comforting verse.</p>
-        <a href="#" class="home-link" style="color: var(--hero-text-color);">Home</a>
-        <button id="mode-toggle">Dark Mode</button>
     </div>
     
     <div class="main-content">
+        <section id="user-profile">
+            <h2>My Profile</h2>
+            <div id="profile-section">
+                <p>Welcome back, <span id="user-name-display">Guest</span>!</p>
+                <input type="text" id="name-input" placeholder="Your Name">
+                <textarea id="bio-input" placeholder="Tell us about yourself..." rows="3"></textarea>
+                <button id="save-profile-btn">Save Profile</button>
+            </div>
+        </section>
+
+        <section id="theme-font-controls">
+            <h2>Customize Your Experience</h2>
+            <div class="controls">
+                <h3>Change Theme:</h3>
+                <button data-theme="light">Light</button>
+                <button data-theme="dark">Dark</button>
+                <button data-theme="ocean">Ocean</button>
+                <button data-theme="forest">Forest</button>
+            </div>
+            <div class="controls">
+                <h3>Font Size:</h3>
+                <button id="font-size-decrease-btn">A-</button>
+                <button id="font-size-increase-btn">A+</button>
+            </div>
+        </section>
+
         <h2>Verse of the Day</h2>
         <div id="verse-of-the-day">
             <h3>Loading...</h3>
