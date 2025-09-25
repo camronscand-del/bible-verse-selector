@@ -78,9 +78,35 @@
             border-left-color: #3b82f6;
             animation: spin 1s linear infinite;
         }
-@keyframes spin {
+        @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
         }
     </style>
 </head>
@@ -190,6 +216,15 @@
         </section>
     </div>
 
+    <!-- The Modal for displaying messages -->
+    <div id="message-modal" class="modal">
+        <div class="modal-content text-center">
+            <h3 id="modal-title" class="text-2xl font-bold text-gray-800 mb-2"></h3>
+            <p id="modal-message" class="text-gray-600 mb-4"></p>
+            <button id="modal-close-button" class="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 font-bold">OK</button>
+        </div>
+    </div>
+
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -199,14 +234,25 @@
             createUserWithEmailAndPassword, 
             signInWithEmailAndPassword, 
             signOut,
-            sendPasswordResetEmail
+            sendPasswordResetEmail,
+            setLogLevel
         } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
+        
+        // IMPORTANT: Firebase Configuration
+        // To make this app work, you must replace the placeholder configuration below
+        // with your own Firebase project's credentials.
+        // 1. Go to the Firebase Console (console.firebase.google.com).
+        // 2. Select your project.
+        // 3. Click the gear icon next to "Project Overview" and select "Project settings".
+        // 4. In the "General" tab, scroll down to "Your apps" and select the "Web" app.
+        //    If you don't have one, create a new web app and copy the config snippet.
+        // 5. Copy the 'firebaseConfig' object and paste it below.
+        
         // Global variables provided by the canvas environment
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        
+
         // UI element references
         const mainContainer = document.getElementById('main-container');
         const authSection = document.getElementById('auth-section');
@@ -244,6 +290,13 @@
         const fontIncreaseButton = document.getElementById('font-increase');
         const fontDecreaseButton = document.getElementById('font-decrease');
         const randomVerseButton = document.getElementById('random-verse-button');
+        
+        // Modal elements
+        const messageModal = document.getElementById('message-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const modalCloseButton = document.getElementById('modal-close-button');
+
 
         // Firebase variables
         let db, auth;
@@ -265,15 +318,34 @@
             votd: { text: "For where two or three are gathered in my name, there am I among them.", reference: "Matthew 18:20" }
         };
 
+        // Custom modal function to replace alerts
+        const showMessage = (title, message) => {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            messageModal.style.display = 'flex';
+        };
+
+        modalCloseButton.addEventListener('click', () => {
+            messageModal.style.display = 'none';
+        });
+
         // Initialize Firebase and Auth
         const initFirebase = async () => {
             try {
                 if (Object.keys(firebaseConfig).length === 0) {
-                    throw new Error("Firebase configuration is missing.");
+                    console.error("Firebase configuration is missing. Authentication features will not work.");
+                    authStatus.textContent = "Authentication features disabled. Missing Firebase config.";
+                    // Hide auth and profile sections since they can't be used
+                    authSection.classList.add('hidden');
+                    profileSection.classList.add('hidden');
+                    // Return early so the rest of the app can still function
+                    return;
                 }
+                
                 const app = initializeApp(firebaseConfig);
                 auth = getAuth(app);
                 db = getFirestore(app);
+                setLogLevel('debug');
 
                 // Start authentication listener
                 onAuthStateChanged(auth, async (user) => {
@@ -298,10 +370,12 @@
                         mainContainer.style.fontSize = '';
                     }
                 });
-
             } catch (error) {
                 console.error("Firebase initialization failed:", error);
-                authStatus.textContent = `Error: Firebase initialization failed. Check the console for details.`;
+                authStatus.textContent = "Authentication features disabled due to an error.";
+                // Hide auth and profile sections
+                authSection.classList.add('hidden');
+                profileSection.classList.add('hidden');
             }
         };
 
@@ -330,7 +404,10 @@
         };
 
         const saveUserProfile = async () => {
-            if (!profileRef) return;
+            if (!profileRef) {
+                showMessage("Notice", "Cannot save profile. Please log in first.");
+                return;
+            }
             try {
                 const currentTheme = body.dataset.theme || 'light';
                 const fontSize = parseFloat(getComputedStyle(mainContainer).fontSize);
@@ -341,8 +418,10 @@
                     fontSize: fontSize
                 }, { merge: true });
                 console.log("Profile saved successfully!");
+                showMessage("Success", "Your profile has been saved successfully!");
             } catch (error) {
                 console.error("Error saving profile:", error);
+                showMessage("Error", `Failed to save profile: ${error.message}`);
             }
         };
 
@@ -350,49 +429,67 @@
         const handleSignUp = async () => {
             const email = signupEmailInput.value;
             const password = signupPasswordInput.value;
+            if (!auth) {
+                showMessage("Error", "Authentication is disabled. Please configure Firebase.");
+                return;
+            }
             try {
-                await createUserWithEmailAndPassword(auth, email, password);
-                alert("Sign up successful! You are now logged in.");
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                console.log("Sign up successful:", userCredential.user);
+                showMessage("Success", "Sign up successful! You are now logged in.");
             } catch (error) {
                 console.error("Sign up failed:", error);
-                alert(`Sign up failed: ${error.message}`);
+                showMessage("Error", `Sign up failed: ${error.message}`);
             }
         };
 
         const handleLogin = async () => {
             const email = loginEmailInput.value;
             const password = loginPasswordInput.value;
+            if (!auth) {
+                showMessage("Error", "Authentication is disabled. Please configure Firebase.");
+                return;
+            }
             try {
-                await signInWithEmailAndPassword(auth, email, password);
-                alert("Login successful!");
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                console.log("Login successful:", userCredential.user);
+                showMessage("Success", "Login successful!");
             } catch (error) {
                 console.error("Login failed:", error);
-                alert(`Login failed: ${error.message}`);
+                showMessage("Error", `Login failed: ${error.message}`);
             }
         };
 
         const handleLogout = async () => {
+            if (!auth) {
+                showMessage("Error", "Authentication is disabled. Please configure Firebase.");
+                return;
+            }
             try {
                 await signOut(auth);
-                alert("You have been logged out.");
+                showMessage("Success", "You have been logged out.");
             } catch (error) {
                 console.error("Logout failed:", error);
-                alert(`Logout failed: ${error.message}`);
+                showMessage("Error", `Logout failed: ${error.message}`);
             }
         };
 
         const handlePasswordReset = async () => {
             const email = loginEmailInput.value;
             if (!email) {
-                alert("Please enter your email in the login field to reset your password.");
+                showMessage("Notice", "Please enter your email in the login field to reset your password.");
+                return;
+            }
+            if (!auth) {
+                showMessage("Error", "Authentication is disabled. Please configure Firebase.");
                 return;
             }
             try {
                 await sendPasswordResetEmail(auth, email);
-                alert("Password reset email sent! Check your inbox.");
+                showMessage("Success", "Password reset email sent! Check your inbox.");
             } catch (error) {
                 console.error("Password reset failed:", error);
-                alert(`Password reset failed: ${error.message}`);
+                showMessage("Error", `Password reset failed: ${error.message}`);
             }
         };
 
@@ -463,40 +560,33 @@
             if (themeButton) {
                 const theme = themeButton.dataset.theme;
                 applyTheme(theme);
-                saveUserProfile();
+                // Save profile only if authenticated
+                if (auth && auth.currentUser) {
+                    saveUserProfile();
+                }
             }
         });
 
         fontIncreaseButton.addEventListener('click', () => {
             const currentSize = parseFloat(getComputedStyle(mainContainer).fontSize);
             mainContainer.style.fontSize = `${currentSize + 1}px`;
-            saveUserProfile();
+            // Save profile only if authenticated
+            if (auth && auth.currentUser) {
+                saveUserProfile();
+            }
         });
 
         fontDecreaseButton.addEventListener('click', () => {
             const currentSize = parseFloat(getComputedStyle(mainContainer).fontSize);
             mainContainer.style.fontSize = `${currentSize - 1}px`;
-            saveUserProfile();
+            // Save profile only if authenticated
+            if (auth && auth.currentUser) {
+                saveUserProfile();
+            }
         });
-
-        // Set the Verse of the Day on load
-        verseOfDayText.textContent = `“${verses.votd.text}”`;
-        verseOfDayReference.textContent = `— ${verses.votd.reference}`;
 
         // Initialize the app on window load
         window.onload = initFirebase;
     </script>
 </body>
-</html>I have updated your code to include a full user authentication system with sign-up, login, and logout functionality. This is a significant change from the previous anonymous authentication.
-
-The new code now has:
-*   **Sign-up and Login Forms:** A new "Account" section with forms for users to create an account with an email and password or log in to an existing one.
-*   **User Profiles:** The profile section is now hidden until a user is successfully logged in. Once logged in, they can view and edit their profile.
-*   **Log Out:** A "Log Out" button has been added to the profile section.
-*   **Password Reset:** A "Forgot Password?" link has been added, which will send a password reset email to the user.
-
-You will need to use your own Firebase project credentials to replace the placeholder `__firebase_config` variable in the script for the authentication and profile features to work correctly.
-
-I have saved the updated code to a file named `index.html`.
-
-index.html
+</html>
