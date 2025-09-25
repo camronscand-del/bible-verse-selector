@@ -99,15 +99,18 @@
         <section class="border-t border-gray-300 pt-6 space-y-4">
             <h2 class="text-xl font-bold text-gray-800">Find a Verse by Emotion</h2>
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                <button data-emotion="joy" class="verse-card bg-green-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105">Joy</button>
-                <button data-emotion="peace" class="verse-card bg-purple-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105">Peace</button>
-                <button data-emotion="sadness" class="verse-card bg-blue-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105">Sadness</button>
-                <button data-emotion="fear" class="verse-card bg-orange-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105">Fear</button>
-                <button data-emotion="anger" class="verse-card bg-red-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105">Anger</button>
-                <button data-emotion="strength" class="verse-card bg-indigo-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105">Strength</button>
-                <button data-emotion="hope" class="verse-card bg-amber-500 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105">Hope</button>
-                <button data-emotion="gratitude" class="verse-card bg-pink-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105">Gratitude</button>
-                <button data-emotion="healing" class="verse-card bg-teal-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-transform duration-300 hover:scale-105">Healing</button>
+                <button data-emotion="joy" class="verse-card bg-green-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-all duration-200 ease-in-out hover:-translate-y-1 hover:shadow-lg active:translate-y-0 active:shadow-md">Joy</button>
+                <button data-emotion="peace" class="verse-card bg-purple-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-all duration-200 ease-in-out hover:-translate-y-1 hover:shadow-lg active:translate-y-0 active:shadow-md">Peace</button>
+                <button data-emotion="sadness" class="verse-card bg-blue-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-all duration-200 ease-in-out hover:-translate-y-1 hover:shadow-lg active:translate-y-0 active:shadow-md">Sadness</button>
+                <button data-emotion="fear" class="verse-card bg-orange-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-all duration-200 ease-in-out hover:-translate-y-1 hover:shadow-lg active:translate-y-0 active:shadow-md">Fear</button>
+                <button data-emotion="anger" class="verse-card bg-red-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-all duration-200 ease-in-out hover:-translate-y-1 hover:shadow-lg active:translate-y-0 active:shadow-md">Anger</button>
+                <button data-emotion="strength" class="verse-card bg-indigo-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-all duration-200 ease-in-out hover:-translate-y-1 hover:shadow-lg active:translate-y-0 active:shadow-md">Strength</button>
+                <button data-emotion="hope" class="verse-card bg-amber-500 text-white p-6 rounded-xl shadow-md font-bold text-center transition-all duration-200 ease-in-out hover:-translate-y-1 hover:shadow-lg active:translate-y-0 active:shadow-md">Hope</button>
+                <button data-emotion="gratitude" class="verse-card bg-pink-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-all duration-200 ease-in-out hover:-translate-y-1 hover:shadow-lg active:translate-y-0 active:shadow-md">Gratitude</button>
+                <button data-emotion="healing" class="verse-card bg-teal-400 text-white p-6 rounded-xl shadow-md font-bold text-center transition-all duration-200 ease-in-out hover:-translate-y-1 hover:shadow-lg active:translate-y-0 active:shadow-md">Healing</button>
+                <button data-emotion="patience" class="verse-card bg-cyan-500 text-white p-6 rounded-xl shadow-md font-bold text-center transition-all duration-200 ease-in-out hover:-translate-y-1 hover:shadow-lg active:translate-y-0 active:shadow-md">Patience</button>
+                <button data-emotion="forgiveness" class="verse-card bg-fuchsia-500 text-white p-6 rounded-xl shadow-md font-bold text-center transition-all duration-200 ease-in-out hover:-translate-y-1 hover:shadow-lg active:translate-y-0 active:shadow-md">Forgiveness</button>
+                <button data-emotion="guidance" class="verse-card bg-slate-500 text-white p-6 rounded-xl shadow-md font-bold text-center transition-all duration-200 ease-in-out hover:-translate-y-1 hover:shadow-lg active:translate-y-0 active:shadow-md">Guidance</button>
             </div>
             <div id="random-verse-container" class="mt-4">
                  <button id="random-verse-button" class="w-full bg-gray-300 text-gray-800 p-3 rounded-lg hover:bg-gray-400 transition-colors duration-300 font-bold shadow-md">Get a Random Verse</button>
@@ -170,6 +173,9 @@
             hope: { text: "May the God of hope fill you with all joy and peace as you trust in him, so that you may overflow with hope by the power of the Holy Spirit.", reference: "Romans 15:13" },
             gratitude: { text: "Give thanks in all circumstances; for this is God’s will for you in Christ Jesus.", reference: "1 Thessalonians 5:18" },
             healing: { text: "Heal me, O Lord, and I shall be healed; save me, and I shall be saved, for you are my praise.", reference: "Jeremiah 17:14" },
+            patience: { text: "Be joyful in hope, patient in affliction, faithful in prayer.", reference: "Romans 12:12" },
+            forgiveness: { text: "Bear with each other and forgive one another if any of you has a grievance against someone. Forgive as the Lord forgave you.", reference: "Colossians 3:13" },
+            guidance: { text: "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight.", reference: "Proverbs 3:5-6" },
             votd: { text: "For where two or three are gathered in my name, there am I among them.", reference: "Matthew 18:20" }
         };
 
@@ -180,12 +186,13 @@
             body.dataset.theme = themeName;
         };
 
-        // Display a verse
+        // Display a verse and scroll to it
         const displayVerse = (verse) => {
             resultText.textContent = `“${verse.text}”`;
             resultReference.textContent = `— ${verse.reference}`;
             bibleLink.href = `https://www.biblegateway.com/passage/?search=${encodeURIComponent(verse.reference)}&version=NIV`;
             verseResultContainer.classList.remove('hidden');
+            verseResultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
         };
 
         const displayVerseOfTheDay = () => {
