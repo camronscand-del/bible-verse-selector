@@ -57,7 +57,7 @@
         .theme-ocean .bg-gray-100 { background-color: #3182ce; }
         .theme-ocean .text-gray-800 { color: #e2e8f0; }
         .theme-ocean .text-gray-500 { color: #bbd0e8; }
-        .theme-ocean input, .theme-ocean textarea { background-color: #3182ce; border-color: #4a90e2; color: #e2e8f0; }
+        .theme-ocean input, .theme-ocean textarea { background-color: #3182ce; border-color: #4a90e2; color: #e2f0f6; }
         .theme-ocean input::placeholder, .theme-ocean textarea::placeholder { color: #bbd0e8; }
         .theme-ocean .border-gray-300 { border-color: #4a90e2; }
         .theme-ocean .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
@@ -312,35 +312,44 @@
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
         
-        // Initialize Firebase app and services
-        const app = initializeApp(firebaseConfig);
-        db = getFirestore(app);
-        auth = getAuth(app);
-        
-        // Authentication state listener
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                userId = user.uid;
-                userIdDisplay.textContent = `User ID: ${userId}`;
-                console.log('User signed in with UID:', userId);
-                // Start listening for real-time favorite verse updates
-                setupFavoritesListener();
-            } else {
-                console.log('No user signed in. Attempting to sign in...');
-                // Sign in with custom token or anonymously if not available
-                try {
-                    if (initialAuthToken) {
-                        await signInWithCustomToken(auth, initialAuthToken);
-                        console.log('Signed in with custom token.');
+        // Main initialization function
+        const initializeAppAndAuth = async () => {
+            try {
+                // Initialize Firebase app and services
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                // Authentication state listener
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        userIdDisplay.textContent = `User ID: ${userId}`;
+                        console.log('User signed in with UID:', userId);
+                        // Start listening for real-time favorite verse updates
+                        setupFavoritesListener();
                     } else {
-                        await signInAnonymously(auth);
-                        console.log('Signed in anonymously.');
+                        console.log('No user signed in. Attempting to sign in...');
+                        // Sign in with custom token or anonymously if not available
+                        try {
+                            if (initialAuthToken) {
+                                await signInWithCustomToken(auth, initialAuthToken);
+                                console.log('Signed in with custom token.');
+                            } else {
+                                await signInAnonymously(auth);
+                                console.log('Signed in anonymously.');
+                            }
+                        } catch (error) {
+                            console.error('Firebase auth error:', error);
+                            showStatusMessage('Authentication failed. Please refresh the page.', 'text-red-500');
+                        }
                     }
-                } catch (error) {
-                    console.error('Firebase auth error:', error);
-                }
+                });
+            } catch (error) {
+                console.error("Firebase initialization failed:", error);
+                showStatusMessage('Failed to connect to the database. Please try again later.', 'text-red-500');
             }
-        });
+        };
 
         // Theme management
         const applyTheme = (themeName) => {
@@ -500,6 +509,9 @@
             if (currentThemeButton) {
                 currentThemeButton.classList.add('ring-2', 'ring-blue-500');
             }
+
+            // Initialize the app
+            initializeAppAndAuth();
         });
 
         // Click handler for all emotion buttons
