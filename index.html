@@ -12,11 +12,13 @@
             transition: background-color 0.3s, color 0.3s;
         }
         /* --- Themes --- */
+        /* The body background color will now be controlled by these theme classes */
         .theme-light {
             background-color: #f3f4f6;
             color: #1f2937;
         }
-        .theme-light .bg-white { background-color: #ffffff; }
+        /* Main container background color for each theme */
+        .theme-light #main-container { background-color: #ffffff; }
         .theme-light .text-gray-800 { color: #1f2937; }
         .theme-light .text-gray-500 { color: #6b7280; }
         .theme-light .bg-gray-100 { background-color: #f9fafb; }
@@ -29,7 +31,8 @@
             background-color: #1a202c;
             color: #e2e8f0;
         }
-        .theme-dark .bg-white { background-color: #2d3748; }
+        /* Main container background color for each theme */
+        .theme-dark #main-container { background-color: #2d3748; }
         .theme-dark .bg-gray-100 { background-color: #4a5568; }
         .theme-dark .text-gray-800 { color: #e2e8f0; }
         .theme-dark .text-gray-500 { color: #a0aec0; }
@@ -42,7 +45,8 @@
             background-color: #e0f2fe;
             color: #0c4a6e;
         }
-        .theme-ocean .bg-white { background-color: #dbeafe; }
+        /* Main container background color for each theme */
+        .theme-ocean #main-container { background-color: #dbeafe; }
         .theme-ocean .bg-gray-100 { background-color: #eff6ff; }
         .theme-ocean .text-gray-800 { color: #0c4a6e; }
         .theme-ocean .text-gray-500 { color: #3b82f6; }
@@ -56,7 +60,8 @@
             background-color: #f0fdf4;
             color: #166534;
         }
-        .theme-forest-green .bg-white { background-color: #dcfce7; }
+        /* Main container background color for each theme */
+        .theme-forest-green #main-container { background-color: #dcfce7; }
         .theme-forest-green .bg-gray-100 { background-color: #dcfce7; }
         .theme-forest-green .text-gray-800 { color: #166534; }
         .theme-forest-green .text-gray-500 { color: #4ade80; }
@@ -70,101 +75,22 @@
         .verse-card:hover {
             transform: scale(1.03);
         }
-        .loading-spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border-left-color: #3b82f6;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background-color: #fefefe;
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-        }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col items-center p-4 transition-colors duration-300">
+<body class="min-h-screen flex flex-col items-center p-4 transition-colors duration-300 theme-light">
     <!-- Main Container -->
-    <div id="main-container" class="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-8 space-y-8 transition-colors duration-300">
+    <div id="main-container" class="w-full max-w-2xl rounded-2xl shadow-xl p-8 space-y-8 transition-colors duration-300">
         <!-- Header -->
         <header class="text-center space-y-2">
             <h1 class="text-5xl font-extrabold text-blue-600">Find a Verse</h1>
             <p class="text-gray-500">Get a verse that speaks to your heart.</p>
         </header>
 
-        <!-- Authentication Section -->
-        <section id="auth-section" class="border-t border-gray-300 pt-6 space-y-4">
-            <h2 class="text-xl font-bold text-gray-800">Account</h2>
-            <div id="auth-status" class="text-center text-gray-500 text-sm">Loading...</div>
-            <div id="auth-forms" class="space-y-4">
-                <div id="login-form" class="space-y-4">
-                    <input id="login-email" type="email" placeholder="Email" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
-                    <input id="login-password" type="password" placeholder="Password" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
-                    <button id="login-button" class="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 font-bold shadow-md">Log In</button>
-                    <button id="signup-toggle-button" class="w-full text-blue-600 hover:underline text-sm font-semibold">Don't have an account? Sign Up</button>
-                    <button id="password-reset-button" class="w-full text-gray-500 hover:underline text-xs">Forgot Password?</button>
-                </div>
-                <div id="signup-form" class="hidden space-y-4">
-                    <input id="signup-email" type="email" placeholder="Email" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
-                    <input id="signup-password" type="password" placeholder="Password" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
-                    <button id="signup-button" class="w-full bg-green-600 text-white p-3 rounded-lg hover:bg-green-700 transition-colors duration-300 font-bold shadow-md">Sign Up</button>
-                    <button id="login-toggle-button" class="w-full text-blue-600 hover:underline text-sm font-semibold">Already have an account? Log In</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- User Profile Section -->
-        <section id="profile-section" class="border-t border-gray-300 pt-6 hidden">
-            <div class="flex items-center justify-between">
-                <h2 class="text-xl font-bold text-gray-800">My Profile</h2>
-                <button id="profile-toggle-button" class="text-blue-600 hover:text-blue-800 transition-colors duration-300 text-sm font-semibold">Hide</button>
-            </div>
-            <div id="profile-content" class="mt-4 space-y-4">
-                <div id="loading-profile" class="flex justify-center items-center h-24 hidden">
-                    <div class="loading-spinner"></div>
-                </div>
-                <div id="profile-form" class="space-y-4">
-                    <input id="profile-name" type="text" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
-                    <textarea id="profile-bio" rows="3" placeholder="A short bio..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"></textarea>
-                    <button id="profile-save-button" class="w-full bg-green-500 text-white p-3 rounded-lg hover:bg-green-600 transition-colors duration-300 font-bold shadow-md">Save Profile</button>
-                    <button id="logout-button" class="w-full bg-red-500 text-white p-3 rounded-lg hover:bg-red-600 transition-colors duration-300 font-bold shadow-md mt-4">Log Out</button>
-                    <p id="user-id" class="text-center text-gray-500 text-xs mt-2"></p>
-                </div>
-            </div>
-        </section>
-
         <!-- The Verse of the Day Section -->
         <section class="border-t border-gray-300 pt-6 space-y-4">
             <h2 class="text-xl font-bold text-gray-800">Verse of the Day</h2>
             <div id="verse-of-day" class="p-6 bg-blue-500 text-white rounded-2xl shadow-md space-y-2 text-center transition-transform duration-300">
-                <div id="votd-text" class="text-lg font-medium italic">Loading verse...</div>
+                <div id="votd-text" class="text-lg font-medium italic"></div>
                 <div id="votd-reference" class="text-sm font-semibold"></div>
             </div>
         </section>
@@ -216,69 +142,9 @@
         </section>
     </div>
 
-    <!-- The Modal for displaying messages -->
-    <div id="message-modal" class="modal">
-        <div class="modal-content text-center">
-            <h3 id="modal-title" class="text-2xl font-bold text-gray-800 mb-2"></h3>
-            <p id="modal-message" class="text-gray-600 mb-4"></p>
-            <button id="modal-close-button" class="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 font-bold">OK</button>
-        </div>
-    </div>
-
-    <!-- Firebase SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { 
-            getAuth, 
-            onAuthStateChanged, 
-            createUserWithEmailAndPassword, 
-            signInWithEmailAndPassword, 
-            signOut,
-            sendPasswordResetEmail,
-            setLogLevel
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        
-        // IMPORTANT: Firebase Configuration
-        // To make this app work, you must replace the placeholder configuration below
-        // with your own Firebase project's credentials.
-        // 1. Go to the Firebase Console (console.firebase.google.com).
-        // 2. Select your project.
-        // 3. Click the gear icon next to "Project Overview" and select "Project settings".
-        // 4. In the "General" tab, scroll down to "Your apps" and select the "Web" app.
-        //    If you don't have one, create a new web app and copy the config snippet.
-        // 5. Copy the 'firebaseConfig' object and paste it below.
-        
-        // Global variables provided by the canvas environment
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-
+    <script>
         // UI element references
         const mainContainer = document.getElementById('main-container');
-        const authSection = document.getElementById('auth-section');
-        const authStatus = document.getElementById('auth-status');
-        const authForms = document.getElementById('auth-forms');
-        const loginForm = document.getElementById('login-form');
-        const signupForm = document.getElementById('signup-form');
-        const loginEmailInput = document.getElementById('login-email');
-        const loginPasswordInput = document.getElementById('login-password');
-        const signupEmailInput = document.getElementById('signup-email');
-        const signupPasswordInput = document.getElementById('signup-password');
-        const loginButton = document.getElementById('login-button');
-        const signupButton = document.getElementById('signup-button');
-        const logoutButton = document.getElementById('logout-button');
-        const signupToggleButton = document.getElementById('signup-toggle-button');
-        const loginToggleButton = document.getElementById('login-toggle-button');
-        const passwordResetButton = document.getElementById('password-reset-button');
-        const profileSection = document.getElementById('profile-section');
-        const profileToggleButton = document.getElementById('profile-toggle-button');
-        const profileContent = document.getElementById('profile-content');
-        const loadingProfile = document.getElementById('loading-profile');
-        const profileForm = document.getElementById('profile-form');
-        const profileNameInput = document.getElementById('profile-name');
-        const profileBioInput = document.getElementById('profile-bio');
-        const profileSaveButton = document.getElementById('profile-save-button');
-        const userIdDisplay = document.getElementById('user-id');
         const verseOfDayText = document.getElementById('votd-text');
         const verseOfDayReference = document.getElementById('votd-reference');
         const verseResultContainer = document.getElementById('verse-result');
@@ -291,17 +157,6 @@
         const fontDecreaseButton = document.getElementById('font-decrease');
         const randomVerseButton = document.getElementById('random-verse-button');
         
-        // Modal elements
-        const messageModal = document.getElementById('message-modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalMessage = document.getElementById('modal-message');
-        const modalCloseButton = document.getElementById('modal-close-button');
-
-
-        // Firebase variables
-        let db, auth;
-        let userId;
-        let profileRef;
         const THEMES = ['light', 'dark', 'ocean', 'forest-green'];
 
         // Verses data
@@ -318,181 +173,6 @@
             votd: { text: "For where two or three are gathered in my name, there am I among them.", reference: "Matthew 18:20" }
         };
 
-        // Custom modal function to replace alerts
-        const showMessage = (title, message) => {
-            modalTitle.textContent = title;
-            modalMessage.textContent = message;
-            messageModal.style.display = 'flex';
-        };
-
-        modalCloseButton.addEventListener('click', () => {
-            messageModal.style.display = 'none';
-        });
-
-        // Initialize Firebase and Auth
-        const initFirebase = async () => {
-            try {
-                if (Object.keys(firebaseConfig).length === 0) {
-                    console.error("Firebase configuration is missing. Authentication features will not work.");
-                    authStatus.textContent = "Authentication features disabled. Missing Firebase config.";
-                    // Hide auth and profile sections since they can't be used
-                    authSection.classList.add('hidden');
-                    profileSection.classList.add('hidden');
-                    // Return early so the rest of the app can still function
-                    return;
-                }
-                
-                const app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
-                db = getFirestore(app);
-                setLogLevel('debug');
-
-                // Start authentication listener
-                onAuthStateChanged(auth, async (user) => {
-                    if (user) {
-                        // User is signed in
-                        userId = user.uid;
-                        authSection.classList.add('hidden');
-                        profileSection.classList.remove('hidden');
-                        authStatus.textContent = `Logged in as: ${user.email}`;
-                        userIdDisplay.textContent = `User ID: ${userId}`;
-                        profileRef = doc(db, `artifacts/${appId}/users/${userId}/profile/data`);
-                        await loadUserProfile();
-                    } else {
-                        // User is signed out
-                        userId = null;
-                        authSection.classList.remove('hidden');
-                        profileSection.classList.add('hidden');
-                        authStatus.textContent = `You are not logged in.`;
-                        profileNameInput.value = '';
-                        profileBioInput.value = '';
-                        applyTheme('light');
-                        mainContainer.style.fontSize = '';
-                    }
-                });
-            } catch (error) {
-                console.error("Firebase initialization failed:", error);
-                authStatus.textContent = "Authentication features disabled due to an error.";
-                // Hide auth and profile sections
-                authSection.classList.add('hidden');
-                profileSection.classList.add('hidden');
-            }
-        };
-
-        // Profile and Settings Management
-        const loadUserProfile = async () => {
-            loadingProfile.classList.add('hidden');
-            profileForm.classList.remove('hidden');
-
-            if (!profileRef) return;
-
-            onSnapshot(profileRef, (docSnap) => {
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    profileNameInput.value = data.name || '';
-                    profileBioInput.value = data.bio || '';
-                    applyTheme(data.theme || 'light');
-                    if (data.fontSize) {
-                        mainContainer.style.fontSize = `${data.fontSize}px`;
-                    }
-                } else {
-                    applyTheme('light');
-                }
-            }, (error) => {
-                console.error("Error fetching profile:", error);
-            });
-        };
-
-        const saveUserProfile = async () => {
-            if (!profileRef) {
-                showMessage("Notice", "Cannot save profile. Please log in first.");
-                return;
-            }
-            try {
-                const currentTheme = body.dataset.theme || 'light';
-                const fontSize = parseFloat(getComputedStyle(mainContainer).fontSize);
-                await setDoc(profileRef, {
-                    name: profileNameInput.value,
-                    bio: profileBioInput.value,
-                    theme: currentTheme,
-                    fontSize: fontSize
-                }, { merge: true });
-                console.log("Profile saved successfully!");
-                showMessage("Success", "Your profile has been saved successfully!");
-            } catch (error) {
-                console.error("Error saving profile:", error);
-                showMessage("Error", `Failed to save profile: ${error.message}`);
-            }
-        };
-
-        // Authentication functions
-        const handleSignUp = async () => {
-            const email = signupEmailInput.value;
-            const password = signupPasswordInput.value;
-            if (!auth) {
-                showMessage("Error", "Authentication is disabled. Please configure Firebase.");
-                return;
-            }
-            try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                console.log("Sign up successful:", userCredential.user);
-                showMessage("Success", "Sign up successful! You are now logged in.");
-            } catch (error) {
-                console.error("Sign up failed:", error);
-                showMessage("Error", `Sign up failed: ${error.message}`);
-            }
-        };
-
-        const handleLogin = async () => {
-            const email = loginEmailInput.value;
-            const password = loginPasswordInput.value;
-            if (!auth) {
-                showMessage("Error", "Authentication is disabled. Please configure Firebase.");
-                return;
-            }
-            try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                console.log("Login successful:", userCredential.user);
-                showMessage("Success", "Login successful!");
-            } catch (error) {
-                console.error("Login failed:", error);
-                showMessage("Error", `Login failed: ${error.message}`);
-            }
-        };
-
-        const handleLogout = async () => {
-            if (!auth) {
-                showMessage("Error", "Authentication is disabled. Please configure Firebase.");
-                return;
-            }
-            try {
-                await signOut(auth);
-                showMessage("Success", "You have been logged out.");
-            } catch (error) {
-                console.error("Logout failed:", error);
-                showMessage("Error", `Logout failed: ${error.message}`);
-            }
-        };
-
-        const handlePasswordReset = async () => {
-            const email = loginEmailInput.value;
-            if (!email) {
-                showMessage("Notice", "Please enter your email in the login field to reset your password.");
-                return;
-            }
-            if (!auth) {
-                showMessage("Error", "Authentication is disabled. Please configure Firebase.");
-                return;
-            }
-            try {
-                await sendPasswordResetEmail(auth, email);
-                showMessage("Success", "Password reset email sent! Check your inbox.");
-            } catch (error) {
-                console.error("Password reset failed:", error);
-                showMessage("Error", `Password reset failed: ${error.message}`);
-            }
-        };
-
         // Theme management
         const applyTheme = (themeName) => {
             body.classList.remove(...THEMES.map(t => `theme-${t}`));
@@ -502,42 +182,19 @@
 
         // Display a verse
         const displayVerse = (verse) => {
-            resultText.textContent = '';
-            resultReference.textContent = '';
-            
             resultText.textContent = `“${verse.text}”`;
             resultReference.textContent = `— ${verse.reference}`;
             bibleLink.href = `https://www.biblegateway.com/passage/?search=${encodeURIComponent(verse.reference)}&version=NIV`;
             verseResultContainer.classList.remove('hidden');
         };
 
+        const displayVerseOfTheDay = () => {
+             const verse = verses.votd;
+             verseOfDayText.textContent = `“${verse.text}”`;
+             verseOfDayReference.textContent = `— ${verse.reference}`;
+        };
+
         // Event listeners
-        profileToggleButton.addEventListener('click', () => {
-            if (profileContent.classList.contains('hidden')) {
-                profileContent.classList.remove('hidden');
-                profileToggleButton.textContent = 'Hide';
-            } else {
-                profileContent.classList.add('hidden');
-                profileToggleButton.textContent = 'Show';
-            }
-        });
-
-        profileSaveButton.addEventListener('click', saveUserProfile);
-        loginButton.addEventListener('click', handleLogin);
-        signupButton.addEventListener('click', handleSignUp);
-        logoutButton.addEventListener('click', handleLogout);
-        passwordResetButton.addEventListener('click', handlePasswordReset);
-
-        signupToggleButton.addEventListener('click', () => {
-            loginForm.classList.add('hidden');
-            signupForm.classList.remove('hidden');
-        });
-
-        loginToggleButton.addEventListener('click', () => {
-            signupForm.classList.add('hidden');
-            loginForm.classList.remove('hidden');
-        });
-
         document.querySelectorAll('.verse-card').forEach(button => {
             button.addEventListener('click', (e) => {
                 const emotion = e.target.dataset.emotion;
@@ -560,33 +217,21 @@
             if (themeButton) {
                 const theme = themeButton.dataset.theme;
                 applyTheme(theme);
-                // Save profile only if authenticated
-                if (auth && auth.currentUser) {
-                    saveUserProfile();
-                }
             }
         });
 
         fontIncreaseButton.addEventListener('click', () => {
             const currentSize = parseFloat(getComputedStyle(mainContainer).fontSize);
             mainContainer.style.fontSize = `${currentSize + 1}px`;
-            // Save profile only if authenticated
-            if (auth && auth.currentUser) {
-                saveUserProfile();
-            }
         });
 
         fontDecreaseButton.addEventListener('click', () => {
             const currentSize = parseFloat(getComputedStyle(mainContainer).fontSize);
             mainContainer.style.fontSize = `${currentSize - 1}px`;
-            // Save profile only if authenticated
-            if (auth && auth.currentUser) {
-                saveUserProfile();
-            }
         });
 
-        // Initialize the app on window load
-        window.onload = initFirebase;
+        // Initialize verse of the day on load
+        window.onload = displayVerseOfTheDay;
     </script>
 </body>
 </html>
