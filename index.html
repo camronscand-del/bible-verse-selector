@@ -25,7 +25,7 @@
         .theme-light input, .theme-light textarea { background-color: #ffffff; border-color: #d1d5db; color: #1f2937; }
         .theme-light input::placeholder, .theme-light textarea::placeholder { color: #9ca3af; }
         .theme-light .border-gray-300 { border-color: #d1d5db; }
-        .theme-light .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .theme-light .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1-px rgba(0, 0, 0, 0.06); }
         
         .theme-dark {
             background-color: #1a202c;
@@ -75,6 +75,22 @@
         .verse-card:hover {
             transform: scale(1.03);
         }
+
+        /* Custom Fade-in Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-4 transition-colors duration-300 theme-light">
@@ -118,9 +134,21 @@
             <div id="verse-result" class="mt-4 p-6 bg-gray-100 rounded-2xl shadow-md space-y-2 hidden">
                 <p id="result-text" class="text-gray-800 text-lg italic"></p>
                 <p id="result-reference" class="text-gray-500 text-sm font-semibold text-right"></p>
-                <div class="text-center pt-2">
+                <div class="flex justify-between items-center pt-2">
+                    <button id="save-verse-button" class="text-gray-500 hover:text-red-500 transition-colors duration-300 font-semibold text-sm">❤️ Save to Favorites</button>
                     <a id="bible-link" href="#" target="_blank" class="text-blue-600 hover:underline text-sm font-semibold">Read on Bible Gateway</a>
                 </div>
+            </div>
+        </section>
+
+        <!-- My Favorites Section -->
+        <section id="favorites-section" class="border-t border-gray-300 pt-6 space-y-4 hidden">
+            <h2 class="text-xl font-bold text-gray-800">My Favorite Verses</h2>
+            <div id="favorites-list" class="space-y-4">
+                <!-- Favorite verses will be dynamically added here -->
+            </div>
+            <div id="no-favorites-message" class="text-center text-gray-500 italic hidden">
+                You haven't saved any favorite verses yet.
             </div>
         </section>
 
@@ -159,6 +187,10 @@
         const fontIncreaseButton = document.getElementById('font-increase');
         const fontDecreaseButton = document.getElementById('font-decrease');
         const randomVerseButton = document.getElementById('random-verse-button');
+        const saveVerseButton = document.getElementById('save-verse-button');
+        const favoritesList = document.getElementById('favorites-list');
+        const favoritesSection = document.getElementById('favorites-section');
+        const noFavoritesMessage = document.getElementById('no-favorites-message');
         
         const THEMES = ['light', 'dark', 'ocean', 'forest-green'];
 
@@ -185,17 +217,24 @@
             body.dataset.theme = themeName;
         };
 
-        // Display a verse and scroll to it
+        // Display a verse with a fade-in animation and scroll to it
         const displayVerse = (verse) => {
             resultText.textContent = `“${verse.text}”`;
             resultReference.textContent = `— ${verse.reference}`;
             bibleLink.href = `https://www.biblegateway.com/passage/?search=${encodeURIComponent(verse.reference)}&version=NIV`;
+            
+            // Show and animate the verse container
             verseResultContainer.classList.remove('hidden');
+            verseResultContainer.classList.remove('fade-in'); // Reset animation
+            void verseResultContainer.offsetWidth; // Trigger reflow
+            verseResultContainer.classList.add('fade-in');
+            
+            // Smoothly scroll to the verse
             verseResultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
         };
 
         // Display a verse that changes every hour
-        const displayVerseOfTheDay = () => {
+        const displayVerseOfTheHour = () => {
              const keys = Object.keys(verses);
              const hour = new Date().getHours();
              // Use the hour to get a predictable index that changes every hour
@@ -204,6 +243,55 @@
              const verse = verses[selectedKey];
              verseOfDayText.textContent = `“${verse.text}”`;
              verseOfDayReference.textContent = `— ${verse.reference}`;
+        };
+
+        // Function to save a verse to local storage
+        const saveVerse = (verse) => {
+            let favorites = JSON.parse(localStorage.getItem('favoriteVerses')) || [];
+            // Check if the verse is already in the list
+            if (!favorites.some(fav => fav.text === verse.text)) {
+                favorites.push(verse);
+                localStorage.setItem('favoriteVerses', JSON.stringify(favorites));
+                renderFavorites();
+            }
+        };
+
+        // Function to remove a verse from local storage
+        const removeVerse = (verseText) => {
+            let favorites = JSON.parse(localStorage.getItem('favoriteVerses')) || [];
+            favorites = favorites.filter(fav => fav.text !== verseText);
+            localStorage.setItem('favoriteVerses', JSON.stringify(favorites));
+            renderFavorites();
+        };
+
+        // Function to render favorite verses
+        const renderFavorites = () => {
+            const favorites = JSON.parse(localStorage.getItem('favoriteVerses')) || [];
+            favoritesList.innerHTML = '';
+            
+            if (favorites.length === 0) {
+                noFavoritesMessage.classList.remove('hidden');
+                favoritesSection.classList.add('hidden');
+            } else {
+                noFavoritesMessage.classList.add('hidden');
+                favoritesSection.classList.remove('hidden');
+                favorites.forEach(verse => {
+                    const favoriteCard = document.createElement('div');
+                    favoriteCard.className = 'p-6 bg-gray-100 rounded-2xl shadow-md space-y-2';
+                    favoriteCard.innerHTML = `
+                        <p class="text-gray-800 text-lg italic">“${verse.text}”</p>
+                        <div class="flex justify-between items-center">
+                            <p class="text-gray-500 text-sm font-semibold">— ${verse.reference}</p>
+                            <button class="remove-favorite-button text-red-400 hover:text-red-600 transition-colors duration-300 font-bold text-sm">Remove</button>
+                        </div>
+                    `;
+                    favoritesList.appendChild(favoriteCard);
+                    
+                    favoriteCard.querySelector('.remove-favorite-button').addEventListener('click', () => {
+                        removeVerse(verse.text);
+                    });
+                });
+            }
         };
 
         // Event listeners
@@ -224,6 +312,14 @@
             displayVerse(randomVerse);
         });
 
+        saveVerseButton.addEventListener('click', () => {
+            const currentVerse = {
+                text: resultText.textContent.replace(/[“”]/g, ''),
+                reference: resultReference.textContent.replace('— ', '')
+            };
+            saveVerse(currentVerse);
+        });
+
         themeControls.addEventListener('click', (e) => {
             const themeButton = e.target.closest('button');
             if (themeButton) {
@@ -242,8 +338,11 @@
             mainContainer.style.fontSize = `${currentSize - 1}px`;
         });
 
-        // Initialize verse of the day on load
-        window.onload = displayVerseOfTheDay;
+        // Initialize on page load
+        window.onload = () => {
+            displayVerseOfTheHour();
+            renderFavorites();
+        };
     </script>
 </body>
 </html>
