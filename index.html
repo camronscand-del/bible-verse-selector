@@ -286,20 +286,68 @@
         
         const THEMES = ['light', 'dark', 'ocean', 'forest-green', 'dusk'];
 
-        // Verses data (for demonstration purposes, a full Bible would be fetched from a service)
+        // Verses data (now with multiple verses per emotion)
         const verses = {
-            joy: { text: "The Lord is my strength and my shield; in Him my heart trusts, and I am helped; my heart exults, and with my song I give thanks to Him.", reference: "Psalm 28:7" },
-            peace: { text: "Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled and do not be afraid.", reference: "John 14:27" },
-            sadness: { text: "The Lord is close to the brokenhearted and saves those who are crushed in spirit.", reference: "Psalm 34:18" },
-            fear: { text: "For God has not given us a spirit of fear, but of power and of love and of a sound mind.", reference: "2 Timothy 1:7" },
-            anger: { text: "A fool gives full vent to his anger, but a wise man keeps himself under control.", reference: "Proverbs 29:11" },
-            strength: { text: "I can do all things through him who strengthens me.", reference: "Philippians 4:13" },
-            hope: { text: "May the God of hope fill you with all joy and peace as you trust in him, so that you may overflow with hope by the power of the Holy Spirit.", reference: "Romans 15:13" },
-            gratitude: { text: "Give thanks in all circumstances; for this is God’s will for you in Christ Jesus.", reference: "1 Thessalonians 5:18" },
-            healing: { text: "Heal me, O Lord, and I shall be healed; save me, and I shall be saved, for you are my praise.", reference: "Jeremiah 17:14" },
-            patience: { text: "Be joyful in hope, patient in affliction, faithful in prayer.", reference: "Romans 12:12" },
-            forgiveness: { text: "Bear with each other and forgive one another if any of you has a grievance against someone. Forgive as the Lord forgave you.", reference: "Colossians 3:13" },
-            guidance: { text: "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight.", reference: "Proverbs 3:5-6" }
+            joy: [
+                { text: "The Lord is my strength and my shield; in Him my heart trusts, and I am helped; my heart exults, and with my song I give thanks to Him.", reference: "Psalm 28:7" },
+                { text: "A joyful heart is good medicine, but a crushed spirit dries up the bones.", reference: "Proverbs 17:22" },
+                { text: "Do not sorrow, for the joy of the Lord is your strength.", reference: "Nehemiah 8:10" }
+            ],
+            peace: [
+                { text: "Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled and do not be afraid.", reference: "John 14:27" },
+                { text: "And the peace of God, which transcends all understanding, will guard your hearts and your minds in Christ Jesus.", reference: "Philippians 4:7" },
+                { text: "You will keep in perfect peace those whose minds are steadfast, because they trust in you.", reference: "Isaiah 26:3" }
+            ],
+            sadness: [
+                { text: "The Lord is close to the brokenhearted and saves those who are crushed in spirit.", reference: "Psalm 34:18" },
+                { text: "Blessed are those who mourn, for they will be comforted.", reference: "Matthew 5:4" },
+                { text: "For we do not have a high priest who is unable to empathize with our weaknesses, but we have one who has been tempted in every way, just as we are—yet he did not sin.", reference: "Hebrews 4:15" }
+            ],
+            fear: [
+                { text: "For God has not given us a spirit of fear, but of power and of love and of a sound mind.", reference: "2 Timothy 1:7" },
+                { text: "So do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you and help you; I will uphold you with my righteous right hand.", reference: "Isaiah 41:10" },
+                { text: "When I am afraid, I put my trust in you.", reference: "Psalm 56:3" }
+            ],
+            anger: [
+                { text: "In your anger do not sin: Do not let the sun go down while you are still angry.", reference: "Ephesians 4:26" },
+                { text: "My dear brothers and sisters, take note of this: Everyone should be quick to listen, slow to speak and slow to become angry, because human anger does not produce the righteousness that God desires.", reference: "James 1:19-20" },
+                { text: "A gentle answer turns away wrath, but a harsh word stirs up anger.", reference: "Proverbs 15:1" }
+            ],
+            strength: [
+                { text: "I can do all things through him who strengthens me.", reference: "Philippians 4:13" },
+                { text: "but those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.", reference: "Isaiah 40:31" },
+                { text: "Be strong and courageous. Do not be afraid or terrified because of them, for the Lord your God goes with you; he will never leave you nor forsake you.", reference: "Deuteronomy 31:6" }
+            ],
+            hope: [
+                { text: "May the God of hope fill you with all joy and peace as you trust in him, so that you may overflow with hope by the power of the Holy Spirit.", reference: "Romans 15:13" },
+                { text: "Now faith is confidence in what we hope for and assurance about what we do not see.", reference: "Hebrews 11:1" },
+                { text: "For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future.", reference: "Jeremiah 29:11" }
+            ],
+            gratitude: [
+                { text: "Give thanks in all circumstances; for this is God’s will for you in Christ Jesus.", reference: "1 Thessalonians 5:18" },
+                { text: "Give thanks to the Lord, for he is good; his love endures forever.", reference: "Psalm 107:1" },
+                { text: "And whatever you do, whether in word or deed, do it all in the name of the Lord Jesus, giving thanks to God the Father through him.", reference: "Colossians 3:17" }
+            ],
+            healing: [
+                { text: "Heal me, O Lord, and I shall be healed; save me, and I shall be saved, for you are my praise.", reference: "Jeremiah 17:14" },
+                { text: "He heals the brokenhearted and binds up their wounds.", reference: "Psalm 147:3" },
+                { text: "But he was pierced for our transgressions, he was crushed for our iniquities; the punishment that brought us peace was on him, and by his wounds we are healed.", reference: "Isaiah 53:5" }
+            ],
+            patience: [
+                { text: "Be joyful in hope, patient in affliction, faithful in prayer.", reference: "Romans 12:12" },
+                { text: "But the fruit of the Spirit is love, joy, peace, forbearance, kindness, goodness, faithfulness, gentleness and self-control.", reference: "Galatians 5:22-23" },
+                { text: "A person’s wisdom yields patience; it is to one’s glory to overlook an offense.", reference: "Proverbs 19:11" }
+            ],
+            forgiveness: [
+                { text: "Bear with each other and forgive one another if any of you has a grievance against someone. Forgive as the Lord forgave you.", reference: "Colossians 3:13" },
+                { text: "For if you forgive other people when they sin against you, your heavenly Father will also forgive you.", reference: "Matthew 6:14" },
+                { text: "Be kind and compassionate to one another, forgiving each other, just as in Christ God forgave you.", reference: "Ephesians 4:32" }
+            ],
+            guidance: [
+                { text: "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight.", reference: "Proverbs 3:5-6" },
+                { text: "I will instruct you and teach you in the way you should go; I will counsel you with my loving eye on you.", reference: "Psalm 32:8" },
+                { text: "If any of you lacks wisdom, you should ask God, who gives generously to all without finding fault, and it will be given to you.", reference: "James 1:5" }
+            ]
         };
 
         // Firebase variables and initialization
@@ -381,17 +429,17 @@
             // Use the hour to get a predictable index that changes every hour
             const index = hour % keys.length;
             const selectedKey = keys[index];
-            const verse = verses[selectedKey];
+            // Get a random verse from the chosen emotion's array
+            const verse = verses[selectedKey][Math.floor(Math.random() * verses[selectedKey].length)];
             verseOfDayText.textContent = `“${verse.text}”`;
             verseOfDayReference.textContent = `— ${verse.reference}`;
         };
 
-        // Fetch a random verse
+        // Fetch a random verse from the entire collection
         const getRandomVerse = () => {
-            const keys = Object.keys(verses);
-            const randomKey = keys[Math.floor(Math.random() * keys.length)];
-            const verse = verses[randomKey];
-            displayVerse(verse);
+            const allVerses = Object.values(verses).flat();
+            const randomVerse = allVerses[Math.floor(Math.random() * allVerses.length)];
+            displayVerse(randomVerse);
         };
         
         // Save a verse to Firestore
@@ -519,7 +567,9 @@
             button.addEventListener('click', () => {
                 const emotion = button.dataset.emotion;
                 if (verses[emotion]) {
-                    displayVerse(verses[emotion]);
+                    const emotionVerses = verses[emotion];
+                    const randomVerse = emotionVerses[Math.floor(Math.random() * emotionVerses.length)];
+                    displayVerse(randomVerse);
                 }
             });
         });
