@@ -62,6 +62,7 @@
         .theme-ocean .border-gray-300 { border-color: #4a90e2; }
         .theme-ocean .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
         .theme-ocean .bg-blue-600 { background-color: #1d4ed8; }
+        .theme-ocean .bg-blue-600 { background-color: #1d4ed8; }
         .theme-ocean #random-verse-button {
             background-color: #3182ce;
             color: #e2e8f0;
@@ -454,6 +455,14 @@
                 showStatusMessage('Please wait while we set up your session.', 'text-red-500');
                 return;
             }
+
+            // Set loading state
+            saveVerseButton.disabled = true;
+            saveVerseButton.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>Saving...`;
+
             try {
                 // Check if the verse already exists to prevent duplicates
                 const favoritesRef = collection(db, 'artifacts', appId, 'users', userId, 'favorites');
@@ -470,6 +479,12 @@
             } catch (e) {
                 console.error("Error adding document: ", e);
                 showStatusMessage('Failed to save verse. Please try again.', 'text-red-500');
+            } finally {
+                // Reset button state
+                saveVerseButton.disabled = false;
+                saveVerseButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+                </svg>Add to Favorites`;
             }
         };
 
