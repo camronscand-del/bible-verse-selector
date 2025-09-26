@@ -208,11 +208,12 @@
                 <p id="result-reference" class="text-gray-500 text-sm font-semibold text-right"></p>
                 <div class="flex flex-col sm:flex-row justify-between items-center pt-2 space-y-2 sm:space-y-0 sm:space-x-2">
                     <div class="flex items-center space-x-2">
-                        <button id="save-verse-button" class="text-gray-500 hover:text-red-500 transition-colors duration-300 font-semibold text-sm flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+                        <button id="save-verse-button" class="text-gray-500 hover:text-red-500 transition-colors duration-300 font-semibold text-sm flex items-center" disabled>
+                             <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
-                            Add to Favorites
+                            Connecting...
                         </button>
                     </div>
                     <a id="bible-link" href="#" target="_blank" class="text-blue-600 hover:underline text-sm font-semibold">Read on Bible Gateway</a>
@@ -374,6 +375,11 @@
                         userId = user.uid;
                         userIdDisplay.textContent = `User ID: ${userId}`;
                         console.log('User signed in with UID:', userId);
+                        // Enable the save button
+                        saveVerseButton.disabled = false;
+                        saveVerseButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+                            </svg>Add to Favorites`;
                         // Start listening for real-time favorite verse updates
                         setupFavoritesListener();
                     } else {
