@@ -12,12 +12,10 @@
             transition: background-color 0.3s, color 0.3s;
         }
         /* --- Themes --- */
-        /* The body background color will now be controlled by these theme classes */
         .theme-light {
             background-color: #f3f4f6;
             color: #1f2937;
         }
-        /* Main container background color for each theme */
         .theme-light #main-container { background-color: #ffffff; }
         .theme-light .text-gray-800 { color: #1f2937; }
         .theme-light .text-gray-500 { color: #6b7280; }
@@ -31,7 +29,6 @@
             background-color: #1a202c;
             color: #e2e8f0;
         }
-        /* Main container background color for each theme */
         .theme-dark #main-container { background-color: #2d3748; }
         .theme-dark .bg-gray-100 { background-color: #4a5568; }
         .theme-dark .text-gray-800 { color: #e2e8f0; }
@@ -52,10 +49,9 @@
             background-color: #2b6cb0;
             color: #e2e8f0;
         }
-        /* Main container background color for each theme */
         .theme-ocean #main-container { background-color: #1c4b7c; }
         .theme-ocean .bg-gray-100 { background-color: #3182ce; }
-        .theme-ocean .text-gray-800 { color: #e2e8f0; }
+        .theme-ocean .text-gray-800 { color: #e2f0e6; }
         .theme-ocean .text-gray-500 { color: #bbd0e8; }
         .theme-ocean input, .theme-ocean textarea { background-color: #3182ce; border-color: #4a90e2; color: #e2f0f6; }
         .theme-ocean input::placeholder, .theme-ocean textarea::placeholder { color: #bbd0e8; }
@@ -65,7 +61,7 @@
         .theme-ocean .bg-blue-600 { background-color: #1d4ed8; }
         .theme-ocean #random-verse-button {
             background-color: #3182ce;
-            color: #e2e8f0;
+            color: #e2f0e6;
         }
         .theme-ocean #random-verse-button:hover {
             background-color: #63b3ed;
@@ -75,7 +71,6 @@
             background-color: #1F382A;
             color: #e2f0e6;
         }
-        /* Main container background color for each theme */
         .theme-forest-green #main-container { background-color: #2F523B; }
         .theme-forest-green .bg-gray-100 { background-color: #3D6C4F; }
         .theme-forest-green .text-gray-800 { color: #e2f0e6; }
@@ -115,7 +110,6 @@
         }
 
         /* --- Custom Animations --- */
-        /* Animation for the verse result container and favorite cards */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -130,7 +124,6 @@
             animation: fadeIn 0.5s ease-out forwards;
         }
 
-        /* Animation for the main container on page load */
         @keyframes popIn {
             from {
                 opacity: 0;
@@ -145,24 +138,6 @@
             animation: popIn 0.5s ease-out forwards;
         }
 
-        .loading-spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-left-color: #3498db;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .copied-message {
-            transition: opacity 0.3s ease-in-out;
-        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-4 transition-colors duration-300 theme-light">
@@ -172,7 +147,6 @@
         <header class="text-center space-y-2">
             <h1 class="text-5xl font-extrabold text-blue-600">Find a Verse</h1>
             <p class="text-gray-500">Get a verse that speaks to your heart.</p>
-             <p id="user-id-display" class="text-xs text-gray-400 mt-2"></p>
         </header>
 
         <!-- The Verse of the Day Section -->
@@ -208,32 +182,11 @@
                 <p id="result-text" class="text-gray-800 text-lg italic"></p>
                 <p id="result-reference" class="text-gray-500 text-sm font-semibold text-right"></p>
                 <div class="flex flex-col sm:flex-row justify-between items-center pt-2 space-y-2 sm:space-y-0 sm:space-x-2">
-                    <div class="flex items-center space-x-2">
-                        <button id="save-verse-button" class="text-gray-500 hover:text-red-500 transition-colors duration-300 font-semibold text-sm flex items-center" disabled>
-                             <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            Connecting...
-                        </button>
-                    </div>
                     <a id="bible-link" href="#" target="_blank" class="text-blue-600 hover:underline text-sm font-semibold">Read on Bible Gateway</a>
                 </div>
-                <div id="status-message" class="text-xs text-center text-gray-500 opacity-0 transition-opacity duration-300"></div>
             </div>
         </section>
-
-        <!-- My Favorites Section -->
-        <section id="favorites-section" class="border-t border-gray-300 pt-6 space-y-4 hidden">
-            <h2 class="text-xl font-bold text-gray-800">My Favorite Verses</h2>
-            <div id="favorites-list" class="space-y-4">
-                <!-- Favorite verses will be dynamically added here -->
-            </div>
-            <div id="no-favorites-message" class="text-center text-gray-500 italic hidden">
-                You haven't saved any favorite verses yet.
-            </div>
-        </section>
-
+        
         <!-- Theme and Font Size Controls -->
         <section class="border-t border-gray-300 pt-6 flex justify-between items-center">
             <div class="flex items-center space-x-4">
@@ -256,16 +209,7 @@
         </section>
     </div>
     
-    <script type="module">
-        // Import the Firebase SDK modules
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, onSnapshot, query, where, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Set Firebase debug logging for development
-        setLogLevel('debug');
-
+    <script>
         // UI element references
         const mainContainer = document.getElementById('main-container');
         const verseOfDayText = document.getElementById('votd-text');
@@ -279,12 +223,6 @@
         const fontIncreaseButton = document.getElementById('font-increase');
         const fontDecreaseButton = document.getElementById('font-decrease');
         const randomVerseButton = document.getElementById('random-verse-button');
-        const saveVerseButton = document.getElementById('save-verse-button');
-        const statusMessage = document.getElementById('status-message');
-        const favoritesList = document.getElementById('favorites-list');
-        const favoritesSection = document.getElementById('favorites-section');
-        const noFavoritesMessage = document.getElementById('no-favorites-message');
-        const userIdDisplay = document.getElementById('user-id-display');
         
         const THEMES = ['light', 'dark', 'ocean', 'forest-green', 'dusk'];
 
@@ -352,80 +290,17 @@
             ]
         };
 
-        // Firebase variables and initialization
-        let db;
-        let auth;
-        let userId = '';
-        
-        // Use the global variables provided by the environment
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-        
-        // Main initialization function
-        const initializeAppAndAuth = async () => {
-            try {
-                // Initialize Firebase app and services
-                const app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-                
-                // Authentication state listener
-                onAuthStateChanged(auth, async (user) => {
-                    if (user) {
-                        userId = user.uid;
-                        userIdDisplay.textContent = `User ID: ${userId}`;
-                        console.log('User signed in with UID:', userId);
-                        // Enable the save button
-                        saveVerseButton.disabled = false;
-                        saveVerseButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
-                            </svg>Add to Favorites`;
-                        // Start listening for real-time favorite verse updates
-                        setupFavoritesListener();
-                    } else {
-                        console.log('No user signed in. Attempting to sign in...');
-                        // Sign in with custom token or anonymously if not available
-                        try {
-                            if (initialAuthToken) {
-                                await signInWithCustomToken(auth, initialAuthToken);
-                                console.log('Signed in with custom token.');
-                            } else {
-                                await signInAnonymously(auth);
-                                console.log('Signed in anonymously.');
-                            }
-                        } catch (error) {
-                            console.error('Firebase auth error:', error);
-                            showStatusMessage('Authentication failed. Please refresh the page.', 'text-red-500');
-                        }
-                    }
-                });
-            } catch (error) {
-                console.error("Firebase initialization failed:", error);
-                showStatusMessage('Failed to connect to the database. Please try again later.', 'text-red-500');
-            }
-        };
-
-        // Theme management
-        const applyTheme = (themeName) => {
-            body.classList.remove(...THEMES.map(t => `theme-${t}`));
-            body.classList.add(`theme-${themeName}`);
-            body.dataset.theme = themeName;
-        };
-
         // Display a verse with a fade-in animation and scroll to it
         const displayVerse = (verse) => {
             resultText.textContent = `“${verse.text}”`;
             resultReference.textContent = `— ${verse.reference}`;
             bibleLink.href = `https://www.biblegateway.com/passage/?search=${encodeURIComponent(verse.reference)}&version=NIV`;
             
-            // Show and animate the verse container
             verseResultContainer.classList.remove('hidden');
-            verseResultContainer.classList.remove('fade-in'); // Reset animation
-            void verseResultContainer.offsetWidth; // Trigger reflow
+            verseResultContainer.classList.remove('fade-in'); 
+            void verseResultContainer.offsetWidth;
             verseResultContainer.classList.add('fade-in');
             
-            // Smoothly scroll to the verse
             verseResultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
         };
 
@@ -433,157 +308,36 @@
         const displayVerseOfTheHour = () => {
             const keys = Object.keys(verses);
             const hour = new Date().getHours();
-            // Use the hour to get a predictable index that changes every hour
             const index = hour % keys.length;
             const selectedKey = keys[index];
-            // Get a random verse from the chosen emotion's array
             const verse = verses[selectedKey][Math.floor(Math.random() * verses[selectedKey].length)];
             verseOfDayText.textContent = `“${verse.text}”`;
             verseOfDayReference.textContent = `— ${verse.reference}`;
         };
 
-        // Fetch a random verse from the entire collection
         const getRandomVerse = () => {
             const allVerses = Object.values(verses).flat();
             const randomVerse = allVerses[Math.floor(Math.random() * allVerses.length)];
             displayVerse(randomVerse);
         };
         
-        // Save a verse to Firestore
-        const saveVerse = async (verse) => {
-            if (!userId) {
-                showStatusMessage('Please wait while we set up your session.', 'text-red-500');
-                return;
-            }
-
-            // Set loading state
-            saveVerseButton.disabled = true;
-            saveVerseButton.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>Saving...`;
-
-            try {
-                // Check if the verse already exists to prevent duplicates
-                const favoritesRef = collection(db, 'artifacts', appId, 'users', userId, 'favorites');
-                const q = query(favoritesRef, where("text", "==", verse.text), where("reference", "==", verse.reference));
-                const querySnapshot = await getDocs(q);
-                
-                if (querySnapshot.empty) {
-                    const docRef = await addDoc(favoritesRef, verse);
-                    console.log("Document written with ID: ", docRef.id);
-                    showStatusMessage('Verse added to your favorites!', 'text-green-500');
-                } else {
-                    showStatusMessage('This verse is already in your favorites.', 'text-yellow-500');
-                }
-            } catch (e) {
-                console.error("Error adding document: ", e);
-                showStatusMessage('Failed to save verse. Please try again.', 'text-red-500');
-            } finally {
-                // Reset button state
-                saveVerseButton.disabled = false;
-                saveVerseButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
-                </svg>Add to Favorites`;
-            }
-        };
-
-        // Delete a favorite verse from Firestore
-        const deleteVerse = async (docId) => {
-            if (!userId) return;
-            try {
-                const verseDocRef = doc(db, 'artifacts', appId, 'users', userId, 'favorites', docId);
-                await deleteDoc(verseDocRef);
-                console.log("Document successfully deleted!");
-                showStatusMessage('Verse removed from your favorites.', 'text-green-500');
-            } catch (e) {
-                console.error("Error removing document: ", e);
-                showStatusMessage('Failed to delete verse.', 'text-red-500');
-            }
-        };
-
-        // Listen for real-time updates on the user's favorites collection
-        const setupFavoritesListener = () => {
-            if (!userId) return;
-            const favoritesRef = collection(db, 'artifacts', appId, 'users', userId, 'favorites');
-            
-            onSnapshot(favoritesRef, (snapshot) => {
-                const favorites = [];
-                snapshot.forEach(doc => {
-                    favorites.push({ id: doc.id, ...doc.data() });
-                });
-                renderFavorites(favorites);
-            }, (error) => {
-                console.error("Error listening to favorites: ", error);
-            });
-        };
-
-        // Render the list of favorite verses
-        const renderFavorites = (favorites) => {
-            favoritesList.innerHTML = ''; // Clear the current list
-            if (favorites.length === 0) {
-                noFavoritesMessage.classList.remove('hidden');
-                favoritesSection.classList.add('hidden');
-            } else {
-                noFavoritesMessage.classList.add('hidden');
-                favoritesSection.classList.remove('hidden');
-                favorites.forEach(verse => {
-                    const favoriteCard = document.createElement('div');
-                    favoriteCard.id = verse.id;
-                    favoriteCard.className = 'p-4 bg-gray-100 rounded-lg shadow-md space-y-2 relative fade-in group transition-transform duration-300 transform-gpu hover:scale-105';
-                    favoriteCard.innerHTML = `
-                        <p class="text-gray-800 italic">“${verse.text}”</p>
-                        <p class="text-gray-500 text-sm font-semibold text-right">— ${verse.reference}</p>
-                        <button class="absolute top-2 right-2 text-gray-400 hover:text-red-500 transition-colors duration-200 opacity-0 group-hover:opacity-100" data-doc-id="${verse.id}" aria-label="Remove from favorites">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 112 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                    `;
-                    favoritesList.appendChild(favoriteCard);
-
-                    // Add event listener to the remove button
-                    const deleteButton = favoriteCard.querySelector('button');
-                    deleteButton.addEventListener('click', () => deleteVerse(deleteButton.dataset.docId));
-                });
-            }
-        };
-        
-        // Show a temporary status message
-        const showStatusMessage = (message, colorClass) => {
-            statusMessage.textContent = message;
-            statusMessage.className = `text-xs text-center transition-opacity duration-300 ${colorClass}`;
-            statusMessage.style.opacity = 1;
-            setTimeout(() => {
-                statusMessage.style.opacity = 0;
-            }, 3000);
-        };
-        
         // Event Listeners
         document.addEventListener('DOMContentLoaded', () => {
-            // Add pop-in animation to main container
             mainContainer.classList.add('pop-in');
             displayVerseOfTheHour();
             
-            // Set initial theme from local storage or default to light
             const savedTheme = localStorage.getItem('theme') || 'light';
             applyTheme(savedTheme);
 
-            // Set initial font size
             const savedFontSize = parseInt(localStorage.getItem('fontSize')) || 16;
             document.documentElement.style.fontSize = `${savedFontSize}px`;
 
-            // Load saved theme
             const currentThemeButton = document.querySelector(`[data-theme="${savedTheme}"]`);
             if (currentThemeButton) {
                 currentThemeButton.classList.add('ring-2', 'ring-blue-500');
             }
-
-            // Initialize the app
-            initializeAppAndAuth();
         });
 
-        // Click handler for all emotion buttons
         document.querySelectorAll('.verse-card').forEach(button => {
             button.addEventListener('click', () => {
                 const emotion = button.dataset.emotion;
@@ -596,16 +350,12 @@
         });
 
         randomVerseButton.addEventListener('click', getRandomVerse);
-        saveVerseButton.addEventListener('click', () => {
-            const verseText = resultText.textContent.replace(/^“|”$/g, '');
-            const verseReference = resultReference.textContent.replace(/^—\s*/, '');
-            if (verseText && verseReference) {
-                saveVerse({
-                    text: verseText,
-                    reference: verseReference
-                });
-            }
-        });
+        
+        const applyTheme = (themeName) => {
+            body.classList.remove(...THEMES.map(t => `theme-${t}`));
+            body.classList.add(`theme-${themeName}`);
+            body.dataset.theme = themeName;
+        };
 
         themeControls.addEventListener('click', (event) => {
             const themeButton = event.target.closest('[data-theme]');
